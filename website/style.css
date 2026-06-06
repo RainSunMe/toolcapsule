@@ -184,13 +184,85 @@ html[lang="zh-CN"] ul,
 html[lang="zh-CN"] .cta p:not(.eyebrow) {
   line-height: 1.82;
 }
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
+.hero-setup {
+  display: grid;
+  grid-template-columns: minmax(360px, 1.08fr) minmax(320px, 0.92fr);
+  gap: 16px;
+  align-items: stretch;
+  max-width: 960px;
 }
-.button, .hero-actions code {
+.install-card,
+.ai-card {
+  border: 1px solid var(--line-strong);
+  border-radius: 28px;
+  background: rgba(255, 250, 241, 0.62);
+  box-shadow: 0 22px 60px rgba(67, 49, 30, 0.10);
+}
+.install-card {
+  padding: 22px;
+}
+.install-card span,
+.ai-card span {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--clay-dark);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 820;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.install-card code {
+  display: block;
+  padding: 18px 20px;
+  border: 1px solid #2c2924;
+  border-radius: 18px;
+  background: #1f1b17;
+  color: #f7f2e8;
+  font-size: clamp(22px, 3.4vw, 34px);
+  line-height: 1.15;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+  box-shadow: inset 0 0 0 1px rgba(247, 242, 232, 0.06);
+}
+.install-card small {
+  display: block;
+  margin-top: 14px;
+  color: var(--muted);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.install-card small code {
+  display: inline;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--clay-dark);
+  font-size: inherit;
+  letter-spacing: 0;
+  white-space: normal;
+  box-shadow: none;
+}
+.ai-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+}
+.ai-card p {
+  margin-bottom: 16px;
+  color: var(--muted);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.62;
+}
+.hero-setup > .button.ghost {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+.button {
   display: inline-flex;
   align-items: center;
   min-height: 48px;
@@ -215,11 +287,6 @@ html[lang="zh-CN"] .cta p:not(.eyebrow) {
 }
 .button.secondary:hover,
 .button.ghost:hover { background: var(--cream); }
-.hero-actions code {
-  border: 1px solid var(--line-strong);
-  background: rgba(255, 250, 241, 0.64);
-  color: var(--code);
-}
 
 .proof-strip {
   display: grid;
@@ -584,6 +651,7 @@ li code { color: var(--clay-dark); }
 
 @media (max-width: 960px) {
   .nav-links { display: none; }
+  .hero-setup { grid-template-columns: 1fr; }
   .editorial-grid,
   .onboarding-section,
   .capsule-row,
