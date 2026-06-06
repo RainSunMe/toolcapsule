@@ -24,27 +24,19 @@ git tag v0.1.0-alpha.1
 git push origin v0.1.0-alpha.1
 ```
 
-The intended `Release` workflow will:
+The `Release` workflow will:
 
 1. install dependencies;
-2. run CI;
-3. publish to npm with provenance through Trusted Publishing;
-4. create a GitHub Release.
-
-If Trusted Publishing fails during early setup, publish manually after CI:
-
-```bash
-npm publish --access public
-```
-
-Then verify with:
-
-```bash
-npm view toolcapsule version
-```
+2. verify the git tag matches `package.json`;
+3. verify the npm version does not already exist;
+4. run CI;
+5. publish to npm with provenance through Trusted Publishing;
+6. verify the npm package is available;
+7. create a GitHub Release.
 
 ## Notes
 
+- Do not use local `npm publish` for normal releases.
 - Do not store `NPM_TOKEN` unless Trusted Publishing is unavailable.
 - The workflow requires `permissions.id-token: write`.
 - The GitHub Environment name must match npm Trusted Publishing exactly.
