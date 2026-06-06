@@ -5,7 +5,7 @@
 - CLI skeleton
 - remote and stdio MCP profiles
 - tools/describe/call/retry
-- generated Agent Skill
+- generated Agent Skill for MCP-to-Skill workflows
 - Feishu example
 - CI and docs
 
@@ -15,6 +15,7 @@
 - shortcut generator
 - richer run recorder
 - mock benchmark reporter
+- SEO/docs polish for lazy MCP, MCP-to-Skill, and Agent Skills for MCP search intent
 
 ## v1.0
 

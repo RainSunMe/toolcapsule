@@ -2,6 +2,8 @@
 
 This note summarizes how current coding agents discover Agent Skills, instructions, and MCP server configuration, and what that means for ToolCapsule onboarding.
 
+In product terms, this is MCP-to-Skill compatibility research: how to turn existing MCP registrations into lazy-loaded Agent Skills for MCP.
+
 Research date: 2026-06-06.
 
 ## Current repository state

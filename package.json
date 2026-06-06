@@ -1,7 +1,7 @@
 {
   "name": "toolcapsule",
-  "version": "0.1.0-alpha.9",
-  "description": "File-first, patchable Agent Skills for heavy MCP tools.",
+  "version": "0.1.0-alpha.10",
+  "description": "MCP-to-Skill for lazy-loaded, patchable Agent Skills from heavy MCP tools.",
   "type": "module",
   "bin": {
     "toolcapsule": "dist/cli.js",
@@ -31,7 +31,13 @@
   "keywords": [
     "mcp",
     "model-context-protocol",
+    "mcp-to-skill",
+    "mcp2skill",
+    "lazy-mcp",
+    "lazy-loaded-mcp",
     "agent-skills",
+    "agent-skill",
+    "agent-skills-for-mcp",
     "skills",
     "skill",
     "tool-calling",

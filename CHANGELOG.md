@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.0-alpha.10
+
+- Reposition ToolCapsule as MCP-to-Skill for heavy MCP tools.
+- Add SEO/search copy for lazy MCP, MCP to Skill, MCP-to-Skill, and Agent Skills for MCP.
+- Update README, website, docs, examples, package metadata, and generated Skill template with consistent positioning.
+
 ## 0.1.0-alpha.9
 
 - Add `tcap import` to convert existing MCP registrations into ToolCapsule profiles and Agent Skills.

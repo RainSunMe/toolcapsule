@@ -5,14 +5,17 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-black?style=flat-square)](LICENSE)
 [![GitHub Repo stars](https://img.shields.io/github/stars/RainSunMe/toolcapsule?style=flat-square)](https://github.com/RainSunMe/toolcapsule)
 
-> Heavy MCP tools don't belong in your prompt. Put them in a ToolCapsule.
+> MCP-to-Skill for heavy MCP tools.
 
-**ToolCapsule** turns heavy MCP servers into lightweight, lazy-loaded, file-first **Agent Skills** with patch-and-retry workflows.
+**ToolCapsule** turns heavy MCP servers into lightweight, lazy-loaded, file-first **Agent Skills** with saved runs and patch-and-retry recovery.
+
+If you are looking for **lazy MCP**, **MCP to Skill**, **MCP-to-Skill**, or **Agent Skills for MCP tools**, ToolCapsule is built for that workflow.
 
 It is not a replacement for MCP or Skills. It is the missing workflow layer between them:
 
 ```text
 Heavy MCP server
+→ MCP-to-Skill workflow layer
 → compact Agent Skill
 → local args/content files
 → auditable tool runs
@@ -32,6 +35,17 @@ But large MCP servers can be expensive in agent contexts:
 
 ToolCapsule keeps the MCP server as the source of truth, but exposes it through a lightweight Skill and local artifacts.
 Transport logs are quiet by default so remote MCP URLs are not printed during normal use. Set `TOOLCAPSULE_DEBUG=1` only when debugging.
+
+## MCP-to-Skill and lazy MCP
+
+ToolCapsule is an **MCP-to-Skill workflow layer**. It imports existing MCP configurations and generates Agent Skills that let agents lazy-load MCP schemas only when needed.
+
+This is the practical version of a lazy MCP workflow:
+
+- MCP remains the protocol and source of truth;
+- Skills become the agent-facing workflow;
+- large payloads move into local files;
+- failed calls become patchable artifacts instead of regenerated prompts.
 
 ## Import your existing MCP setup
 

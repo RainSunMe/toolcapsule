@@ -1,14 +1,20 @@
 # Concept
 
-**ToolCapsule** is a lazy workflow layer for heavy MCP tools.
+**ToolCapsule** is an MCP-to-Skill workflow layer for heavy MCP tools.
 
-MCP connects agents to tools. Skills package repeatable agent workflows. ToolCapsule sits between them: it keeps MCP as the source of truth, but turns schema-heavy tools into compact, file-first Agent Skills.
+MCP connects agents to tools. Skills package repeatable agent workflows. ToolCapsule sits between them: it keeps MCP as the source of truth, but turns schema-heavy tools into compact, lazy-loaded, file-first Agent Skills.
 
 ## The idea
 
 ```text
 MCP tool schema → compact Skill guidance → local capsule files → auditable run → patch and retry
 ```
+
+## Key concepts
+
+- **MCP-to-Skill**: the workflow that converts an MCP server into an Agent Skill while keeping MCP as the source of truth.
+- **Lazy MCP**: MCP tool schemas are loaded on demand instead of being carried in every agent turn.
+- **Agent Skills for MCP**: generated Skills that give agents a compact, file-first workflow for MCP capabilities.
 
 ## Fast import
 

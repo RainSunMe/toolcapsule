@@ -1,6 +1,6 @@
 # Generic stdio MCP demo
 
-This example proves ToolCapsule is not Feishu-specific.
+This example proves ToolCapsule is not Feishu-specific. The same MCP-to-Skill workflow works for any stdio MCP server.
 
 It uses the mock MCP server from the test fixtures:
 
