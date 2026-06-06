@@ -4,6 +4,8 @@ import type { JsonRpcMessage, ProfileConfig, ToolsListResult } from "../types.js
 
 export type McpClientOptions = {
   timeoutMs?: number;
+  debug?: boolean;
+  clientVersion?: string;
 };
 
 export class McpClient {
@@ -15,9 +17,13 @@ export class McpClient {
     { resolve: (value: JsonRpcMessage) => void; reject: (error: Error) => void }
   >();
   private timeoutMs: number;
+  private debug: boolean;
+  private clientVersion: string;
 
   constructor(profile: ProfileConfig, opts: McpClientOptions = {}) {
     this.timeoutMs = opts.timeoutMs ?? Number(process.env.TOOLCAPSULE_TIMEOUT_MS || "45000");
+    this.debug = opts.debug ?? process.env.TOOLCAPSULE_DEBUG === "1";
+    this.clientVersion = opts.clientVersion ?? "0.0.0";
     if (profile.transport.type === "remote") {
       this.child = spawn("npx", ["-y", "mcp-remote", profile.transport.url], {
         stdio: ["pipe", "pipe", "pipe"],
@@ -29,12 +35,17 @@ export class McpClient {
     }
     this.child.stdout.setEncoding("utf8");
     this.child.stdout.on("data", (chunk: string) => this.onStdout(chunk));
-    this.child.stderr.on("data", (chunk: Buffer) => process.stderr.write(chunk));
+    this.child.stderr.on("data", (chunk: Buffer) => this.onStderr(chunk));
     this.child.on("exit", (code, signal) => {
       const error = new Error(`MCP process exited early (code=${code}, signal=${signal})`);
       for (const waiter of this.pending.values()) waiter.reject(error);
       this.pending.clear();
     });
+  }
+
+  private onStderr(chunk: Buffer): void {
+    if (!this.debug) return;
+    process.stderr.write(redactSecrets(chunk.toString("utf8")));
   }
 
   private onStdout(chunk: string): void {
@@ -65,7 +76,7 @@ export class McpClient {
     await this.request("initialize", {
       protocolVersion: "2025-03-26",
       capabilities: {},
-      clientInfo: { name: "toolcapsule", version: "0.1.0" },
+      clientInfo: { name: "toolcapsule", version: this.clientVersion },
     });
     this.notify("notifications/initialized", {});
   }
@@ -109,4 +120,12 @@ export class McpClient {
       if (timer) clearTimeout(timer);
     }
   }
+}
+
+function redactSecrets(text: string): string {
+  return text
+    .replace(/https:\/\/mcp\.feishu\.cn\/mcp\/[^\s"']+/g, "https://mcp.feishu.cn/mcp/[redacted]")
+    .replace(/(Bearer\s+)[A-Za-z0-9._~+/=-]+/gi, "$1[redacted]")
+    .replace(/(token=)[^\s&"']+/gi, "$1[redacted]")
+    .replace(/(api[_-]?key=)[^\s&"']+/gi, "$1[redacted]");
 }

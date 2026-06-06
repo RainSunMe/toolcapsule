@@ -15,3 +15,9 @@
 ## 0.1.0-alpha.2
 
 - Fix CLI version reporting so `toolcapsule --version` and `tcap --version` match `package.json`.
+
+## 0.1.0-alpha.3
+
+- Silence MCP transport stderr by default to avoid leaking remote MCP URLs in normal command output.
+- Add `TOOLCAPSULE_DEBUG=1` for redacted transport logs when debugging.
+- Pass the current package version to MCP `clientInfo`.
