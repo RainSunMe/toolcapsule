@@ -569,6 +569,18 @@ li code { color: var(--clay-dark); }
   flex-wrap: wrap;
   gap: 12px;
 }
+.copy-status {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(89, 107, 80, 0.30);
+  border-radius: 14px;
+  background: rgba(89, 107, 80, 0.10);
+  color: var(--sage);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+}
+.copy-status[hidden] { display: none; }
 
 @media (max-width: 960px) {
   .nav-links { display: none; }
