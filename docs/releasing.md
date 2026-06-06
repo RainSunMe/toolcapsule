@@ -24,12 +24,24 @@ git tag v0.1.0-alpha.1
 git push origin v0.1.0-alpha.1
 ```
 
-The `Release` workflow will:
+The intended `Release` workflow will:
 
 1. install dependencies;
 2. run CI;
 3. publish to npm with provenance through Trusted Publishing;
 4. create a GitHub Release.
+
+If Trusted Publishing fails during early setup, publish manually after CI:
+
+```bash
+npm publish --access public
+```
+
+Then verify with:
+
+```bash
+npm view toolcapsule version
+```
 
 ## Notes
 
