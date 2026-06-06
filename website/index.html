@@ -82,8 +82,8 @@
         </div>
       </section>
 
-      <section id="import" class="import-panel">
-        <div class="import-copy">
+      <section id="import" class="onboarding-section">
+        <div class="onboarding-intro">
           <p class="eyebrow" data-i18n="import.eyebrow">Fast import</p>
           <h2 data-i18n="import.title">Turn existing MCP config into a Skill.</h2>
           <p data-i18n="import.copy">
@@ -97,7 +97,7 @@
             <span>Cursor</span>
           </div>
         </div>
-        <div class="import-demo" aria-label="MCP import terminal demo">
+        <div class="onboarding-terminal" aria-label="MCP import terminal demo">
           <div class="terminal-card">
             <div class="terminal-top">
               <span></span><span></span><span></span>
@@ -113,40 +113,39 @@ created  .claude/skills/github-mcp/SKILL.md
 
 <span>$</span> tcap tools github --brief</code></pre>
           </div>
-          <div class="import-benefits">
-            <div>
-              <strong data-i18n="import.benefit1.title">No retyping</strong>
-              <p data-i18n="import.benefit1.copy">Reuse existing URLs, commands, headers, env references, and cwd.</p>
-            </div>
-            <div>
-              <strong data-i18n="import.benefit2.title">Safe by default</strong>
-              <p data-i18n="import.benefit2.copy">Workspace config first; user-level config requires opt-in.</p>
-            </div>
-            <div>
-              <strong data-i18n="import.benefit3.title">Agent-ready</strong>
-              <p data-i18n="import.benefit3.copy">Default target is Claude, with Copilot, OpenCode, .agents, or all targets available.</p>
-            </div>
+        </div>
+        <div class="onboarding-benefits">
+          <article>
+            <strong data-i18n="import.benefit1.title">No retyping</strong>
+            <p data-i18n="import.benefit1.copy">Reuse existing URLs, commands, headers, env references, and cwd.</p>
+          </article>
+          <article>
+            <strong data-i18n="import.benefit2.title">Safe by default</strong>
+            <p data-i18n="import.benefit2.copy">Workspace config first; user-level config requires opt-in.</p>
+          </article>
+          <article>
+            <strong data-i18n="import.benefit3.title">Agent-ready</strong>
+            <p data-i18n="import.benefit3.copy">Default target is Claude, with Copilot, OpenCode, .agents, or all targets available.</p>
+          </article>
+        </div>
+        <div id="capsule" class="capsule-row">
+          <div>
+            <p class="eyebrow" data-i18n="capsule.eyebrow">The capsule</p>
+            <h2 data-i18n="capsule.title">A tool call becomes a patchable artifact.</h2>
+            <p data-i18n="capsule.copy">
+              Instead of asking the model to regenerate a large tool call after a failure,
+              ToolCapsule stores the arguments, payloads, request, response, and error as local files.
+            </p>
           </div>
-        </div>
-      </section>
-
-      <section id="capsule" class="capsule-panel">
-        <div class="panel-copy">
-          <p class="eyebrow" data-i18n="capsule.eyebrow">The capsule</p>
-          <h2 data-i18n="capsule.title">A tool call becomes a patchable artifact.</h2>
-          <p data-i18n="capsule.copy">
-            Instead of asking the model to regenerate a large tool call after a failure,
-            ToolCapsule stores the arguments, payloads, request, response, and error as local files.
-          </p>
-        </div>
-        <div class="artifact-card" aria-label="Capsule file structure">
-          <div class="artifact-title">runs/2026-06-06T10-00-00</div>
-          <pre><code>args.json
+          <div class="artifact-card" aria-label="Capsule file structure">
+            <div class="artifact-title">runs/2026-06-06T10-00-00</div>
+            <pre><code>args.json
 content.md
 request.json
 response.json
 error.txt
 command.txt</code></pre>
+          </div>
         </div>
       </section>
 
@@ -222,16 +221,30 @@ command.txt</code></pre>
     </div>
 
     <script>
-      const aiPrompt = `Help me convert my existing local MCP configuration into ToolCapsule skills.
+      const aiPrompt = `Help me onboard this project to ToolCapsule from start to finish.
+
+    ToolCapsule turns heavy MCP servers into lightweight, lazy-loaded, file-first Agent Skills. Your job is to install it if needed, import my existing MCP configuration safely, generate the right skill, and show me how to use patch-and-retry.
 
 Please do this safely:
-1. Run tcap import --dry-run to inspect common workspace MCP config files: .vscode/mcp.json, .mcp.json, opencode.json, .gemini/settings.json, and .cursor/mcp.json.
-2. Do not print secrets, API keys, bearer tokens, private document IDs, or private MCP URLs. Preserve environment variable references instead.
-3. If needed, ask me before using --include-user to inspect ~/.claude.json, ~/.config/opencode/opencode.json, or ~/.gemini/settings.json.
-4. Identify the MCP server that best matches my task.
-5. Import it with tcap import --name <server> --target <target>. Use claude by default, or copilot/opencode/agents/all if that matches my agent.
-6. Use tcap tools <profile> --brief and tcap schema <profile> <tool> before calling tools.
-7. Put large arguments or Markdown payloads in local files, call with tcap call <profile> <tool> @args.json --save-run, and use tcap retry <run-dir> after patching failures.`;
+    1. Check whether toolcapsule or tcap is installed. If missing, install it with: npm i -g toolcapsule
+    2. Run: tcap import --dry-run
+    3. Inspect common workspace MCP config files only: .vscode/mcp.json, .mcp.json, opencode.json, .gemini/settings.json, and .cursor/mcp.json.
+    4. Do not print secrets, API keys, bearer tokens, private document IDs, or private MCP URLs. Preserve environment variable references such as \\${TOKEN}, $TOKEN, or {env:TOKEN}.
+    5. If workspace config is not enough, ask me before using --include-user to inspect ~/.claude.json, ~/.config/opencode/opencode.json, or ~/.gemini/settings.json.
+    6. Identify the MCP server that best matches my task. If multiple servers match, explain the options briefly and ask me to choose.
+    7. Import the selected server with: tcap import --name <server> --target <target>
+       - Use --target claude by default.
+       - Use --target copilot for GitHub Copilot / VS Code.
+       - Use --target opencode for OpenCode.
+       - Use --target agents for .agents/skills compatibility.
+       - Use --target all only if I ask for multi-agent setup.
+    8. After import, confirm the generated files, usually .toolcapsule/profiles/<server>.json and .claude/skills/<server>-mcp/SKILL.md.
+    9. Discover tools briefly with: tcap tools <profile> --brief
+    10. Load one tool schema only when needed with: tcap schema <profile> <tool>
+    11. Put large arguments or Markdown payloads in local files such as args.json or content.md.
+    12. Call tools with: tcap call <profile> <tool> @args.json --save-run
+    13. If a call fails, inspect the saved run, patch the local args/content file, then retry with: tcap retry <run-dir>
+    14. Summarize what was installed, imported, generated, and how I should invoke the new skill in my current agent.`;
 
       const copy = {
         en: {
