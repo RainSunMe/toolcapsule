@@ -143,8 +143,8 @@ h1 {
   max-width: 1050px;
   margin-bottom: 28px;
   font-size: clamp(58px, 9.4vw, 132px);
-  line-height: 0.88;
-  letter-spacing: -0.075em;
+  line-height: 0.98;
+  letter-spacing: -0.065em;
   font-weight: 520;
 }
 html[lang="zh-CN"] h1 {
