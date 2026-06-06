@@ -1,0 +1,40 @@
+---
+name: {{skillName}}
+description: '{{description}}'
+argument-hint: 'MCP task, tool name, or args file to run'
+---
+
+# {{title}}
+
+This skill wraps an MCP server as a lightweight, lazy-loaded, file-first workflow.
+
+## Why use this skill
+
+- Keep full MCP tool schemas out of the model context until needed.
+- Use brief tool summaries for everyday work.
+- Store large payloads in local files such as `args.json` or `content.md`.
+- Patch local artifacts and retry failed calls deterministically.
+
+## Commands
+
+```bash
+toolcapsule tools {{profileName}} --brief
+toolcapsule describe {{profileName}} <tool>
+toolcapsule call {{profileName}} <tool> @args.json
+toolcapsule retry <run-dir>
+```
+
+## Workflow
+
+1. Use `tools --brief` to find the likely tool.
+2. Use `describe <tool>` only when the brief schema is insufficient.
+3. Put complex arguments in a local JSON file.
+4. Call with `@args.json` and save the run.
+5. On failure, patch the local file and run `retry`.
+
+## Safety
+
+- Do not fabricate IDs, URLs, user IDs, or opaque tokens.
+- Prefer local files for large payloads.
+- Do not print secrets.
+- Review destructive tools before calling.
