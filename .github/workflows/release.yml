@@ -48,7 +48,14 @@ jobs:
       - name: Verify npm publish
         run: |
           VERSION=$(node -p "require('./package.json').version")
-          npm view "toolcapsule@$VERSION" name version bin
+          for attempt in 1 2 3 4 5 6; do
+            if npm view "toolcapsule@$VERSION" name version bin; then
+              exit 0
+            fi
+            echo "npm registry has not returned toolcapsule@$VERSION yet; retry $attempt/6"
+            sleep 10
+          done
+          exit 1
       - uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true

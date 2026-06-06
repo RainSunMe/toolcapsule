@@ -44,3 +44,7 @@
 ## 0.1.0-alpha.7
 
 - Publish prerelease versions with the explicit `alpha` npm dist-tag.
+
+## 0.1.0-alpha.8
+
+- Retry npm publish verification to tolerate registry propagation delay.
