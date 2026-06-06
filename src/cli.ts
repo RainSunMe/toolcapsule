@@ -16,6 +16,17 @@ import { percentReduction, roughTokens } from "./utils/tokens.js";
 
 const cli = cac("toolcapsule");
 
+async function readPackageVersion(): Promise<string> {
+  try {
+    const pkg = JSON.parse(await readFile(new URL("../package.json", import.meta.url), "utf8")) as { version?: string };
+    return pkg.version || "0.0.0";
+  } catch {
+    return "0.0.0";
+  }
+}
+
+const packageVersion = await readPackageVersion();
+
 async function withClient<T>(profile: ProfileConfig, fn: (client: McpClient) => Promise<T>): Promise<T> {
   const client = new McpClient(profile);
   try {
@@ -167,7 +178,7 @@ cli.command("render-readme", "Print website hero copy snippets").action(async ()
 });
 
 cli.help();
-cli.version("0.1.0-alpha.0");
+cli.version(packageVersion);
 
 try {
   cli.parse();
