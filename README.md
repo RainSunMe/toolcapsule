@@ -112,8 +112,6 @@ In a Feishu MCP benchmark:
 
 Results vary by MCP server, model, and host.
 
-Read the public benchmark write-up: [MCP vs Skill benchmark](docs/benchmarks/mcp-vs-skill.md).
-
 ## CLI
 
 ```text
@@ -153,7 +151,6 @@ Early alpha. APIs may change before v1.0.
 - [Architecture](docs/architecture.md)
 - [Patch and retry](docs/patch-and-retry.md)
 - [Benchmark methodology](docs/benchmark-methodology.md)
-- [MCP vs Skill benchmark](docs/benchmarks/mcp-vs-skill.md)
 - [Releasing](docs/releasing.md)
 - [Launch notes](docs/launch.md)
 - [Screenshots and recordings](docs/screenshots.md)
