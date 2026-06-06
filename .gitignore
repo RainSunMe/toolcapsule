@@ -9,3 +9,5 @@ coverage/
 /runs/
 /.github/skills/*/runs/
 .vercel
+
+.local/
