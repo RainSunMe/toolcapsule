@@ -40,3 +40,7 @@
 
 - Use Node 24 in the release workflow to satisfy npm Trusted Publishing requirements.
 - Let npm Trusted Publishing generate provenance automatically during publish.
+
+## 0.1.0-alpha.7
+
+- Publish prerelease versions with the explicit `alpha` npm dist-tag.
