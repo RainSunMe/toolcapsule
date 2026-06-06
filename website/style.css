@@ -147,12 +147,20 @@ h1 {
   letter-spacing: -0.075em;
   font-weight: 520;
 }
+html[lang="zh-CN"] h1 {
+  line-height: 1.08;
+  letter-spacing: -0.06em;
+}
 h2 {
   margin-bottom: 0;
   font-size: clamp(34px, 4.8vw, 68px);
   line-height: 0.98;
   letter-spacing: -0.055em;
   font-weight: 520;
+}
+html[lang="zh-CN"] h2 {
+  line-height: 1.12;
+  letter-spacing: -0.04em;
 }
 h3 {
   margin-bottom: 12px;
@@ -167,6 +175,14 @@ h3 {
   font-size: clamp(20px, 2.4vw, 28px);
   line-height: 1.42;
   margin-bottom: 34px;
+}
+html[lang="zh-CN"] .hero-subtitle,
+html[lang="zh-CN"] .section-copy,
+html[lang="zh-CN"] .panel-copy p:not(.eyebrow),
+html[lang="zh-CN"] .workflow p,
+html[lang="zh-CN"] ul,
+html[lang="zh-CN"] .cta p:not(.eyebrow) {
+  line-height: 1.82;
 }
 .hero-actions {
   display: flex;
@@ -280,15 +296,17 @@ h3 {
 .workflow {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1px;
   margin: 0 0 112px;
-  border: 1px solid var(--line-strong);
-  background: var(--line-strong);
+  border-top: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-strong);
 }
 .workflow article {
   min-height: 260px;
   padding: 24px;
-  background: rgba(247, 242, 232, 0.86);
+  border-right: 1px solid var(--line);
+}
+.workflow article:last-child {
+  border-right: 0;
 }
 .workflow span {
   display: inline-block;
@@ -306,17 +324,17 @@ h3 {
 .comparison {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  border-top: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-strong);
 }
 .comparison-card {
   padding: 32px;
-  border: 1px solid var(--line-strong);
-  border-radius: 30px;
-  background: rgba(255, 250, 241, 0.52);
+  border: 0;
+  background: transparent;
 }
 .comparison-card.accent {
-  border-color: rgba(143, 67, 42, 0.28);
-  background: linear-gradient(180deg, rgba(255, 250, 241, 0.74), rgba(240, 222, 201, 0.7));
+  border-left: 1px solid var(--line);
+  background: transparent;
 }
 ul {
   margin: 24px 0 0;
@@ -356,5 +374,10 @@ li code { color: var(--clay-dark); }
   .workflow { grid-template-columns: 1fr; }
   .proof-strip div { border-right: 0; border-bottom: 1px solid var(--line); }
   .proof-strip div:last-child { border-bottom: 0; }
-  .capsule-panel, .comparison-card { padding: 24px; border-radius: 24px; }
+  .workflow article { border-right: 0; border-bottom: 1px solid var(--line); }
+  .workflow article:last-child { border-bottom: 0; }
+  .comparison { grid-template-columns: 1fr; }
+  .comparison-card { padding: 24px; }
+  .comparison-card.accent { border-left: 0; border-top: 1px solid var(--line); }
+  .capsule-panel { padding: 24px; border-radius: 24px; }
 }
