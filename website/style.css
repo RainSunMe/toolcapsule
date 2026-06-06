@@ -12,6 +12,9 @@
   --sage: #596b50;
   --cream: #fffaf1;
   --code: #28231e;
+  --code-bg: #1b1814;
+  --code-border: #342f28;
+  --code-muted: #d8c9b7;
   font-family:
     ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 }
@@ -142,7 +145,7 @@ h1, h2, h3, p { margin-top: 0; }
 h1 {
   max-width: 1050px;
   margin-bottom: 28px;
-  font-size: clamp(58px, 9.4vw, 132px);
+  font-size: clamp(54px, 8.8vw, 120px);
   line-height: 0.98;
   letter-spacing: -0.065em;
   font-weight: 520;
@@ -215,13 +218,16 @@ html[lang="zh-CN"] .cta p:not(.eyebrow) {
 }
 .install-card code {
   display: block;
-  padding: 0 0 12px;
-  border-bottom: 1px solid var(--ink);
+  padding: 12px 14px;
+  border: 1px solid var(--line-strong);
+  border-left: 4px solid var(--clay-dark);
+  background: rgba(255, 250, 241, 0.54);
   color: var(--ink);
-  font-size: clamp(30px, 4.8vw, 54px);
-  line-height: 1.04;
-  letter-spacing: -0.055em;
-  white-space: nowrap;
+  font-size: clamp(22px, 2.8vw, 34px);
+  line-height: 1.18;
+  letter-spacing: -0.035em;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 .install-card small {
   display: block;
@@ -414,43 +420,47 @@ html[lang="zh-CN"] .onboarding-intro h2 {
 }
 .terminal-card {
   overflow: hidden;
-  border: 1px solid #2c2924;
+  border: 1px solid var(--code-border);
+  border-top: 3px solid var(--clay-dark);
   border-radius: 0;
-  background: #1f1b17;
+  background:
+    linear-gradient(180deg, rgba(255, 250, 241, 0.035), transparent 42%),
+    var(--code-bg);
   color: #f7f2e8;
   box-shadow: none;
-  transform: rotate(1deg);
 }
 .terminal-top {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 14px 16px;
+  padding: 12px 16px;
   border-bottom: 1px solid rgba(247, 242, 232, 0.12);
-  color: #d9c8b5;
+  color: var(--code-muted);
   font-family: ui-sans-serif, system-ui, sans-serif;
   font-size: 12px;
 }
 .terminal-top span {
-  width: 10px;
-  height: 10px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: #c96f4a;
+  background: rgba(217, 139, 102, 0.70);
 }
-.terminal-top span:nth-child(2) { background: #d4ad4f; }
-.terminal-top span:nth-child(3) { background: #596b50; }
+.terminal-top span:nth-child(2) { background: rgba(212, 173, 79, 0.65); }
+.terminal-top span:nth-child(3) { background: rgba(89, 107, 80, 0.80); }
 .terminal-top strong {
   margin-left: auto;
-  font-weight: 700;
+  font-weight: 680;
+  letter-spacing: 0.02em;
 }
 .terminal-card pre {
   margin: 0;
-  padding: clamp(18px, 3vw, 28px);
+  padding: clamp(20px, 3vw, 30px);
   font-size: clamp(13px, 1.6vw, 16px);
-  line-height: 1.78;
+  line-height: 1.82;
   white-space: pre-wrap;
 }
-.terminal-card code span { color: #d98b66; }
+.terminal-card code { color: #f6eadb; }
+.terminal-card code span { color: #e49a72; }
 .onboarding-benefits {
   grid-column: 1 / -1;
   display: grid;
@@ -495,20 +505,29 @@ html[lang="zh-CN"] .onboarding-intro h2 {
 }
 .artifact-card {
   overflow: hidden;
-  border: 1px solid #2c2924;
+  border: 1px solid var(--code-border);
+  border-top: 3px solid var(--sage);
   border-radius: 0;
-  background: #1f1b17;
+  background:
+    linear-gradient(180deg, rgba(255, 250, 241, 0.035), transparent 42%),
+    var(--code-bg);
   color: #f7f2e8;
   box-shadow: none;
 }
 .artifact-title {
   padding: 15px 18px;
   border-bottom: 1px solid rgba(247, 242, 232, 0.15);
-  color: #d9c8b5;
+  color: var(--code-muted);
   font-family: ui-sans-serif, system-ui, sans-serif;
   font-size: 13px;
 }
-.artifact-card pre { margin: 0; padding: 22px; font-size: 15px; line-height: 1.85; }
+.artifact-card pre {
+  margin: 0;
+  padding: 24px;
+  color: #f6eadb;
+  font-size: 15px;
+  line-height: 1.88;
+}
 
 .workflow {
   display: grid;
