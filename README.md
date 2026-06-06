@@ -142,6 +142,7 @@ Early alpha. APIs may change before v1.0.
 - [Architecture](docs/architecture.md)
 - [Patch and retry](docs/patch-and-retry.md)
 - [Benchmark methodology](docs/benchmark-methodology.md)
+- [Releasing](docs/releasing.md)
 - [Release checklist](docs/release-checklist.md)
 - [Roadmap](ROADMAP.md)
 
