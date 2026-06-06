@@ -6,5 +6,5 @@ coverage/
 .env.*
 !.env.example
 *.log
-runs/
-.github/skills/*/runs/
+/runs/
+/.github/skills/*/runs/
