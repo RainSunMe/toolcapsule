@@ -4,6 +4,21 @@ import Handlebars from "handlebars";
 import type { ProfileConfig } from "../types.js";
 import { writeJson } from "../utils/fs.js";
 
+export type SkillTarget = "copilot" | "claude" | "opencode" | "agents" | "all";
+
+export const defaultSkillTarget: SkillTarget = "claude";
+
+export function skillOutputDir(skillName: string, target: Exclude<SkillTarget, "all">): string {
+  if (target === "copilot") return join(".github", "skills", skillName);
+  if (target === "claude") return join(".claude", "skills", skillName);
+  if (target === "opencode") return join(".opencode", "skills", skillName);
+  return join(".agents", "skills", skillName);
+}
+
+export function expandSkillTargets(target: SkillTarget): Exclude<SkillTarget, "all">[] {
+  return target === "all" ? ["copilot", "claude", "opencode", "agents"] : [target];
+}
+
 const skillTemplate = `---
 name: {{skillName}}
 description: '{{description}}'
@@ -48,11 +63,11 @@ toolcapsule retry <run-dir>
 
 export type GenerateSkillOptions = {
   outputDir?: string;
+  target?: SkillTarget;
 };
 
-export async function generateSkill(profile: ProfileConfig, opts: GenerateSkillOptions = {}): Promise<string> {
+async function generateSkillAt(profile: ProfileConfig, outputDir: string): Promise<string> {
   const skillName = profile.skill?.name || `${profile.name}-mcp`;
-  const outputDir = opts.outputDir || join(".github", "skills", skillName);
   await mkdir(join(outputDir, "scripts"), { recursive: true });
   await mkdir(join(outputDir, "runs"), { recursive: true });
 
@@ -73,6 +88,15 @@ export async function generateSkill(profile: ProfileConfig, opts: GenerateSkillO
     `# Scripts\n\nThis skill uses the project-level \`toolcapsule\` CLI.\n`,
   );
   return outputDir;
+}
+
+export async function generateSkill(profile: ProfileConfig, opts: GenerateSkillOptions = {}): Promise<string> {
+  const skillName = profile.skill?.name || `${profile.name}-mcp`;
+  const target = opts.target || defaultSkillTarget;
+  const outputs = opts.outputDir
+    ? [await generateSkillAt(profile, opts.outputDir)]
+    : await Promise.all(expandSkillTargets(target).map((item) => generateSkillAt(profile, skillOutputDir(skillName, item))));
+  return outputs.join(", ");
 }
 
 export async function writeProfile(path: string, profile: ProfileConfig): Promise<void> {

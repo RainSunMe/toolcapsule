@@ -55,6 +55,24 @@ Add a better release note with:
 
 ## 2. Product usability
 
+### 2.0 Fast MCP import
+
+Initial support exists:
+
+```bash
+tcap import --dry-run
+tcap import --name <server> --target claude
+tcap import --all --target all
+```
+
+Next improvements:
+
+- Add clearer per-tool import summaries in CLI output.
+- Add support for more user-level config locations after explicit confirmation.
+- Add integration tests with fixture config files for Claude Code, VS Code, OpenCode, Gemini CLI, and Cursor.
+- Document security behavior around `headers`, `env`, and user-level configs.
+- Consider an interactive mode that prompts users to pick a server when multiple MCP servers are found.
+
 ### 2.1 Build a real Feishu demo
 
 The Feishu example should become a complete demo:

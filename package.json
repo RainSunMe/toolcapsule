@@ -1,6 +1,6 @@
 {
   "name": "toolcapsule",
-  "version": "0.1.0-alpha.8",
+  "version": "0.1.0-alpha.9",
   "description": "File-first, patchable Agent Skills for heavy MCP tools.",
   "type": "module",
   "bin": {

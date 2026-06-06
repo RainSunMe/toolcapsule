@@ -1,5 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { defaultSkillTarget, expandSkillTargets, skillOutputDir, type SkillTarget } from "./generator.js";
 
 const agentSkill = `---
 name: toolcapsule
@@ -73,8 +74,13 @@ Use ToolCapsule for MCP servers with:
 - failures that benefit from patching local artifacts instead of regenerating a full tool call.
 `;
 
-export async function installAgentSkill(outputDir = ".github/skills/toolcapsule"): Promise<string> {
-  await mkdir(outputDir, { recursive: true });
-  await writeFile(join(outputDir, "SKILL.md"), agentSkill);
-  return outputDir;
+export async function installAgentSkill(outputDir?: string, target: SkillTarget = defaultSkillTarget): Promise<string> {
+  const outputDirs = outputDir ? [outputDir] : expandSkillTargets(target).map((item) => skillOutputDir("toolcapsule", item));
+  await Promise.all(
+    outputDirs.map(async (dir) => {
+      await mkdir(dir, { recursive: true });
+      await writeFile(join(dir, "SKILL.md"), agentSkill);
+    }),
+  );
+  return outputDirs.join(", ");
 }

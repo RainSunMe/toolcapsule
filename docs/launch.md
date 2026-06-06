@@ -23,9 +23,21 @@ npm i -g toolcapsule
 Try:
 
 ```bash
-tcap init feishu --url https://mcp.example.com/mcp/xxx
+tcap import --dry-run
+tcap import --name feishu --target claude
 tcap tools feishu --brief
 tcap call feishu create-doc @args.json --save-run
+```
+
+New onboarding angle:
+
+> Already have MCP configured in Claude Code, VS Code, OpenCode, Gemini CLI, or Cursor? ToolCapsule can import it and generate the right Agent Skill.
+
+Short demo:
+
+```bash
+tcap import --dry-run
+tcap import --name github --target all
 ```
 
 ## Suggested screenshot checklist
@@ -33,14 +45,17 @@ tcap call feishu create-doc @args.json --save-run
 Ask a human/function-caller to capture:
 
 1. Hero section at `https://toolcapsule.studio` or `https://toolcapsule.vercel.app`.
-2. Terminal showing `tcap tools feishu --brief`.
-3. Terminal showing a saved run directory.
-4. Before/after graphic: native MCP schema in prompt vs ToolCapsule local artifacts.
+2. Terminal showing `tcap import --dry-run` finding an existing MCP server.
+3. Terminal showing `tcap tools feishu --brief`.
+4. Terminal showing a saved run directory.
+5. Before/after graphic: native MCP schema in prompt vs ToolCapsule local artifacts.
 
 ## Suggested GIF flow
 
-1. Run `tcap call ... --save-run`.
-2. Show failure or saved run artifacts.
-3. Patch `args.json`.
-4. Run `tcap retry runs/<id>`.
-5. Show success.
+1. Run `tcap import --dry-run`.
+2. Run `tcap import --name ... --target claude`.
+3. Run `tcap call ... --save-run`.
+4. Show failure or saved run artifacts.
+5. Patch `args.json`.
+6. Run `tcap retry runs/<id>`.
+7. Show success.
