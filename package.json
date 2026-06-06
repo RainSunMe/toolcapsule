@@ -4,8 +4,8 @@
   "description": "File-first, patchable Agent Skills for heavy MCP tools.",
   "type": "module",
   "bin": {
-    "toolcapsule": "./dist/cli.js",
-    "tcap": "./dist/cli.js"
+    "toolcapsule": "dist/cli.js",
+    "tcap": "dist/cli.js"
   },
   "files": [
     "dist",
