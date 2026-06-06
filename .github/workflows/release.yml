@@ -24,8 +24,27 @@ jobs:
           cache: pnpm
           registry-url: https://registry.npmjs.org
       - run: pnpm install --frozen-lockfile
+      - name: Check tag matches package version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="${GITHUB_REF_NAME#v}"
+          if [ "$VERSION" != "$TAG" ]; then
+            echo "package.json version $VERSION does not match tag $GITHUB_REF_NAME"
+            exit 1
+          fi
+      - name: Check npm version is unpublished
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if npm view "toolcapsule@$VERSION" version >/dev/null 2>&1; then
+            echo "toolcapsule@$VERSION already exists on npm"
+            exit 1
+          fi
       - run: pnpm run ci
       - run: npm publish --provenance --access public
+      - name: Verify npm publish
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          npm view "toolcapsule@$VERSION" name version bin
       - uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true

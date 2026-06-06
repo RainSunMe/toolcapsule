@@ -28,3 +28,10 @@
 - Add `llms.txt` so AI agents can quickly learn how to install and use ToolCapsule.
 - Add a generic stdio MCP example to show ToolCapsule is not Feishu-specific.
 - Add screenshot and recording placeholders for launch assets.
+
+## 0.1.0-alpha.5
+
+- Harden release workflow for npm Trusted Publishing.
+- Check tag/package version consistency before publish.
+- Check npm version availability before publish.
+- Verify npm publish inside the release workflow.

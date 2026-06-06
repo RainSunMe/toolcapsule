@@ -130,12 +130,9 @@ GH_PAGER=cat gh repo edit RainSunMe/toolcapsule \
 
 ## Vercel Workflow
 
-### Deploy manually
+Normal production deploys must go through GitHub push and Vercel Git Integration. Do not run `vercel --prod` for routine website updates.
 
-```bash
-cd /home/yingbo/code/toolcapsule
-corepack pnpm exec vercel --prod --yes
-```
+Manual Vercel deploy is only an emergency fallback.
 
 ### Inspect deployment/domain
 
@@ -208,8 +205,11 @@ git push origin v0.1.0-alpha.1
 The `Release` workflow should:
 
 - install dependencies;
+- verify tag and package version match;
+- verify the npm version is unpublished;
 - run `pnpm run ci`;
 - publish npm with `npm publish --provenance --access public`;
+- verify npm publish;
 - create a GitHub Release.
 
 ### Verify release
