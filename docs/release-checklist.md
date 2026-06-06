@@ -8,7 +8,7 @@ Before publishing v0.1.0:
 - [ ] Connect the repository to Vercel.
 - [ ] Point `toolcapsule.studio` to Vercel.
 - [ ] Enable GitHub Discussions.
-- [ ] Add `NPM_TOKEN` or configure npm trusted publishing.
+- [ ] Configure npm Trusted Publishing for `release.yml` and environment `npm`.
 - [ ] Review the security model for local command execution.
 - [ ] Run `pnpm run ci`.
 - [ ] Run CLI smoke tests with a mock MCP server.
