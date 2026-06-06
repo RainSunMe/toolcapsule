@@ -31,6 +31,7 @@ But large MCP servers can be expensive in agent contexts:
 - failed tool calls force the model to regenerate the whole call.
 
 ToolCapsule keeps the MCP server as the source of truth, but exposes it through a lightweight Skill and local artifacts.
+Transport logs are quiet by default so remote MCP URLs are not printed during normal use. Set `TOOLCAPSULE_DEBUG=1` only when debugging.
 
 ## What is a ToolCapsule?
 

@@ -28,7 +28,7 @@ async function readPackageVersion(): Promise<string> {
 const packageVersion = await readPackageVersion();
 
 async function withClient<T>(profile: ProfileConfig, fn: (client: McpClient) => Promise<T>): Promise<T> {
-  const client = new McpClient(profile);
+  const client = new McpClient(profile, { clientVersion: packageVersion });
   try {
     await client.init();
     return await fn(client);
