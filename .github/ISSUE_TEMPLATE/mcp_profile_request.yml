@@ -1,0 +1,17 @@
+name: MCP profile request
+description: Request a profile or shortcut for an MCP server
+labels: [mcp-profile]
+body:
+  - type: input
+    id: server
+    attributes:
+      label: MCP server name
+    validations:
+      required: true
+  - type: textarea
+    id: tools
+    attributes:
+      label: Important tools and workflows
+      placeholder: Do not paste secrets or private endpoints.
+    validations:
+      required: true

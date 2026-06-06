@@ -1,0 +1,74 @@
+{
+  "name": "toolcapsule",
+  "version": "0.1.0-alpha.0",
+  "description": "File-first, patchable Agent Skills for heavy MCP tools.",
+  "type": "module",
+  "bin": {
+    "toolcapsule": "./dist/cli.js",
+    "tcap": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "docs",
+    "examples"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsx src/cli.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "ci": "tsc --noEmit && eslint . && vitest run && tsup",
+    "smoke": "node dist/cli.js --help"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "agent-skills",
+    "skills",
+    "skill",
+    "tool-calling",
+    "function-calling",
+    "ai-agents",
+    "llm-tools",
+    "context-engineering",
+    "cli",
+    "typescript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RainSunMe/toolcapsule.git"
+  },
+  "bugs": {
+    "url": "https://github.com/RainSunMe/toolcapsule/issues"
+  },
+  "homepage": "https://toolcapsule.studio",
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@9.15.9",
+  "dependencies": {
+    "cac": "^6.7.14",
+    "execa": "^9.6.0",
+    "handlebars": "^4.7.8",
+    "picocolors": "^1.1.1",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "@types/node": "^22.10.7",
+    "eslint": "^9.18.0",
+    "prettier": "^3.4.2",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.20.0",
+    "vitest": "^2.1.8"
+  }
+}
