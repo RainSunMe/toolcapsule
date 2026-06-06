@@ -2,6 +2,8 @@
 
 ToolCapsule has reached a public alpha loop: GitHub repository, Vercel site, npm package, release workflow, and project skill are in place.
 
+The public positioning is now: MCP-to-Skill for heavy MCP tools. Keep future docs, demos, and releases aligned with lazy MCP, lazy-loaded Agent Skills, and Agent Skills for MCP search intent.
+
 This document tracks what should happen next.
 
 ## 1. Immediate follow-up
@@ -95,7 +97,7 @@ tcap call feishu create-doc @create-doc.args.json --save-run
 tcap retry runs/...
 ```
 
-Goal: a new user should understand MCP → Skill → file-first call → patch-and-retry in one example.
+Goal: a new user should understand MCP-to-Skill → file-first call → patch-and-retry in one example.
 
 ### 2.2 Add shortcuts
 

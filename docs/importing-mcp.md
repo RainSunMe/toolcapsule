@@ -1,8 +1,8 @@
 # Import existing MCP configuration
 
-ToolCapsule can convert MCP servers already configured in other coding tools into ToolCapsule profiles and Agent Skills.
+ToolCapsule can convert MCP servers already configured in other coding tools into ToolCapsule profiles and Agent Skills. This is the core MCP-to-Skill workflow.
 
-This is the fastest onboarding path when a user already has MCP working in Claude Code, GitHub Copilot / VS Code, OpenCode, Gemini CLI, or Cursor.
+This is the fastest onboarding path when a user already has MCP working in Claude Code, GitHub Copilot / VS Code, OpenCode, Gemini CLI, or Cursor. It also enables a lazy MCP setup where schemas are loaded only when the generated Skill needs them.
 
 ## Quick start
 
@@ -18,6 +18,8 @@ tcap import --name <server> --target all
 ```
 
 ## What gets created
+
+An MCP-to-Skill import keeps MCP as the capability layer and creates a Skill as the agent-facing workflow layer.
 
 For an imported server named `github`, ToolCapsule writes:
 

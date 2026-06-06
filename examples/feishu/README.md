@@ -1,6 +1,8 @@
 # Feishu / Lark demo
 
-This demo shows the intended ToolCapsule workflow for a heavy document MCP server.
+This demo shows the MCP-to-Skill workflow for a heavy document MCP server.
+
+Feishu/Lark is a good example of lazy MCP: keep the MCP server as the capability layer, generate an Agent Skill as the workflow layer, and load full schemas only when needed.
 
 ## 1. Initialize a profile
 

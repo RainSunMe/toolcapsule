@@ -1,8 +1,8 @@
 # ToolCapsule
 
-ToolCapsule turns schema-heavy MCP servers into lightweight, lazy-loaded Agent Skills with file-first calls and patch-and-retry recovery.
+ToolCapsule is MCP-to-Skill for heavy MCP tools. It turns schema-heavy MCP servers into lightweight, lazy-loaded Agent Skills with file-first calls and patch-and-retry recovery.
 
-Use it when an AI agent needs to operate a heavy MCP server without carrying full tool schemas in every prompt.
+Use it when an AI agent needs a lazy MCP workflow: operate a heavy MCP server without carrying full tool schemas in every prompt.
 
 ## Install
 
@@ -31,6 +31,8 @@ This creates:
 ```
 
 ## Convert an MCP server into a Skill workflow
+
+This is the MCP-to-Skill step: keep MCP as the capability layer and generate an Agent Skill as the workflow layer.
 
 Remote MCP:
 
