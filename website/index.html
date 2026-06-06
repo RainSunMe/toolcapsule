@@ -11,139 +11,141 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <div class="page-shell">
-      <nav class="nav" aria-label="Main navigation">
-        <a class="brand" href="#top" aria-label="ToolCapsule home">
-          <span class="brand-mark">TC</span>
-          <span>ToolCapsule</span>
-        </a>
-        <div class="nav-links">
-          <a href="#why">Why</a>
-          <a href="#workflow">Workflow</a>
-          <a href="#benchmark">Benchmark</a>
-          <a href="https://github.com/RainSunMe/toolcapsule">GitHub</a>
-        </div>
+    <header class="nav">
+      <a class="brand" href="#top" aria-label="ToolCapsule home">
+        <span class="brand-mark">◒</span>
+        <span>ToolCapsule</span>
+      </a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#problem">Problem</a>
+        <a href="#capsule">Capsule</a>
+        <a href="#evidence">Evidence</a>
+        <a href="https://github.com/RainSunMe/toolcapsule">GitHub</a>
       </nav>
+    </header>
 
-      <main id="top" class="hero">
-        <section class="hero-copy">
-          <div class="pill-row">
-            <span class="pill">MCP → Skill workflow</span>
-            <span class="pill ghost">file-first tool calls</span>
-          </div>
-          <h1>Heavy MCP tools don't belong in your prompt.</h1>
-          <p class="subtitle">
-            ToolCapsule turns schema-heavy MCP servers into lightweight, lazy-loaded Agent Skills
-            with local artifacts, auditable runs, and patch-and-retry recovery.
-          </p>
-          <div class="actions">
-            <code>npm i -g toolcapsule</code>
-            <a class="button primary" href="https://github.com/RainSunMe/toolcapsule">Star on GitHub</a>
-            <a class="button secondary" href="#workflow">See workflow</a>
-          </div>
-          <p class="fine-print">
-            Also available as <code>tcap</code>. Built for Feishu/Lark, Notion, Jira,
-            Linear, Confluence, GitHub, and other heavy MCP servers.
-          </p>
-        </section>
+    <main id="top">
+      <section class="hero">
+        <div class="hero-kicker">MCP tools as lightweight Agent Skills</div>
+        <h1>Heavy MCP tools don’t belong in your prompt.</h1>
+        <p class="hero-subtitle">
+          ToolCapsule keeps schema-heavy MCP servers out of the context window by turning
+          them into lazy-loaded, file-first Agent Skills with patch-and-retry recovery.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="https://github.com/RainSunMe/toolcapsule">View on GitHub</a>
+          <code>npm i -g toolcapsule</code>
+          <code>tcap tools feishu --brief</code>
+        </div>
+      </section>
 
-        <section class="terminal-card" aria-label="ToolCapsule CLI preview">
-          <div class="terminal-top">
-            <span></span><span></span><span></span>
-            <strong>toolcapsule</strong>
-          </div>
-          <pre><code>$ tcap tools feishu --brief
-- create-doc: Create document required=title|markdown
-- search-user: Find user required=query
-
-$ tcap call feishu create-doc @args.json --save-run
-✓ Saved run: runs/2026-06-06T10-00-00
-
-$ vim args.json
-$ tcap retry runs/2026-06-06T10-00-00
-✓ Tool call replayed from patched artifacts</code></pre>
-        </section>
-      </main>
-
-      <section id="benchmark" class="metrics" aria-label="Benchmark metrics">
-        <article>
+      <section class="proof-strip" aria-label="Benchmark highlights">
+        <div>
           <strong>88.4%</strong>
           <span>fewer input tokens</span>
-        </article>
-        <article>
+        </div>
+        <div>
           <strong>87.6%</strong>
           <span>fewer total tokens</span>
-        </article>
-        <article>
+        </div>
+        <div>
           <strong>100%</strong>
           <span>planning success rate</span>
+        </div>
+      </section>
+
+      <section id="problem" class="section editorial-grid">
+        <div class="section-heading">
+          <p class="eyebrow">The problem</p>
+          <h2>MCP made tools universal. It also made tool context heavier.</h2>
+        </div>
+        <div class="section-copy">
+          <p>
+            Native MCP is excellent for small, frequent tools. But document and workflow MCP
+            servers often expose long descriptions, schemas, and rules that can be visible to the
+            model even when the user is only planning.
+          </p>
+          <p>
+            ToolCapsule keeps MCP as the capability layer and uses Skills as the agent-facing
+            workflow layer. Full schemas are still available, but no longer need to be carried
+            every turn.
+          </p>
+        </div>
+      </section>
+
+      <section id="capsule" class="capsule-panel">
+        <div class="panel-copy">
+          <p class="eyebrow">The capsule</p>
+          <h2>A tool call becomes a patchable artifact.</h2>
+          <p>
+            Instead of asking the model to regenerate a large tool call after a failure,
+            ToolCapsule stores the arguments, payloads, request, response, and error as local files.
+          </p>
+        </div>
+        <div class="artifact-card" aria-label="Capsule file structure">
+          <div class="artifact-title">runs/2026-06-06T10-00-00</div>
+          <pre><code>args.json
+content.md
+request.json
+response.json
+error.txt
+command.txt</code></pre>
+        </div>
+      </section>
+
+      <section class="workflow">
+        <article>
+          <span>01</span>
+          <h3>Discover briefly</h3>
+          <p>List MCP tools as compact summaries instead of injecting every schema.</p>
         </article>
         <article>
-          <strong>tcap</strong>
-          <span>short CLI alias</span>
+          <span>02</span>
+          <h3>Write locally</h3>
+          <p>Put Markdown, JSON, and long arguments into files the agent can patch.</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h3>Call deterministically</h3>
+          <p>Run the MCP tool through a CLI and save the full request/response trace.</p>
+        </article>
+        <article>
+          <span>04</span>
+          <h3>Patch and retry</h3>
+          <p>Fix the local file and replay the same tool call without rewriting the prompt.</p>
         </article>
       </section>
 
-      <section id="why" class="section two-col">
-        <div>
-          <p class="eyebrow">Why it exists</p>
-          <h2>MCP is powerful. Big MCP servers are heavy.</h2>
-        </div>
-        <div class="copy-stack">
-          <p>
-            Native MCP can expose long tool descriptions and schemas on every model call. That
-            is fine for small tools, but expensive for SaaS, document, and workflow MCP servers.
-          </p>
-          <p>
-            ToolCapsule keeps MCP as the capability layer and generates a compact Agent Skill as
-            the workflow layer. Full schemas are loaded only when needed.
-          </p>
-        </div>
-      </section>
-
-      <section id="workflow" class="section workflow-grid">
-        <div class="workflow-card highlight">
-          <span>01</span>
-          <h3>Discover</h3>
-          <p>List tools as compact summaries instead of injecting every schema into every turn.</p>
-        </div>
-        <div class="workflow-card">
-          <span>02</span>
-          <h3>Capsule</h3>
-          <p>Put large arguments, Markdown, and JSON payloads in local files.</p>
-        </div>
-        <div class="workflow-card">
-          <span>03</span>
-          <h3>Call</h3>
-          <p>Execute MCP tools through a reproducible CLI and save request/response artifacts.</p>
-        </div>
-        <div class="workflow-card">
-          <span>04</span>
-          <h3>Patch & retry</h3>
-          <p>When calls fail, patch the file instead of asking the model to regenerate everything.</p>
-        </div>
-      </section>
-
-      <section class="section comparison">
-        <div class="panel bad">
-          <p class="eyebrow">Before</p>
-          <h2>Regenerate the whole tool call</h2>
+      <section id="evidence" class="section comparison">
+        <div class="comparison-card muted">
+          <p class="eyebrow">Native MCP</p>
+          <h2>Regenerate the call</h2>
           <ul>
-            <li>Full MCP schema stays close to the prompt.</li>
-            <li>Large payloads are recreated by the model.</li>
-            <li>Retries may accidentally change correct content.</li>
+            <li>Tool schemas stay close to the prompt.</li>
+            <li>Large payloads are reassembled by the model.</li>
+            <li>Retries can accidentally change correct content.</li>
           </ul>
         </div>
-        <div class="panel good">
-          <p class="eyebrow">After</p>
-          <h2>Patch local artifacts and replay</h2>
+        <div class="comparison-card accent">
+          <p class="eyebrow">ToolCapsule</p>
+          <h2>Patch the artifact</h2>
           <ul>
-            <li>Schema is lazy-loaded only when needed.</li>
+            <li>Schemas are lazy-loaded when needed.</li>
             <li>Payloads live in <code>args.json</code> and content files.</li>
-            <li>Retries are deterministic and auditable.</li>
+            <li>Retries are auditable, local, and deterministic.</li>
           </ul>
         </div>
       </section>
-    </div>
+
+      <section class="cta">
+        <p class="eyebrow">For heavy MCP servers</p>
+        <h2>Keep the protocol. Change the workflow.</h2>
+        <p>
+          ToolCapsule is designed for Feishu/Lark, Notion, Jira, Linear, Confluence,
+          GitHub management tools, and internal SaaS MCPs.
+        </p>
+        <a class="button primary" href="https://github.com/RainSunMe/toolcapsule">Start with ToolCapsule</a>
+      </section>
+    </main>
   </body>
 </html>
