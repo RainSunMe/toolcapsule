@@ -73,11 +73,20 @@
           ToolCapsule turns schema-heavy MCP servers into lazy-loaded, file-first Agent Skills
           with patch-and-retry recovery. If you want lazy MCP, this is the workflow layer.
         </p>
-        <div class="hero-actions">
-          <a class="button primary" href="https://github.com/RainSunMe/toolcapsule" data-i18n="hero.github">View on GitHub</a>
-          <button class="button secondary" type="button" data-open-ai-modal data-i18n="hero.aiButton">Give this to your AI</button>
-          <code>npm i -g toolcapsule</code>
-          <code>tcap import --dry-run</code>
+        <div class="hero-setup" aria-label="Get started">
+          <div class="install-card">
+            <span data-i18n="hero.installLabel">Install ToolCapsule</span>
+            <code>npm i -g toolcapsule</code>
+            <small data-i18n-html="hero.installHint">Then scan existing MCP configs with <code>tcap import --dry-run</code>.</small>
+          </div>
+          <div class="ai-card">
+            <span data-i18n="hero.aiLabel">Agent onboarding prompt</span>
+            <p data-i18n="hero.aiCopy">
+              Copy a detailed prompt for Claude Code, GitHub Copilot / VS Code, OpenCode, Gemini CLI, or Cursor so it can import your MCP setup safely.
+            </p>
+            <button class="button secondary" type="button" data-open-ai-modal data-i18n="hero.aiButton">Copy onboarding prompt for your coding agent</button>
+          </div>
+          <a class="button ghost" href="https://github.com/RainSunMe/toolcapsule" data-i18n="hero.github">View on GitHub</a>
         </div>
       </section>
 
@@ -289,8 +298,12 @@ Please do this safely:
           "hero.kicker": "MCP-to-Skill for lazy-loaded MCP tools",
           "hero.title": "Heavy MCP tools don’t belong in your prompt.",
           "hero.subtitle": "ToolCapsule turns schema-heavy MCP servers into lazy-loaded, file-first Agent Skills with patch-and-retry recovery. If you want lazy MCP, this is the workflow layer.",
+          "hero.installLabel": "Install ToolCapsule",
+          "hero.installHint": "Then scan existing MCP configs with <code>tcap import --dry-run</code>.",
+          "hero.aiLabel": "Agent onboarding prompt",
+          "hero.aiCopy": "Copy a detailed prompt for Claude Code, GitHub Copilot / VS Code, OpenCode, Gemini CLI, or Cursor so it can import your MCP setup safely.",
           "hero.github": "View on GitHub",
-          "hero.aiButton": "Give this to your AI",
+          "hero.aiButton": "Copy onboarding prompt for your coding agent",
           "proof.input": "fewer input tokens",
           "proof.total": "fewer total tokens",
           "proof.success": "planning success rate",
@@ -349,8 +362,12 @@ Please do this safely:
           "hero.kicker": "MCP-to-Skill：让 MCP 工具按需加载",
           "hero.title": "别把复杂 MCP 工具塞进提示词。",
           "hero.subtitle": "ToolCapsule 把 schema 繁重的 MCP 服务变成按需加载、文件优先的 Agent Skill，并支持本地修补与确定性重试。如果你想找 lazy MCP，这就是对应的工作流层。",
+          "hero.installLabel": "安装 ToolCapsule",
+          "hero.installHint": "然后用 <code>tcap import --dry-run</code> 扫描已有 MCP 配置。",
+          "hero.aiLabel": "给编程 Agent 的接入提示词",
+          "hero.aiCopy": "复制一段详细提示词给 Claude Code、GitHub Copilot / VS Code、OpenCode、Gemini CLI 或 Cursor，让它安全导入你的 MCP 配置。",
           "hero.github": "查看 GitHub",
-          "hero.aiButton": "复制给 AI",
+          "hero.aiButton": "复制给编程 Agent 的接入提示词",
           "proof.input": "输入 token 减少",
           "proof.total": "总 token 减少",
           "proof.success": "规划成功率",
