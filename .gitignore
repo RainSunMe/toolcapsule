@@ -8,3 +8,4 @@ coverage/
 *.log
 /runs/
 /.github/skills/*/runs/
+.vercel

@@ -5,7 +5,8 @@ Before publishing v0.1.0:
 - [ ] Create the GitHub repository.
 - [ ] Replace any remaining placeholder links.
 - [ ] Confirm the npm package name `toolcapsule` is available, or choose a scoped package.
-- [ ] Enable GitHub Pages in repository settings.
+- [ ] Connect the repository to Vercel.
+- [ ] Point `toolcapsule.studio` to Vercel.
 - [ ] Enable GitHub Discussions.
 - [ ] Add `NPM_TOKEN` or configure npm trusted publishing.
 - [ ] Review the security model for local command execution.
