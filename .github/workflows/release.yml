@@ -44,7 +44,7 @@ jobs:
             exit 1
           fi
       - run: pnpm run ci
-      - run: npm publish --access public
+      - run: npm publish --access public --tag alpha
       - name: Verify npm publish
         run: |
           VERSION=$(node -p "require('./package.json').version")
