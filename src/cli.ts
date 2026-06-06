@@ -10,6 +10,7 @@ import { briefTools } from "./schema/brief.js";
 import { summarizeTool, summarizeTools } from "./schema/summarize.js";
 import { generateSkill, writeProfile } from "./skill/generator.js";
 import { createRunId, loadRun, saveRun } from "./runs/recorder.js";
+import { writeFile } from "node:fs/promises";
 import { readJson } from "./utils/fs.js";
 import { percentReduction, roughTokens } from "./utils/tokens.js";
 
@@ -68,6 +69,14 @@ cli
     if (!tool) throw new Error(`Tool not found: ${toolName}`);
     console.log(JSON.stringify(options.brief ? summarizeTool(tool) : tool, null, 2));
   });
+
+cli.command("schema <profile> <tool>", "Print a compact schema for one MCP tool").action(async (profileName: string, toolName: string) => {
+  const profile = await loadProfile(profileName);
+  const result = await withClient(profile, (client) => client.listTools());
+  const tool = result.tools.find((item) => item.name === toolName);
+  if (!tool) throw new Error(`Tool not found: ${toolName}`);
+  console.log(JSON.stringify(summarizeTool(tool), null, 2));
+});
 
 cli
   .command("call <profile> <tool> <args>", "Call an MCP tool with JSON args or @args.json")
@@ -129,25 +138,28 @@ cli.command("summarize <profile>", "Summarize all tools into compact JSON").acti
   console.log(JSON.stringify(summarizeTools(result.tools), null, 2));
 });
 
-cli.command("benchmark <profile>", "Estimate schema savings for a profile").action(async (profileName: string) => {
+cli
+  .command("benchmark <profile>", "Estimate schema savings for a profile")
+  .option("--markdown", "Print a Markdown report")
+  .option("--out <file>", "Write report to a file")
+  .action(async (profileName: string, options: { markdown?: boolean; out?: string }) => {
   const profile = await loadProfile(profileName);
   const result = await withClient(profile, (client) => client.listTools());
   const nativeTokens = roughTokens(result);
   const brief = summarizeTools(result.tools);
   const briefTokens = roughTokens(brief);
-  console.log(
-    JSON.stringify(
-      {
-        profile: profileName,
-        tools: result.tools.length,
-        nativeToolsRoughTokens: nativeTokens,
-        summarizedToolsRoughTokens: briefTokens,
-        estimatedReductionPct: Number(percentReduction(nativeTokens, briefTokens).toFixed(2)),
-      },
-      null,
-      2,
-    ),
-  );
+  const summary = {
+    profile: profileName,
+    tools: result.tools.length,
+    nativeToolsRoughTokens: nativeTokens,
+    summarizedToolsRoughTokens: briefTokens,
+    estimatedReductionPct: Number(percentReduction(nativeTokens, briefTokens).toFixed(2)),
+  };
+  const output = options.markdown
+    ? `# ToolCapsule benchmark: ${profileName}\n\n| Metric | Value |\n|---|---:|\n| MCP tools | ${summary.tools} |\n| Native MCP schema rough tokens | ${summary.nativeToolsRoughTokens} |\n| ToolCapsule summary rough tokens | ${summary.summarizedToolsRoughTokens} |\n| Estimated reduction | ${summary.estimatedReductionPct}% |\n\n> Rough tokens are estimated from serialized schema length. Use this report to compare schema footprint before and after capsule summaries.\n`
+    : JSON.stringify(summary, null, 2);
+  if (options.out) await writeFile(options.out, output);
+  console.log(output);
 });
 
 cli.command("render-readme", "Print website hero copy snippets").action(async () => {

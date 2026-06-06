@@ -1,0 +1,5 @@
+{
+  "doc_id": "https://example.feishu.cn/docx/replace-with-your-doc-id",
+  "mode": "append",
+  "markdown": "## Patch-and-retry update\n\nThis update came from a local args file."
+}

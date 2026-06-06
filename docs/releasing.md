@@ -14,8 +14,8 @@ On GitHub, create an Environment named `npm`.
 
 ## Release steps
 
-1. Update `package.json` version.
-2. Update `CHANGELOG.md`.
+1. Create a changeset with `pnpm changeset` for normal changes, or update `package.json` / `CHANGELOG.md` manually for urgent alpha releases.
+2. Ensure `CHANGELOG.md` describes the release.
 3. Commit and push to `main`.
 4. Create and push a tag:
 

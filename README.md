@@ -1,5 +1,10 @@
 # ToolCapsule
 
+[![npm version](https://img.shields.io/npm/v/toolcapsule?style=flat-square)](https://www.npmjs.com/package/toolcapsule)
+[![CI](https://img.shields.io/github/actions/workflow/status/RainSunMe/toolcapsule/ci.yml?branch=main&style=flat-square)](https://github.com/RainSunMe/toolcapsule/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-black?style=flat-square)](LICENSE)
+[![GitHub Repo stars](https://img.shields.io/github/stars/RainSunMe/toolcapsule?style=flat-square)](https://github.com/RainSunMe/toolcapsule)
+
 > Heavy MCP tools don't belong in your prompt. Put them in a ToolCapsule.
 
 **ToolCapsule** turns heavy MCP servers into lightweight, lazy-loaded, file-first **Agent Skills** with patch-and-retry workflows.
@@ -44,7 +49,7 @@ npm i -g toolcapsule
 
 toolcapsule init feishu --url https://mcp.example.com/mcp/xxx
 toolcapsule tools feishu --brief
-toolcapsule describe feishu create-doc --brief
+toolcapsule schema feishu create-doc
 toolcapsule call feishu create-doc @args.json --save-run
 toolcapsule retry runs/2026-06-06T10-00-00-000Z
 ```
@@ -112,10 +117,11 @@ toolcapsule init <name> --url <remote-mcp-url>
 toolcapsule init <name> --command <stdio-command> --arg <arg>
 toolcapsule tools <profile> --brief
 toolcapsule describe <profile> <tool> --brief
+toolcapsule schema <profile> <tool>
 toolcapsule call <profile> <tool> @args.json --save-run
 toolcapsule retry <run-dir>
 toolcapsule summarize <profile>
-toolcapsule benchmark <profile>
+toolcapsule benchmark <profile> --markdown --out toolcapsule-report.md
 ```
 
 `tcap` is an equivalent short alias for `toolcapsule`.
@@ -143,6 +149,7 @@ Early alpha. APIs may change before v1.0.
 - [Patch and retry](docs/patch-and-retry.md)
 - [Benchmark methodology](docs/benchmark-methodology.md)
 - [Releasing](docs/releasing.md)
+- [Launch notes](docs/launch.md)
 - [Next steps](docs/next-steps.md)
 - [Release checklist](docs/release-checklist.md)
 - [Roadmap](ROADMAP.md)

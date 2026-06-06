@@ -1,9 +1,60 @@
-# Feishu example
+# Feishu / Lark demo
+
+This demo shows the intended ToolCapsule workflow for a heavy document MCP server.
+
+## 1. Initialize a profile
 
 ```bash
-toolcapsule init feishu --url https://mcp.feishu.cn/mcp/your-endpoint
-tcap tools feishu --brief
-tcap call feishu create-doc @examples/feishu/args.create-doc.json --save-run
+tcap init feishu --url https://mcp.feishu.cn/mcp/your-endpoint
 ```
 
-Use a test folder or wiki space for live writes.
+This creates:
+
+```text
+.toolcapsule/profiles/feishu.json
+.github/skills/feishu-mcp/SKILL.md
+```
+
+## 2. Discover tools briefly
+
+```bash
+tcap tools feishu --brief
+```
+
+Use this instead of loading the full MCP schema into the prompt.
+
+## 3. Inspect one tool only when needed
+
+```bash
+tcap schema feishu create-doc
+```
+
+## 4. Call with local artifacts
+
+```bash
+tcap call feishu create-doc @examples/feishu/create-doc.args.json --save-run
+```
+
+For large documents, keep the Markdown in `demo.md`, patch it locally, then copy/update the JSON payload before retrying.
+
+## 5. Patch and retry
+
+If the call fails:
+
+```bash
+# edit examples/feishu/create-doc.args.json or examples/feishu/demo.md
+tcap retry runs/<run-id>
+```
+
+## Files
+
+| File | Purpose |
+|---|---|
+| `demo.md` | Long Markdown payload example |
+| `create-doc.args.json` | Create document call args |
+| `update-doc.args.json` | Update document call args |
+| `args.create-doc.json` | Legacy minimal args example |
+
+## Safety
+
+Use a test folder or wiki space for live writes. Do not commit private MCP endpoints, tokens, user IDs, or document URLs.
