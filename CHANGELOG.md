@@ -21,3 +21,10 @@
 - Silence MCP transport stderr by default to avoid leaking remote MCP URLs in normal command output.
 - Add `TOOLCAPSULE_DEBUG=1` for redacted transport logs when debugging.
 - Pass the current package version to MCP `clientInfo`.
+
+## 0.1.0-alpha.4
+
+- Add `tcap install-skill` to install a generic ToolCapsule Agent Skill into a workspace.
+- Add `llms.txt` so AI agents can quickly learn how to install and use ToolCapsule.
+- Add a generic stdio MCP example to show ToolCapsule is not Feishu-specific.
+- Add screenshot and recording placeholders for launch assets.

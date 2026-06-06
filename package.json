@@ -1,6 +1,6 @@
 {
   "name": "toolcapsule",
-  "version": "0.1.0-alpha.3",
+  "version": "0.1.0-alpha.4",
   "description": "File-first, patchable Agent Skills for heavy MCP tools.",
   "type": "module",
   "bin": {
@@ -12,7 +12,8 @@
     "README.md",
     "LICENSE",
     "docs",
-    "examples"
+    "examples",
+    "llms.txt"
   ],
   "scripts": {
     "build": "tsup",

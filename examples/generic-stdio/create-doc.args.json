@@ -1,0 +1,4 @@
+{
+  "title": "Generic ToolCapsule demo",
+  "markdown": "## Hello\n\nThis call uses a generic stdio MCP profile, not a Feishu-specific integration."
+}

@@ -48,6 +48,7 @@ Instead of making the model hold everything in the prompt, ToolCapsule stores he
 ```bash
 npm i -g toolcapsule
 
+toolcapsule install-skill
 toolcapsule init feishu --url https://mcp.example.com/mcp/xxx
 toolcapsule tools feishu --brief
 toolcapsule schema feishu create-doc
@@ -116,6 +117,7 @@ Results vary by MCP server, model, and host.
 ```text
 toolcapsule init <name> --url <remote-mcp-url>
 toolcapsule init <name> --command <stdio-command> --arg <arg>
+toolcapsule install-skill
 toolcapsule tools <profile> --brief
 toolcapsule describe <profile> <tool> --brief
 toolcapsule schema <profile> <tool>
@@ -151,6 +153,7 @@ Early alpha. APIs may change before v1.0.
 - [Benchmark methodology](docs/benchmark-methodology.md)
 - [Releasing](docs/releasing.md)
 - [Launch notes](docs/launch.md)
+- [Screenshots and recordings](docs/screenshots.md)
 - [Next steps](docs/next-steps.md)
 - [Release checklist](docs/release-checklist.md)
 - [Roadmap](ROADMAP.md)

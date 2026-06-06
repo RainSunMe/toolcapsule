@@ -9,6 +9,7 @@ import { loadProfile } from "./profile.js";
 import { briefTools } from "./schema/brief.js";
 import { summarizeTool, summarizeTools } from "./schema/summarize.js";
 import { generateSkill, writeProfile } from "./skill/generator.js";
+import { installAgentSkill } from "./skill/installer.js";
 import { createRunId, loadRun, saveRun } from "./runs/recorder.js";
 import { writeFile } from "node:fs/promises";
 import { readJson } from "./utils/fs.js";
@@ -55,6 +56,14 @@ cli
     await writeProfile(join(".toolcapsule", "profiles", `${name}.json`), profile);
     const out = await generateSkill(profile, options.output ? { outputDir: options.output } : {});
     console.log(pc.green(`Created profile and skill at ${out}`));
+  });
+
+cli
+  .command("install-skill", "Install the generic ToolCapsule Agent Skill into this workspace")
+  .option("--output <dir>", "Skill output directory", { default: ".github/skills/toolcapsule" })
+  .action(async (options: { output: string }) => {
+    const out = await installAgentSkill(options.output);
+    console.log(pc.green(`Installed ToolCapsule Agent Skill at ${out}`));
   });
 
 cli

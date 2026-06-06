@@ -1,0 +1,79 @@
+# ToolCapsule
+
+ToolCapsule turns schema-heavy MCP servers into lightweight, lazy-loaded Agent Skills with file-first calls and patch-and-retry recovery.
+
+Use it when an AI agent needs to operate a heavy MCP server without carrying full tool schemas in every prompt.
+
+## Install
+
+```bash
+npm install -g toolcapsule
+```
+
+Short command:
+
+```bash
+tcap --help
+```
+
+## Install the Agent Skill
+
+Inside a workspace:
+
+```bash
+tcap install-skill
+```
+
+This creates:
+
+```text
+.github/skills/toolcapsule/SKILL.md
+```
+
+## Convert an MCP server into a Skill workflow
+
+Remote MCP:
+
+```bash
+tcap init <name> --url <remote-mcp-url>
+```
+
+stdio MCP:
+
+```bash
+tcap init <name> --command <command> --arg <arg>
+```
+
+## Discover tools cheaply
+
+```bash
+tcap tools <name> --brief
+```
+
+## Inspect one tool schema
+
+```bash
+tcap schema <name> <tool>
+```
+
+## Call a tool with local args
+
+```bash
+tcap call <name> <tool> @args.json --save-run
+```
+
+## Retry after patching local files
+
+```bash
+tcap retry runs/<run-id>
+```
+
+## Benchmark schema footprint
+
+```bash
+tcap benchmark <name> --markdown --out toolcapsule-report.md
+```
+
+## Safety
+
+Do not print or commit remote MCP URLs, tokens, API keys, private document IDs, user IDs, or run artifacts. Transport stderr is quiet by default. Use `TOOLCAPSULE_DEBUG=1` only when debugging.
