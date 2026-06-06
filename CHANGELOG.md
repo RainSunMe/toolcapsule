@@ -35,3 +35,8 @@
 - Check tag/package version consistency before publish.
 - Check npm version availability before publish.
 - Verify npm publish inside the release workflow.
+
+## 0.1.0-alpha.6
+
+- Use Node 24 in the release workflow to satisfy npm Trusted Publishing requirements.
+- Let npm Trusted Publishing generate provenance automatically during publish.
