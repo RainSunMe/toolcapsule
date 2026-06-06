@@ -217,6 +217,7 @@ command.txt</code></pre>
           <button class="button primary" type="button" data-copy-ai-prompt data-i18n="modal.copyButton">Copy prompt</button>
           <a class="button ghost" href="https://github.com/RainSunMe/toolcapsule" data-i18n="modal.github">Open GitHub</a>
         </div>
+        <p class="copy-status" role="status" aria-live="polite" data-copy-status hidden></p>
       </section>
     </div>
 
@@ -229,7 +230,7 @@ Please do this safely:
     1. Check whether toolcapsule or tcap is installed. If missing, install it with: npm i -g toolcapsule
     2. Run: tcap import --dry-run
     3. Inspect common workspace MCP config files only: .vscode/mcp.json, .mcp.json, opencode.json, .gemini/settings.json, and .cursor/mcp.json.
-    4. Do not print secrets, API keys, bearer tokens, private document IDs, or private MCP URLs. Preserve environment variable references such as \\${TOKEN}, $TOKEN, or {env:TOKEN}.
+    4. Do not print secrets, API keys, bearer tokens, private document IDs, or private MCP URLs. Preserve environment variable references such as $TOKEN or {env:TOKEN}.
     5. If workspace config is not enough, ask me before using --include-user to inspect ~/.claude.json, ~/.config/opencode/opencode.json, or ~/.gemini/settings.json.
     6. Identify the MCP server that best matches my task. If multiple servers match, explain the options briefly and ask me to choose.
     7. Import the selected server with: tcap import --name <server> --target <target>
@@ -302,6 +303,8 @@ Please do this safely:
           "modal.copy": "Your AI can inspect existing MCP configs, pick the right server, and turn it into a ToolCapsule skill without you retyping setup details.",
           "modal.copyButton": "Copy prompt",
           "modal.copied": "Copied",
+          "modal.copiedStatus": "Copied to clipboard. Paste it into your coding agent.",
+          "modal.copyFailed": "Could not access clipboard. Select the text and copy it manually.",
           "modal.github": "Open GitHub",
           "lang.toggle": "中文"
         },
@@ -360,6 +363,8 @@ Please do this safely:
           "modal.copy": "AI 可以检查你已有的 MCP 配置，选择合适的服务器，并把它转换成 ToolCapsule skill，不需要你手动重填配置。",
           "modal.copyButton": "复制提示词",
           "modal.copied": "已复制",
+          "modal.copiedStatus": "已复制到剪贴板。现在可以粘贴给你的编程 Agent。",
+          "modal.copyFailed": "无法访问剪贴板。请选中文本后手动复制。",
           "modal.github": "打开 GitHub",
           "lang.toggle": "EN"
         }
@@ -380,34 +385,54 @@ Please do this safely:
 
       let currentLanguage = "en";
       setLanguage(currentLanguage);
-      document.querySelector("[data-ai-prompt]").value = aiPrompt;
+      const promptBox = document.querySelector("[data-ai-prompt]");
+      const openButton = document.querySelector("[data-open-ai-modal]");
+      const closeButton = document.querySelector("[data-close-ai-modal]");
+      const copyButton = document.querySelector("[data-copy-ai-prompt]");
+      const copyStatus = document.querySelector("[data-copy-status]");
+      promptBox.value = aiPrompt;
+
+      const showCopyStatus = (message) => {
+        copyStatus.textContent = message;
+        copyStatus.hidden = false;
+        window.clearTimeout(showCopyStatus.timer);
+        showCopyStatus.timer = window.setTimeout(() => {
+          copyStatus.hidden = true;
+        }, 3200);
+      };
 
       const modal = document.querySelector("[data-ai-modal]");
       const openModal = () => {
         modal.hidden = false;
         document.body.classList.add("modal-open");
-        document.querySelector("[data-ai-prompt]").focus();
+        promptBox.focus();
       };
       const closeModal = () => {
         modal.hidden = true;
         document.body.classList.remove("modal-open");
       };
 
-      document.querySelector("[data-open-ai-modal]").addEventListener("click", openModal);
-      document.querySelector("[data-close-ai-modal]").addEventListener("click", closeModal);
+      openButton.addEventListener("click", openModal);
+      closeButton.addEventListener("click", closeModal);
       modal.addEventListener("click", (event) => {
         if (event.target === modal) closeModal();
       });
       document.addEventListener("keydown", (event) => {
         if (event.key === "Escape" && !modal.hidden) closeModal();
       });
-      document.querySelector("[data-copy-ai-prompt]").addEventListener("click", async (event) => {
-        await navigator.clipboard.writeText(aiPrompt);
+      copyButton.addEventListener("click", async (event) => {
         const button = event.currentTarget;
-        button.textContent = copy[currentLanguage]["modal.copied"];
-        setTimeout(() => {
-          button.textContent = copy[currentLanguage]["modal.copyButton"];
-        }, 1400);
+        try {
+          await navigator.clipboard.writeText(aiPrompt);
+          button.textContent = copy[currentLanguage]["modal.copied"];
+          showCopyStatus(copy[currentLanguage]["modal.copiedStatus"]);
+          setTimeout(() => {
+            button.textContent = copy[currentLanguage]["modal.copyButton"];
+          }, 1400);
+        } catch {
+          promptBox.select();
+          showCopyStatus(copy[currentLanguage]["modal.copyFailed"]);
+        }
       });
 
       document.querySelector("[data-lang-toggle]").addEventListener("click", () => {
