@@ -83,32 +83,49 @@
       </section>
 
       <section id="import" class="import-panel">
-        <div class="panel-copy">
+        <div class="import-copy">
           <p class="eyebrow" data-i18n="import.eyebrow">Fast import</p>
-          <h2 data-i18n="import.title">Already configured MCP? Convert it.</h2>
+          <h2 data-i18n="import.title">Turn existing MCP config into a Skill.</h2>
           <p data-i18n="import.copy">
-            ToolCapsule reads existing MCP registrations from Claude Code, GitHub Copilot / VS Code,
-            OpenCode, Gemini CLI, and Cursor, then writes a profile and Agent Skill for your target agent.
+            ToolCapsule reads MCP registrations you already have and writes a profile plus an Agent Skill for Claude Code, GitHub Copilot / VS Code, OpenCode, Gemini CLI, or Cursor.
           </p>
+          <div class="import-chips" aria-label="Supported MCP config sources">
+            <span>Claude Code</span>
+            <span>VS Code</span>
+            <span>OpenCode</span>
+            <span>Gemini CLI</span>
+            <span>Cursor</span>
+          </div>
         </div>
-        <div class="import-steps" aria-label="MCP import workflow">
-          <div>
-            <span>01</span>
-            <strong data-i18n="import.step1.title">Scan safely</strong>
-            <code>tcap import --dry-run</code>
-            <p data-i18n="import.step1.copy">Inspect workspace MCP config first; user-level config is opt-in.</p>
+        <div class="import-demo" aria-label="MCP import terminal demo">
+          <div class="terminal-card">
+            <div class="terminal-top">
+              <span></span><span></span><span></span>
+              <strong>toolcapsule import</strong>
+            </div>
+            <pre><code><span>$</span> tcap import --dry-run
+github   vscode   .vscode/mcp.json
+notion   claude   .mcp.json
+
+<span>$</span> tcap import --name github --target claude
+created  .toolcapsule/profiles/github.json
+created  .claude/skills/github-mcp/SKILL.md
+
+<span>$</span> tcap tools github --brief</code></pre>
           </div>
-          <div>
-            <span>02</span>
-            <strong data-i18n="import.step2.title">Generate skill</strong>
-            <code>tcap import --name github --target claude</code>
-            <p data-i18n="import.step2.copy">Create a ToolCapsule profile and a lazy-loaded Agent Skill.</p>
-          </div>
-          <div>
-            <span>03</span>
-            <strong data-i18n="import.step3.title">Use briefly</strong>
-            <code>tcap tools github --brief</code>
-            <p data-i18n="import.step3.copy">Discover compact summaries before loading full schemas.</p>
+          <div class="import-benefits">
+            <div>
+              <strong data-i18n="import.benefit1.title">No retyping</strong>
+              <p data-i18n="import.benefit1.copy">Reuse existing URLs, commands, headers, env references, and cwd.</p>
+            </div>
+            <div>
+              <strong data-i18n="import.benefit2.title">Safe by default</strong>
+              <p data-i18n="import.benefit2.copy">Workspace config first; user-level config requires opt-in.</p>
+            </div>
+            <div>
+              <strong data-i18n="import.benefit3.title">Agent-ready</strong>
+              <p data-i18n="import.benefit3.copy">Default target is Claude, with Copilot, OpenCode, .agents, or all targets available.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -235,14 +252,14 @@ Please do this safely:
           "problem.p1": "Native MCP is excellent for small, frequent tools. But document and workflow MCP servers often expose long descriptions, schemas, and rules that can be visible to the model even when the user is only planning.",
           "problem.p2": "ToolCapsule keeps MCP as the capability layer and uses Skills as the agent-facing workflow layer. Full schemas are still available, but no longer need to be carried every turn.",
           "import.eyebrow": "Fast import",
-          "import.title": "Already configured MCP? Convert it.",
-          "import.copy": "ToolCapsule reads existing MCP registrations from Claude Code, GitHub Copilot / VS Code, OpenCode, Gemini CLI, and Cursor, then writes a profile and Agent Skill for your target agent.",
-          "import.step1.title": "Scan safely",
-          "import.step1.copy": "Inspect workspace MCP config first; user-level config is opt-in.",
-          "import.step2.title": "Generate skill",
-          "import.step2.copy": "Create a ToolCapsule profile and a lazy-loaded Agent Skill.",
-          "import.step3.title": "Use briefly",
-          "import.step3.copy": "Discover compact summaries before loading full schemas.",
+          "import.title": "Turn existing MCP config into a Skill.",
+          "import.copy": "ToolCapsule reads MCP registrations you already have and writes a profile plus an Agent Skill for Claude Code, GitHub Copilot / VS Code, OpenCode, Gemini CLI, or Cursor.",
+          "import.benefit1.title": "No retyping",
+          "import.benefit1.copy": "Reuse existing URLs, commands, headers, env references, and cwd.",
+          "import.benefit2.title": "Safe by default",
+          "import.benefit2.copy": "Workspace config first; user-level config requires opt-in.",
+          "import.benefit3.title": "Agent-ready",
+          "import.benefit3.copy": "Default target is Claude, with Copilot, OpenCode, .agents, or all targets available.",
           "capsule.eyebrow": "The capsule",
           "capsule.title": "A tool call becomes a patchable artifact.",
           "capsule.copy": "Instead of asking the model to regenerate a large tool call after a failure, ToolCapsule stores the arguments, payloads, request, response, and error as local files.",
@@ -293,14 +310,14 @@ Please do this safely:
           "problem.p1": "原生 MCP 很适合小而高频的工具。但文档和流程类 MCP 服务通常带着很长的描述、schema 和规则；即使用户只是在规划，这些内容也可能持续占用模型上下文。",
           "problem.p2": "ToolCapsule 保留 MCP 作为能力层，同时把 Skill 作为面向 Agent 的工作流层。完整 schema 仍然可用，但不需要每一轮都背在提示词里。",
           "import.eyebrow": "快速导入",
-          "import.title": "已经配置过 MCP？直接转换。",
-          "import.copy": "ToolCapsule 可以读取 Claude Code、GitHub Copilot / VS Code、OpenCode、Gemini CLI 和 Cursor 里已有的 MCP 注册，并为目标 Agent 写出 profile 和 Agent Skill。",
-          "import.step1.title": "安全扫描",
-          "import.step1.copy": "默认只检查工作区 MCP 配置；用户级配置需要显式开启。",
-          "import.step2.title": "生成 Skill",
-          "import.step2.copy": "创建 ToolCapsule profile 和按需加载的 Agent Skill。",
-          "import.step3.title": "轻量使用",
-          "import.step3.copy": "先查看简洁摘要，再按需加载完整 schema。",
+          "import.title": "把已有 MCP 配置变成 Skill。",
+          "import.copy": "ToolCapsule 会读取你已经配置好的 MCP 注册，并为 Claude Code、GitHub Copilot / VS Code、OpenCode、Gemini CLI 或 Cursor 写出 profile 和 Agent Skill。",
+          "import.benefit1.title": "不用重填",
+          "import.benefit1.copy": "复用已有 URL、命令、headers、环境变量引用和 cwd。",
+          "import.benefit2.title": "默认安全",
+          "import.benefit2.copy": "优先检查工作区配置；用户级配置必须显式开启。",
+          "import.benefit3.title": "Agent 就绪",
+          "import.benefit3.copy": "默认输出 Claude，也支持 Copilot、OpenCode、.agents 或全部目标。",
           "capsule.eyebrow": "工作流",
           "capsule.title": "一次工具调用，变成可修补的本地工件。",
           "capsule.copy": "大型工具调用失败后，不必让模型重新生成整段调用。ToolCapsule 会把参数、载荷、请求、响应和错误都保存为本地文件。",
