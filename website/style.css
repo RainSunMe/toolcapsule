@@ -17,7 +17,10 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 86px;
+}
 body {
   margin: 0;
   background:
@@ -103,6 +106,19 @@ code, pre {
   font-size: 14px;
 }
 .nav-links a:hover { color: var(--ink); }
+.lang-toggle {
+  min-width: 56px;
+  height: 36px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: rgba(255, 250, 241, 0.58);
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 720;
+  cursor: pointer;
+}
+.lang-toggle:hover { background: var(--cream); }
 
 main {
   width: min(1180px, calc(100% - 40px));
@@ -206,6 +222,11 @@ h3 {
 }
 
 .section { margin-bottom: 112px; }
+.section[id],
+.capsule-panel[id],
+.comparison[id] {
+  scroll-margin-top: 86px;
+}
 .editorial-grid {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
