@@ -41,17 +41,23 @@ code, pre {
   font-family: "SFMono-Regular", "IBM Plex Mono", Consolas, monospace;
 }
 
-.nav {
+.site-header {
   position: sticky;
   top: 0;
   z-index: 20;
+  width: 100%;
+  border-bottom: 1px solid rgba(201, 189, 168, 0.72);
+  background: rgba(247, 242, 232, 0.86);
+  backdrop-filter: blur(18px) saturate(1.04);
+  box-shadow: 0 12px 40px rgba(67, 49, 30, 0.08);
+}
+.nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: min(1180px, calc(100% - 40px));
   margin: 0 auto;
-  padding: 22px 0;
-  backdrop-filter: blur(12px);
+  padding: 16px 0;
 }
 .brand {
   display: inline-flex;
@@ -62,15 +68,30 @@ code, pre {
   letter-spacing: -0.02em;
 }
 .brand-mark {
+  position: relative;
   display: grid;
   place-items: center;
   width: 34px;
   height: 34px;
   border: 1px solid var(--ink);
   border-radius: 50%;
-  color: var(--cream);
   background: var(--ink);
-  font-size: 15px;
+  box-shadow: 0 10px 24px rgba(25, 24, 21, 0.16);
+}
+.brand-mark::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--cream);
+}
+.brand-mark::after {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--ink);
 }
 .nav-links {
   display: flex;
