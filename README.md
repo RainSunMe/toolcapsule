@@ -33,6 +33,24 @@ But large MCP servers can be expensive in agent contexts:
 ToolCapsule keeps the MCP server as the source of truth, but exposes it through a lightweight Skill and local artifacts.
 Transport logs are quiet by default so remote MCP URLs are not printed during normal use. Set `TOOLCAPSULE_DEBUG=1` only when debugging.
 
+## Import your existing MCP setup
+
+Already configured MCP in Claude Code, GitHub Copilot / VS Code, OpenCode, Gemini CLI, or Cursor? Import it instead of retyping URLs and commands:
+
+```bash
+tcap import --dry-run
+tcap import --name github --target claude
+```
+
+ToolCapsule scans common workspace MCP config files such as `.mcp.json`, `.vscode/mcp.json`, `opencode.json`, `.gemini/settings.json`, and `.cursor/mcp.json`, then creates:
+
+```text
+.toolcapsule/profiles/<server>.json
+.claude/skills/<server>-mcp/SKILL.md
+```
+
+Use `--target copilot`, `--target opencode`, `--target agents`, or `--target all` to write skills for other agents. User-level MCP configs are only inspected when you opt in with `--include-user`.
+
 ## What is a ToolCapsule?
 
 A ToolCapsule is a file-first tool call package:
@@ -49,7 +67,8 @@ Instead of making the model hold everything in the prompt, ToolCapsule stores he
 npm i -g toolcapsule
 
 toolcapsule install-skill
-toolcapsule init feishu --url https://mcp.example.com/mcp/xxx
+toolcapsule import --dry-run
+toolcapsule import --name feishu --target claude
 toolcapsule tools feishu --brief
 toolcapsule schema feishu create-doc
 toolcapsule call feishu create-doc @args.json --save-run
@@ -66,7 +85,7 @@ tcap call feishu create-doc @args.json --save-run
 ## What it generates
 
 ```text
-.github/skills/feishu-mcp/
+.claude/skills/feishu-mcp/
   SKILL.md                  # lightweight Agent Skill entrypoint
   toolcapsule.config.json   # MCP transport/profile config
   scripts/README.md
@@ -115,9 +134,12 @@ Results vary by MCP server, model, and host.
 ## CLI
 
 ```text
-toolcapsule init <name> --url <remote-mcp-url>
-toolcapsule init <name> --command <stdio-command> --arg <arg>
-toolcapsule install-skill
+toolcapsule init <name> --url <remote-mcp-url> --target claude
+toolcapsule init <name> --command <stdio-command> --arg <arg> --target claude
+toolcapsule install-skill --target claude
+toolcapsule import --dry-run
+toolcapsule import --name <server> --target claude
+toolcapsule import --all --target all
 toolcapsule tools <profile> --brief
 toolcapsule describe <profile> <tool> --brief
 toolcapsule schema <profile> <tool>
@@ -149,6 +171,7 @@ Early alpha. APIs may change before v1.0.
 
 - [Concept](docs/concept.md)
 - [Architecture](docs/architecture.md)
+- [Import existing MCP configuration](docs/importing-mcp.md)
 - [Patch and retry](docs/patch-and-retry.md)
 - [Benchmark methodology](docs/benchmark-methodology.md)
 - [Releasing](docs/releasing.md)
@@ -156,6 +179,7 @@ Early alpha. APIs may change before v1.0.
 - [Screenshots and recordings](docs/screenshots.md)
 - [Next steps](docs/next-steps.md)
 - [Release checklist](docs/release-checklist.md)
+- [Agent tool compatibility research](docs/agent-tool-compatibility.md)
 - [Roadmap](ROADMAP.md)
 
 ## License

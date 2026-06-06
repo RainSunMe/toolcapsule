@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.9
+
+- Add `tcap import` to convert existing MCP registrations into ToolCapsule profiles and Agent Skills.
+- Add `--target` support for `claude`, `copilot`, `opencode`, `agents`, and `all`, with `claude` as the default skill target.
+- Preserve string-valued imported MCP `headers`, `env` / `environment`, and `cwd` fields where possible.
+- Add importer tests for VS Code, OpenCode, and multi-server selection flows.
+- Add fast MCP import documentation and homepage copy.
+
 ## 0.1.0-alpha.0
 
 - Initial alpha scaffold.

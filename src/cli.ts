@@ -5,10 +5,11 @@ import { cac } from "cac";
 import pc from "picocolors";
 import type { ProfileConfig } from "./types.js";
 import { McpClient } from "./mcp/client.js";
+import { discoverMcpServers, selectImportedServers } from "./mcp/importer.js";
 import { loadProfile } from "./profile.js";
 import { briefTools } from "./schema/brief.js";
 import { summarizeTool, summarizeTools } from "./schema/summarize.js";
-import { generateSkill, writeProfile } from "./skill/generator.js";
+import { defaultSkillTarget, generateSkill, type SkillTarget, writeProfile } from "./skill/generator.js";
 import { installAgentSkill } from "./skill/installer.js";
 import { createRunId, loadRun, saveRun } from "./runs/recorder.js";
 import { writeFile } from "node:fs/promises";
@@ -42,29 +43,74 @@ function readArgsPath(raw: string): string {
   return raw.startsWith("@") ? raw.slice(1) : raw;
 }
 
+function readSkillTarget(raw: string | undefined): SkillTarget {
+  const target = raw || defaultSkillTarget;
+  if (["copilot", "claude", "opencode", "agents", "all"].includes(target)) return target as SkillTarget;
+  throw new Error("Invalid --target. Use one of: copilot, claude, opencode, agents, all");
+}
+
 cli
   .command("init <name>", "Create a profile and generated Agent Skill for an MCP server")
   .option("--url <url>", "Remote MCP URL")
   .option("--command <command>", "stdio MCP command")
   .option("--arg <arg>", "stdio MCP argument, repeatable", { type: [String] })
   .option("--output <dir>", "Skill output directory")
-  .action(async (name: string, options: { url?: string; command?: string; arg?: string[]; output?: string }) => {
+  .option("--target <target>", "Skill target: copilot, claude, opencode, agents, all", { default: defaultSkillTarget })
+  .action(async (name: string, options: { url?: string; command?: string; arg?: string[]; output?: string; target?: string }) => {
     if (!options.url && !options.command) throw new Error("Provide --url for remote MCP or --command for stdio MCP");
     const profile: ProfileConfig = options.url
       ? { name, transport: { type: "remote", url: options.url } }
       : { name, transport: { type: "stdio", command: options.command!, args: options.arg ?? [] } };
     await writeProfile(join(".toolcapsule", "profiles", `${name}.json`), profile);
-    const out = await generateSkill(profile, options.output ? { outputDir: options.output } : {});
+    const out = await generateSkill(profile, options.output ? { outputDir: options.output } : { target: readSkillTarget(options.target) });
     console.log(pc.green(`Created profile and skill at ${out}`));
   });
 
 cli
   .command("install-skill", "Install the generic ToolCapsule Agent Skill into this workspace")
-  .option("--output <dir>", "Skill output directory", { default: ".github/skills/toolcapsule" })
-  .action(async (options: { output: string }) => {
-    const out = await installAgentSkill(options.output);
+  .option("--output <dir>", "Skill output directory")
+  .option("--target <target>", "Skill target: copilot, claude, opencode, agents, all", { default: defaultSkillTarget })
+  .action(async (options: { output?: string; target?: string }) => {
+    const out = await installAgentSkill(options.output, readSkillTarget(options.target));
     console.log(pc.green(`Installed ToolCapsule Agent Skill at ${out}`));
   });
+
+cli
+  .command("import", "Import existing MCP configuration into ToolCapsule profiles and skills")
+  .option("--include-user", "Also inspect user-level MCP config files")
+  .option("--name <name>", "Import only one MCP server by name")
+  .option("--all", "Import all discovered MCP servers")
+  .option("--target <target>", "Skill target: copilot, claude, opencode, agents, all", { default: defaultSkillTarget })
+  .option("--dry-run", "List importable MCP servers without writing files")
+  .action(
+    async (options: { includeUser?: boolean; name?: string; all?: boolean; target?: string; dryRun?: boolean }) => {
+      const discovered = await discoverMcpServers(options.includeUser ? { includeUser: true } : {});
+      if (discovered.length === 0) {
+        console.log("No importable MCP servers found.");
+        return;
+      }
+
+      if (options.dryRun) {
+        for (const server of discovered) {
+          console.log(`${server.name}\t${server.source.tool}\t${server.source.path}`);
+          for (const warning of server.warnings) console.log(pc.yellow(`  warning: ${warning}`));
+        }
+        return;
+      }
+
+      const selected = selectImportedServers(discovered, options.name, options.all);
+      if (selected.length === 0) {
+        throw new Error("Multiple MCP servers found. Re-run with --dry-run, then pass --name <server> or --all.");
+      }
+
+      for (const server of selected) {
+        await writeProfile(join(".toolcapsule", "profiles", `${server.profile.name}.json`), server.profile);
+        const out = await generateSkill(server.profile, { target: readSkillTarget(options.target) });
+        console.log(pc.green(`Imported ${server.name} from ${server.source.path} -> ${out}`));
+        for (const warning of server.warnings) console.log(pc.yellow(`  warning: ${warning}`));
+      }
+    },
+  );
 
 cli
   .command("tools <profile>", "List MCP tools")

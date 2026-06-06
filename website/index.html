@@ -21,6 +21,7 @@
         </a>
         <nav class="nav-links" aria-label="Main navigation">
           <a href="#problem" data-i18n="nav.problem">Problem</a>
+          <a href="#import" data-i18n="nav.import">Import</a>
           <a href="#capsule" data-i18n="nav.capsule">Capsule</a>
           <a href="#evidence" data-i18n="nav.evidence">Evidence</a>
           <a href="https://github.com/RainSunMe/toolcapsule">GitHub</a>
@@ -41,8 +42,9 @@
         </p>
         <div class="hero-actions">
           <a class="button primary" href="https://github.com/RainSunMe/toolcapsule" data-i18n="hero.github">View on GitHub</a>
+          <button class="button secondary" type="button" data-open-ai-modal data-i18n="hero.aiButton">Give this to your AI</button>
           <code>npm i -g toolcapsule</code>
-          <code>tcap tools feishu --brief</code>
+          <code>tcap import --dry-run</code>
         </div>
       </section>
 
@@ -77,6 +79,37 @@
             workflow layer. Full schemas are still available, but no longer need to be carried
             every turn.
           </p>
+        </div>
+      </section>
+
+      <section id="import" class="import-panel">
+        <div class="panel-copy">
+          <p class="eyebrow" data-i18n="import.eyebrow">Fast import</p>
+          <h2 data-i18n="import.title">Already configured MCP? Convert it.</h2>
+          <p data-i18n="import.copy">
+            ToolCapsule reads existing MCP registrations from Claude Code, GitHub Copilot / VS Code,
+            OpenCode, Gemini CLI, and Cursor, then writes a profile and Agent Skill for your target agent.
+          </p>
+        </div>
+        <div class="import-steps" aria-label="MCP import workflow">
+          <div>
+            <span>01</span>
+            <strong data-i18n="import.step1.title">Scan safely</strong>
+            <code>tcap import --dry-run</code>
+            <p data-i18n="import.step1.copy">Inspect workspace MCP config first; user-level config is opt-in.</p>
+          </div>
+          <div>
+            <span>02</span>
+            <strong data-i18n="import.step2.title">Generate skill</strong>
+            <code>tcap import --name github --target claude</code>
+            <p data-i18n="import.step2.copy">Create a ToolCapsule profile and a lazy-loaded Agent Skill.</p>
+          </div>
+          <div>
+            <span>03</span>
+            <strong data-i18n="import.step3.title">Use briefly</strong>
+            <code>tcap tools github --brief</code>
+            <p data-i18n="import.step3.copy">Discover compact summaries before loading full schemas.</p>
+          </div>
         </div>
       </section>
 
@@ -154,16 +187,46 @@ command.txt</code></pre>
         <a class="button primary" href="https://github.com/RainSunMe/toolcapsule" data-i18n="cta.button">Start with ToolCapsule</a>
       </section>
     </main>
+
+    <div class="modal-backdrop" data-ai-modal hidden>
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="ai-modal-title">
+        <button class="modal-close" type="button" aria-label="Close" data-close-ai-modal>×</button>
+        <p class="eyebrow" data-i18n="modal.eyebrow">Fast onboarding</p>
+        <h2 id="ai-modal-title" data-i18n="modal.title">Copy this prompt into your coding agent.</h2>
+        <p data-i18n="modal.copy">
+          Your AI can inspect existing MCP configs, pick the right server, and turn it into a ToolCapsule skill without you retyping setup details.
+        </p>
+        <textarea class="prompt-box" readonly data-ai-prompt></textarea>
+        <div class="modal-actions">
+          <button class="button primary" type="button" data-copy-ai-prompt data-i18n="modal.copyButton">Copy prompt</button>
+          <a class="button ghost" href="https://github.com/RainSunMe/toolcapsule" data-i18n="modal.github">Open GitHub</a>
+        </div>
+      </section>
+    </div>
+
     <script>
+      const aiPrompt = `Help me convert my existing local MCP configuration into ToolCapsule skills.
+
+Please do this safely:
+1. Run tcap import --dry-run to inspect common workspace MCP config files: .vscode/mcp.json, .mcp.json, opencode.json, .gemini/settings.json, and .cursor/mcp.json.
+2. Do not print secrets, API keys, bearer tokens, private document IDs, or private MCP URLs. Preserve environment variable references instead.
+3. If needed, ask me before using --include-user to inspect ~/.claude.json, ~/.config/opencode/opencode.json, or ~/.gemini/settings.json.
+4. Identify the MCP server that best matches my task.
+5. Import it with tcap import --name <server> --target <target>. Use claude by default, or copilot/opencode/agents/all if that matches my agent.
+6. Use tcap tools <profile> --brief and tcap schema <profile> <tool> before calling tools.
+7. Put large arguments or Markdown payloads in local files, call with tcap call <profile> <tool> @args.json --save-run, and use tcap retry <run-dir> after patching failures.`;
+
       const copy = {
         en: {
           "nav.problem": "Problem",
+          "nav.import": "Import",
           "nav.capsule": "Capsule",
           "nav.evidence": "Evidence",
           "hero.kicker": "MCP tools as lightweight Agent Skills",
           "hero.title": "Heavy MCP tools don’t belong in your prompt.",
           "hero.subtitle": "ToolCapsule keeps schema-heavy MCP servers out of the context window by turning them into lazy-loaded, file-first Agent Skills with patch-and-retry recovery.",
           "hero.github": "View on GitHub",
+          "hero.aiButton": "Give this to your AI",
           "proof.input": "fewer input tokens",
           "proof.total": "fewer total tokens",
           "proof.success": "planning success rate",
@@ -171,6 +234,15 @@ command.txt</code></pre>
           "problem.title": "MCP made tools universal. It also made tool context heavier.",
           "problem.p1": "Native MCP is excellent for small, frequent tools. But document and workflow MCP servers often expose long descriptions, schemas, and rules that can be visible to the model even when the user is only planning.",
           "problem.p2": "ToolCapsule keeps MCP as the capability layer and uses Skills as the agent-facing workflow layer. Full schemas are still available, but no longer need to be carried every turn.",
+          "import.eyebrow": "Fast import",
+          "import.title": "Already configured MCP? Convert it.",
+          "import.copy": "ToolCapsule reads existing MCP registrations from Claude Code, GitHub Copilot / VS Code, OpenCode, Gemini CLI, and Cursor, then writes a profile and Agent Skill for your target agent.",
+          "import.step1.title": "Scan safely",
+          "import.step1.copy": "Inspect workspace MCP config first; user-level config is opt-in.",
+          "import.step2.title": "Generate skill",
+          "import.step2.copy": "Create a ToolCapsule profile and a lazy-loaded Agent Skill.",
+          "import.step3.title": "Use briefly",
+          "import.step3.copy": "Discover compact summaries before loading full schemas.",
           "capsule.eyebrow": "The capsule",
           "capsule.title": "A tool call becomes a patchable artifact.",
           "capsule.copy": "Instead of asking the model to regenerate a large tool call after a failure, ToolCapsule stores the arguments, payloads, request, response, and error as local files.",
@@ -195,16 +267,24 @@ command.txt</code></pre>
           "cta.title": "Keep the protocol. Change the workflow.",
           "cta.copy": "ToolCapsule is designed for Feishu/Lark, Notion, Jira, Linear, Confluence, GitHub management tools, and internal SaaS MCPs.",
           "cta.button": "Start with ToolCapsule",
+          "modal.eyebrow": "Fast onboarding",
+          "modal.title": "Copy this prompt into your coding agent.",
+          "modal.copy": "Your AI can inspect existing MCP configs, pick the right server, and turn it into a ToolCapsule skill without you retyping setup details.",
+          "modal.copyButton": "Copy prompt",
+          "modal.copied": "Copied",
+          "modal.github": "Open GitHub",
           "lang.toggle": "中文"
         },
         zh: {
           "nav.problem": "痛点",
+          "nav.import": "导入",
           "nav.capsule": "工作流",
           "nav.evidence": "效果",
           "hero.kicker": "把 MCP 工具变成轻量 Agent Skill",
           "hero.title": "别把复杂 MCP 工具塞进提示词。",
           "hero.subtitle": "ToolCapsule 把 schema 繁重的 MCP 服务变成按需加载、文件优先的 Agent Skill，并支持本地修补与确定性重试。",
           "hero.github": "查看 GitHub",
+          "hero.aiButton": "复制给 AI",
           "proof.input": "输入 token 减少",
           "proof.total": "总 token 减少",
           "proof.success": "规划成功率",
@@ -212,6 +292,15 @@ command.txt</code></pre>
           "problem.title": "MCP 让工具通用，也让工具上下文变重。",
           "problem.p1": "原生 MCP 很适合小而高频的工具。但文档和流程类 MCP 服务通常带着很长的描述、schema 和规则；即使用户只是在规划，这些内容也可能持续占用模型上下文。",
           "problem.p2": "ToolCapsule 保留 MCP 作为能力层，同时把 Skill 作为面向 Agent 的工作流层。完整 schema 仍然可用，但不需要每一轮都背在提示词里。",
+          "import.eyebrow": "快速导入",
+          "import.title": "已经配置过 MCP？直接转换。",
+          "import.copy": "ToolCapsule 可以读取 Claude Code、GitHub Copilot / VS Code、OpenCode、Gemini CLI 和 Cursor 里已有的 MCP 注册，并为目标 Agent 写出 profile 和 Agent Skill。",
+          "import.step1.title": "安全扫描",
+          "import.step1.copy": "默认只检查工作区 MCP 配置；用户级配置需要显式开启。",
+          "import.step2.title": "生成 Skill",
+          "import.step2.copy": "创建 ToolCapsule profile 和按需加载的 Agent Skill。",
+          "import.step3.title": "轻量使用",
+          "import.step3.copy": "先查看简洁摘要，再按需加载完整 schema。",
           "capsule.eyebrow": "工作流",
           "capsule.title": "一次工具调用，变成可修补的本地工件。",
           "capsule.copy": "大型工具调用失败后，不必让模型重新生成整段调用。ToolCapsule 会把参数、载荷、请求、响应和错误都保存为本地文件。",
@@ -236,6 +325,12 @@ command.txt</code></pre>
           "cta.title": "保留协议，换掉工作流。",
           "cta.copy": "ToolCapsule 适合飞书/Lark、Notion、Jira、Linear、Confluence、GitHub 管理工具和企业内部 SaaS MCP。",
           "cta.button": "开始使用 ToolCapsule",
+          "modal.eyebrow": "快速接入",
+          "modal.title": "把这段提示词复制给你的编程 Agent。",
+          "modal.copy": "AI 可以检查你已有的 MCP 配置，选择合适的服务器，并把它转换成 ToolCapsule skill，不需要你手动重填配置。",
+          "modal.copyButton": "复制提示词",
+          "modal.copied": "已复制",
+          "modal.github": "打开 GitHub",
           "lang.toggle": "EN"
         }
       };
@@ -255,6 +350,35 @@ command.txt</code></pre>
 
       let currentLanguage = "en";
       setLanguage(currentLanguage);
+      document.querySelector("[data-ai-prompt]").value = aiPrompt;
+
+      const modal = document.querySelector("[data-ai-modal]");
+      const openModal = () => {
+        modal.hidden = false;
+        document.body.classList.add("modal-open");
+        document.querySelector("[data-ai-prompt]").focus();
+      };
+      const closeModal = () => {
+        modal.hidden = true;
+        document.body.classList.remove("modal-open");
+      };
+
+      document.querySelector("[data-open-ai-modal]").addEventListener("click", openModal);
+      document.querySelector("[data-close-ai-modal]").addEventListener("click", closeModal);
+      modal.addEventListener("click", (event) => {
+        if (event.target === modal) closeModal();
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !modal.hidden) closeModal();
+      });
+      document.querySelector("[data-copy-ai-prompt]").addEventListener("click", async (event) => {
+        await navigator.clipboard.writeText(aiPrompt);
+        const button = event.currentTarget;
+        button.textContent = copy[currentLanguage]["modal.copied"];
+        setTimeout(() => {
+          button.textContent = copy[currentLanguage]["modal.copyButton"];
+        }, 1400);
+      });
 
       document.querySelector("[data-lang-toggle]").addEventListener("click", () => {
         currentLanguage = currentLanguage === "en" ? "zh" : "en";

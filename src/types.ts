@@ -2,11 +2,15 @@ export type TransportConfig =
   | {
       type: "remote";
       url: string;
+      headers?: Record<string, string>;
+      env?: Record<string, string>;
     }
   | {
       type: "stdio";
       command: string;
       args?: string[];
+      env?: Record<string, string>;
+      cwd?: string;
     };
 
 export type ShortcutConfig = {

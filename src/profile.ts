@@ -7,8 +7,19 @@ import { readJson } from "./utils/fs.js";
 const profileSchema = z.object({
   name: z.string().min(1),
   transport: z.union([
-    z.object({ type: z.literal("remote"), url: z.string().url() }),
-    z.object({ type: z.literal("stdio"), command: z.string().min(1), args: z.array(z.string()).optional() }),
+    z.object({
+      type: z.literal("remote"),
+      url: z.string().url(),
+      headers: z.record(z.string()).optional(),
+      env: z.record(z.string()).optional(),
+    }),
+    z.object({
+      type: z.literal("stdio"),
+      command: z.string().min(1),
+      args: z.array(z.string()).optional(),
+      env: z.record(z.string()).optional(),
+      cwd: z.string().optional(),
+    }),
   ]),
   skill: z
     .object({

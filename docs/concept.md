@@ -10,6 +10,25 @@ MCP connects agents to tools. Skills package repeatable agent workflows. ToolCap
 MCP tool schema → compact Skill guidance → local capsule files → auditable run → patch and retry
 ```
 
+## Fast import
+
+ToolCapsule can start from MCP servers users already registered in their coding tools:
+
+```bash
+tcap import --dry-run
+tcap import --name <server> --target claude
+```
+
+The import flow reads common workspace MCP config files, creates a ToolCapsule profile, and writes an Agent Skill for the selected target. This makes onboarding a conversion step instead of a manual reconfiguration step.
+
+Supported target outputs:
+
+- `claude` → `.claude/skills/` (default)
+- `copilot` → `.github/skills/`
+- `opencode` → `.opencode/skills/`
+- `agents` → `.agents/skills/`
+- `all` → all compatible locations
+
 ## Principles
 
 1. Brief by default, full MCP schema on demand.

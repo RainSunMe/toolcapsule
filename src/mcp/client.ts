@@ -1,5 +1,6 @@
 import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
 import { once } from "node:events";
+import { resolve } from "node:path";
 import type { JsonRpcMessage, ProfileConfig, ToolsListResult } from "../types.js";
 
 export type McpClientOptions = {
@@ -25,12 +26,15 @@ export class McpClient {
     this.debug = opts.debug ?? process.env.TOOLCAPSULE_DEBUG === "1";
     this.clientVersion = opts.clientVersion ?? "0.0.0";
     if (profile.transport.type === "remote") {
-      this.child = spawn("npx", ["-y", "mcp-remote", profile.transport.url], {
+      this.child = spawn("npx", ["-y", "mcp-remote", profile.transport.url, ...headersToArgs(profile.transport.headers)], {
         stdio: ["pipe", "pipe", "pipe"],
+        env: { ...process.env, ...profile.transport.env },
       });
     } else {
       this.child = spawn(profile.transport.command, profile.transport.args ?? [], {
         stdio: ["pipe", "pipe", "pipe"],
+        env: { ...process.env, ...profile.transport.env },
+        cwd: profile.transport.cwd ? resolve(profile.transport.cwd) : undefined,
       });
     }
     this.child.stdout.setEncoding("utf8");
@@ -120,6 +124,11 @@ export class McpClient {
       if (timer) clearTimeout(timer);
     }
   }
+}
+
+function headersToArgs(headers: Record<string, string> | undefined): string[] {
+  if (!headers) return [];
+  return Object.entries(headers).flatMap(([key, value]) => ["--header", `${key}:${value}`]);
 }
 
 function redactSecrets(text: string): string {
