@@ -1,6 +1,6 @@
 # ToolCapsule
 
-ToolCapsule is MCP-to-Skill for heavy MCP tools. It turns schema-heavy MCP servers into lightweight, lazy-loaded Agent Skills with file-first calls and patch-and-retry recovery.
+ToolCapsule is an AI-first workflow manager for heavy MCP tools. It inventories existing MCPs, turns selected heavy servers into lazy Agent Skills, and keeps calls file-first with patch-and-retry recovery.
 
 Use it when an AI agent needs a lazy MCP workflow: operate a heavy MCP server without carrying full tool schemas in every prompt.
 
@@ -24,23 +24,11 @@ Short command:
 tcap --help
 ```
 
-## Install the Agent Skill
-
-Inside a workspace:
-
-```bash
-tcap install-skill
-```
-
-This creates:
-
-```text
-.github/skills/toolcapsule/SKILL.md
-```
+Note: `npx skills add toolcapsule` is not enough today because the `skills` CLI treats a bare value as a git source. Use `RainSunMe/toolcapsule`.
 
 ## Convert an MCP server into a Skill workflow
 
-This is the MCP-to-Skill step: keep MCP as the capability layer and generate an Agent Skill as the workflow layer.
+This is the ToolCapsule enable step: keep MCP as the capability layer and generate an Agent Skill as the workflow layer.
 
 Remote MCP:
 

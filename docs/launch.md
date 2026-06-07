@@ -2,15 +2,15 @@
 
 ## One-line pitch
 
-MCP-to-Skill for heavy MCP tools.
+AI-first workflow manager for heavy MCP tools.
 
 ## Short pitch
 
-ToolCapsule turns schema-heavy MCP servers into lightweight, lazy-loaded Agent Skills with file-first calls and patch-and-retry recovery. If you are looking for lazy MCP, this is the workflow layer.
+ToolCapsule inventories existing MCPs, turns selected heavy servers into lazy Agent Skills, and keeps calls file-first with patch-and-retry recovery.
 
 ## Announcement draft
 
-MCP is becoming the standard way to connect agents to tools. Skills are becoming the standard way to package repeatable agent workflows. ToolCapsule connects the two: MCP-to-Skill for heavy tools.
+MCP is becoming the standard way to connect agents to tools. Skills are becoming the standard way to package repeatable agent workflows. ToolCapsule connects the two as an AI-first workflow manager for heavy MCP tools.
 
 Large MCP servers can quietly eat your context window with long tool descriptions and schemas. ToolCapsule keeps MCP as the capability layer and turns heavy tools into compact, lazy-loaded Agent Skills. Large payloads live in files, every call can be recorded, and failed calls can be patched and retried without asking the model to regenerate everything.
 
@@ -36,7 +36,7 @@ New onboarding angle:
 
 Search angle:
 
-> Lazy MCP, MCP to Skill, MCP-to-Skill, Agent Skills for MCP tools — all describe the workflow ToolCapsule implements.
+> Lazy MCP, MCP to Skill, MCP-to-Skill, Agent Skills for MCP tools — these are related search terms, but ToolCapsule is broader: inventory, enable, Skill generation, file-first calls, and patch-and-retry.
 
 Short demo:
 

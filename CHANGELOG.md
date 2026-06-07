@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.0-alpha.13
+
+- Reposition ToolCapsule as an AI-first workflow manager for heavy MCP tools.
+- Add comparison docs for native MCP, `lazy-mcp`, `mcp2skill`, and `mcp-to-skill` style workflows.
+- Update README, website, launch copy, hero copy, and AI-facing docs to emphasize MCP inventory, linked profiles, file-first calls, and patch-and-retry.
+- Clarify that `npx skills add toolcapsule` is not supported by the `skills` CLI today; use `npx skills add RainSunMe/toolcapsule --skill toolcapsule`.
+
 ## 0.1.0-alpha.12
 
 - Add the official `toolcapsule` Skill under `skills/toolcapsule/` for `npx skills add RainSunMe/toolcapsule --skill toolcapsule` onboarding.
