@@ -42,7 +42,7 @@ This skill wraps an MCP server as a lightweight, lazy-loaded, file-first workflo
 toolcapsule tools {{profileName}} --brief
 toolcapsule describe {{profileName}} <tool>
 toolcapsule call {{profileName}} <tool> @args.json
-toolcapsule retry <run-dir>
+toolcapsule retry .toolcapsule/runs/{{profileName}}/<run-id>
 \`\`\`
 
 ## Workflow
@@ -69,7 +69,6 @@ export type GenerateSkillOptions = {
 async function generateSkillAt(profile: ProfileConfig, outputDir: string): Promise<string> {
   const skillName = profile.skill?.name || `${profile.name}-mcp`;
   await mkdir(join(outputDir, "scripts"), { recursive: true });
-  await mkdir(join(outputDir, "runs"), { recursive: true });
 
   const template = Handlebars.compile(skillTemplate);
   const description =

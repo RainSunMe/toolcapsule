@@ -121,5 +121,5 @@ tcap call github create-issue @args.json --save-run
 If the call fails, patch `args.json` and retry:
 
 ```bash
-tcap retry runs/<run-id>
+tcap retry .toolcapsule/runs/github/<run-id>
 ```

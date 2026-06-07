@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-alpha.11
+
+- Store saved run artifacts under `.toolcapsule/runs/<profile>/<run-id>/` instead of the workspace root.
+- Automatically add `.toolcapsule/` to `.gitignore` when creating ToolCapsule workspace state.
+- Stop generating unused `runs/` directories inside generated Agent Skill folders.
+- Add a Chinese launch blog draft for ToolCapsule.
+- Update docs, examples, and generated Skill copy for the new run artifact path.
+
 ## 0.1.0-alpha.10
 
 - Reposition ToolCapsule as MCP-to-Skill for heavy MCP tools.

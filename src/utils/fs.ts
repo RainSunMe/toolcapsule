@@ -15,6 +15,24 @@ export async function writeText(path: string, value: string): Promise<void> {
   await writeFile(path, value);
 }
 
+export async function ensureToolCapsuleIgnored(): Promise<void> {
+  const gitignorePath = ".gitignore";
+  const entry = ".toolcapsule/";
+  let content = "";
+  try {
+    content = await readFile(gitignorePath, "utf8");
+  } catch (error) {
+    if (!(error instanceof Error && "code" in error && error.code === "ENOENT")) throw error;
+  }
+
+  const lines = content.split(/\r?\n/).map((line) => line.trim());
+  const alreadyIgnored = lines.some((line) => line === entry || line === `/${entry}` || line === ".toolcapsule");
+  if (alreadyIgnored) return;
+
+  const prefix = content.length > 0 && !content.endsWith("\n") ? "\n" : "";
+  await writeFile(gitignorePath, `${content}${prefix}${entry}\n`);
+}
+
 export function abs(path: string): string {
   return resolve(process.cwd(), path);
 }

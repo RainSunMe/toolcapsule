@@ -12,7 +12,7 @@ Large Feishu documents often contain Markdown, tables, diagrams, mentions, and o
 2. Reference it from `create-doc.args.json`.
 3. Call the MCP tool with `tcap call ... --save-run`.
 4. If Feishu rejects a block, patch this file.
-5. Run `tcap retry runs/<id>`.
+5. Run `tcap retry .toolcapsule/runs/feishu/<id>`.
 
 ## Checklist
 

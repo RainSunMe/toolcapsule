@@ -86,7 +86,7 @@ toolcapsule import --name feishu --target claude
 toolcapsule tools feishu --brief
 toolcapsule schema feishu create-doc
 toolcapsule call feishu create-doc @args.json --save-run
-toolcapsule retry runs/2026-06-06T10-00-00-000Z
+toolcapsule retry .toolcapsule/runs/feishu/2026-06-06T10-00-00-000Z
 ```
 
 Short alias:
@@ -103,7 +103,10 @@ tcap call feishu create-doc @args.json --save-run
   SKILL.md                  # lightweight Agent Skill entrypoint
   toolcapsule.config.json   # MCP transport/profile config
   scripts/README.md
-  runs/                     # auditable tool call records
+
+.toolcapsule/
+  profiles/feishu.json      # local MCP profile
+  runs/feishu/              # auditable tool call records
 ```
 
 This lets your agent discover the Skill instead of carrying the full MCP schema in every turn.
@@ -130,7 +133,7 @@ toolcapsule call feishu create-doc @args.json --save-run
 # 2. Patch args.json or content.md
 
 # 3. Retry deterministically
-toolcapsule retry runs/2026-06-06T10-00-00-000Z
+toolcapsule retry .toolcapsule/runs/feishu/2026-06-06T10-00-00-000Z
 ```
 
 This is especially useful for MCP tools that create documents, tickets, pages, dashboards, reports, or batch operations.

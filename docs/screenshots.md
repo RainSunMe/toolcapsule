@@ -51,7 +51,7 @@ docs/assets/saved-run.png
 Command:
 
 ```bash
-tcap retry runs/<run-id>
+tcap retry .toolcapsule/runs/feishu/<run-id>
 ```
 
 Placeholder:
@@ -67,5 +67,5 @@ docs/assets/patch-and-retry.gif
 3. Run `tcap tools <profile> --brief`.
 4. Run a call with `--save-run`.
 5. Patch `args.json`.
-6. Run `tcap retry runs/<run-id>`.
+6. Run `tcap retry .toolcapsule/runs/feishu/<run-id>`.
 7. End on the generated run directory and the ToolCapsule slogan.

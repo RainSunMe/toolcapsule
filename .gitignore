@@ -6,8 +6,7 @@ coverage/
 .env.*
 !.env.example
 *.log
-/runs/
-/.github/skills/*/runs/
+.toolcapsule/
 .vercel
 
 .local/
