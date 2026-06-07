@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.0-alpha.14
+
+- Skip empty or invalid MCP config files during import and inventory discovery.
+- Ignore local MCP workspace settings, generated agent skills, and generated skill lock state.
+
 ## 0.1.0-alpha.13
 
 - Reposition ToolCapsule as an AI-first workflow manager for heavy MCP tools.

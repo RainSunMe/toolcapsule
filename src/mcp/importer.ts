@@ -126,7 +126,12 @@ export function linkedProfileForImportedServer(server: ImportedMcpServer, name =
 
 export async function resolveProfileSource(source: McpProfileSource): Promise<SnapshotProfileConfig | undefined> {
   if (!existsSync(source.path)) return undefined;
-  const config = asRecord(await readJson(source.path));
+  let config: ServerRecord | undefined;
+  try {
+    config = asRecord(await readJson(source.path));
+  } catch {
+    return undefined;
+  }
   if (!config) return undefined;
   const entry = serverEntries(source, config).find(([name]) => name === source.server);
   if (!entry) return undefined;
@@ -156,7 +161,12 @@ export async function discoverMcpServers(opts: { includeUser?: boolean; includeM
 
   for (const source of sources) {
     if (!existsSync(source.path)) continue;
-    const config = asRecord(await readJson(source.path));
+    let config: ServerRecord | undefined;
+    try {
+      config = asRecord(await readJson(source.path));
+    } catch {
+      continue;
+    }
     if (!config) continue;
     for (const [name, raw] of serverEntries(source, config)) {
       const imported = mapServer(name, source, raw);

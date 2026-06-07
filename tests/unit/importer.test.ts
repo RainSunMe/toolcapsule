@@ -91,4 +91,21 @@ describe("MCP config importer", () => {
     expect(selectImportedServers(servers, "second")).toHaveLength(1);
     expect(selectImportedServers(servers, undefined, true)).toHaveLength(2);
   });
+
+  test("skips empty or invalid MCP config files", async () => {
+    await mkdir(".vscode", { recursive: true });
+    await writeFile(join(".vscode", "mcp.json"), "");
+    await writeFile(
+      ".mcp.json",
+      JSON.stringify({
+        mcpServers: {
+          Figma: { type: "http", url: "https://example.com/mcp" },
+        },
+      }),
+    );
+
+    const servers = await discoverMcpServers();
+    expect(servers).toHaveLength(1);
+    expect(servers[0]?.name).toBe("figma");
+  });
 });
