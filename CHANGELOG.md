@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0-alpha.12
+
+- Add the official `toolcapsule` Skill under `skills/toolcapsule/` for `npx skills add RainSunMe/toolcapsule --skill toolcapsule` onboarding.
+- Add `tcap mcp list`, `tcap mcp enable`, and `tcap mcp disable` for AI-friendly MCP inventory and control.
+- Add `import --as`, linked profiles, snapshot profiles via `--copy`, and user-level profile storage under `~/.toolcapsule/profiles/`.
+- Generate MCP-specific Skills with a tool summary table from `tools/list` to reduce follow-up list/schema steps.
+- Expand MCP config discovery across workspace, user, VS Code server, Cursor, and managed Claude locations.
+- Update README, website, docs, examples, and launch copy to the `npx skills add` plus `mcp list/enable` flow.
+
 ## 0.1.0-alpha.11
 
 - Store saved run artifacts under `.toolcapsule/runs/<profile>/<run-id>/` instead of the workspace root.

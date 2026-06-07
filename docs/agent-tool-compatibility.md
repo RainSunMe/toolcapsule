@@ -57,9 +57,20 @@ Yes. A strong onboarding flow is to import existing MCP config files and convert
 Initial support exists through:
 
 ```bash
-tcap import --dry-run
-tcap import --name <server> --target claude
-tcap import --all --target all
+npx skills add RainSunMe/toolcapsule --skill toolcapsule
+```
+
+After the ToolCapsule Skill is installed, the agent can install/use the CLI and run:
+
+```bash
+tcap mcp list --include-user
+tcap mcp enable <server> --as <profile> --target claude
+```
+
+For all compatible skill targets:
+
+```bash
+tcap mcp enable <server> --as <profile> --target all
 ```
 
 The importer currently reads workspace MCP config by default and only reads user-level config with `--include-user`.

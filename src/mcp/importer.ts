@@ -1,19 +1,16 @@
 import { existsSync } from "node:fs";
 import { homedir } from "node:os";
-import { join } from "node:path";
-import type { ProfileConfig, TransportConfig } from "../types.js";
+import { isAbsolute, join, resolve } from "node:path";
+import type { McpProfileSource, ProfileConfig, SnapshotProfileConfig, TransportConfig } from "../types.js";
 import { readJson } from "../utils/fs.js";
 
-export type McpConfigSource = {
-  tool: "vscode" | "claude" | "opencode" | "gemini" | "cursor" | "generic";
-  path: string;
-  userLevel?: boolean;
-};
+export type McpConfigSource = Omit<McpProfileSource, "server">;
 
 export type ImportedMcpServer = {
   name: string;
+  originalName: string;
   source: McpConfigSource;
-  profile: ProfileConfig;
+  profile: SnapshotProfileConfig;
   warnings: string[];
 };
 
@@ -21,6 +18,7 @@ type ServerRecord = Record<string, unknown>;
 
 const workspaceSources: McpConfigSource[] = [
   { tool: "vscode", path: join(".vscode", "mcp.json") },
+  { tool: "generic", path: "mcp.json" },
   { tool: "claude", path: ".mcp.json" },
   { tool: "opencode", path: "opencode.json" },
   { tool: "gemini", path: join(".gemini", "settings.json") },
@@ -28,9 +26,20 @@ const workspaceSources: McpConfigSource[] = [
 ];
 
 const userSources: McpConfigSource[] = [
+  { tool: "vscode", path: join(homedir(), ".config", "Code", "User", "mcp.json"), userLevel: true },
+  { tool: "vscode", path: join(homedir(), ".config", "Code - Insiders", "User", "mcp.json"), userLevel: true },
+  { tool: "vscode", path: join(homedir(), ".vscode-server", "data", "User", "mcp.json"), userLevel: true },
+  { tool: "vscode", path: join(homedir(), ".vscode-server-insiders", "data", "User", "mcp.json"), userLevel: true },
   { tool: "claude", path: join(homedir(), ".claude.json"), userLevel: true },
   { tool: "opencode", path: join(homedir(), ".config", "opencode", "opencode.json"), userLevel: true },
   { tool: "gemini", path: join(homedir(), ".gemini", "settings.json"), userLevel: true },
+  { tool: "cursor", path: join(homedir(), ".cursor", "mcp.json"), userLevel: true },
+  { tool: "cursor", path: join(homedir(), ".config", "Cursor", "User", "mcp.json"), userLevel: true },
+  { tool: "cursor", path: join(homedir(), ".config", "Cursor", "User", "settings.json"), userLevel: true },
+];
+
+const managedSources: McpConfigSource[] = [
+  { tool: "claude", path: "/etc/claude-code/managed-mcp.json", managed: true },
 ];
 
 function asRecord(value: unknown): ServerRecord | undefined {
@@ -93,6 +102,7 @@ function mapServer(name: string, source: McpConfigSource, raw: unknown): Importe
   const profileName = cleanName(name);
   return {
     name: profileName,
+    originalName: name,
     source,
     warnings,
     profile: {
@@ -100,6 +110,27 @@ function mapServer(name: string, source: McpConfigSource, raw: unknown): Importe
       transport,
     },
   };
+}
+
+export function linkedProfileForImportedServer(server: ImportedMcpServer, name = server.name): ProfileConfig {
+  return {
+    name,
+    kind: "linked",
+    source: {
+      ...server.source,
+      path: isAbsolute(server.source.path) ? server.source.path : resolve(server.source.path),
+      server: server.originalName,
+    },
+  };
+}
+
+export async function resolveProfileSource(source: McpProfileSource): Promise<SnapshotProfileConfig | undefined> {
+  if (!existsSync(source.path)) return undefined;
+  const config = asRecord(await readJson(source.path));
+  if (!config) return undefined;
+  const entry = serverEntries(source, config).find(([name]) => name === source.server);
+  if (!entry) return undefined;
+  return mapServer(entry[0], source, entry[1])?.profile;
 }
 
 function serverEntries(source: McpConfigSource, config: ServerRecord): Array<[string, unknown]> {
@@ -115,8 +146,12 @@ function serverEntries(source: McpConfigSource, config: ServerRecord): Array<[st
   return Object.entries(asRecord(config.mcpServers) ?? {});
 }
 
-export async function discoverMcpServers(opts: { includeUser?: boolean } = {}): Promise<ImportedMcpServer[]> {
-  const sources = opts.includeUser ? [...workspaceSources, ...userSources] : workspaceSources;
+export async function discoverMcpServers(opts: { includeUser?: boolean; includeManaged?: boolean } = {}): Promise<ImportedMcpServer[]> {
+  const sources = [
+    ...workspaceSources,
+    ...(opts.includeUser ? userSources : []),
+    ...(opts.includeManaged ? managedSources : []),
+  ];
   const discovered: ImportedMcpServer[] = [];
 
   for (const source of sources) {

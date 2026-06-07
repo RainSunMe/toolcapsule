@@ -21,11 +21,11 @@ MCP tool schema → compact Skill guidance → local capsule files → auditable
 ToolCapsule can start from MCP servers users already registered in their coding tools:
 
 ```bash
-tcap import --dry-run
-tcap import --name <server> --target claude
+tcap mcp list --include-user
+tcap mcp enable <server> --as <profile> --target claude
 ```
 
-The import flow reads common workspace MCP config files, creates a ToolCapsule profile, and writes an Agent Skill for the selected target. This makes onboarding a conversion step instead of a manual reconfiguration step.
+The inventory flow reads common workspace and opted-in user MCP config files, links or snapshots a ToolCapsule profile, and writes an Agent Skill for the selected target. This makes onboarding a conversion step instead of a manual reconfiguration step.
 
 Supported target outputs:
 

@@ -13,9 +13,12 @@ tcap init feishu --url https://mcp.feishu.cn/mcp/your-endpoint
 This creates:
 
 ```text
-.toolcapsule/profiles/feishu.json
+~/.toolcapsule/profiles/feishu.json
 .github/skills/feishu-mcp/SKILL.md
 ```
+
+Use `--local` if the profile should be stored in this workspace under `.toolcapsule/profiles/` instead.
+Use `--copy` with `tcap import` if you want ToolCapsule to snapshot the MCP transport instead of linking the original MCP config.
 
 ## 2. Discover tools briefly
 

@@ -17,14 +17,15 @@ Large MCP servers can quietly eat your context window with long tool description
 Install:
 
 ```bash
-npm i -g toolcapsule
+npx skills add RainSunMe/toolcapsule --skill toolcapsule
 ```
 
 Try:
 
 ```bash
-tcap import --dry-run
-tcap import --name feishu --target claude
+npm i -g toolcapsule
+tcap mcp list --include-user
+tcap mcp enable docs --as feishu --target claude
 tcap tools feishu --brief
 tcap call feishu create-doc @args.json --save-run
 ```
@@ -40,8 +41,8 @@ Search angle:
 Short demo:
 
 ```bash
-tcap import --dry-run
-tcap import --name github --target all
+tcap mcp list --include-user
+tcap mcp enable github --target all
 ```
 
 ## Suggested screenshot checklist
@@ -49,15 +50,15 @@ tcap import --name github --target all
 Ask a human/function-caller to capture:
 
 1. Hero section at `https://toolcapsule.studio` or `https://toolcapsule.vercel.app`.
-2. Terminal showing `tcap import --dry-run` finding an existing MCP server.
+2. Terminal showing `tcap mcp list --include-user` finding existing MCP servers.
 3. Terminal showing `tcap tools feishu --brief`.
 4. Terminal showing a saved run directory.
 5. Before/after graphic: native MCP schema in prompt vs ToolCapsule local artifacts.
 
 ## Suggested GIF flow
 
-1. Run `tcap import --dry-run`.
-2. Run `tcap import --name ... --target claude`.
+1. Run `tcap mcp list --include-user`.
+2. Run `tcap mcp enable ... --as ... --target claude`.
 3. Run `tcap call ... --save-run`.
 4. Show failure or saved run artifacts.
 5. Patch `args.json`.
