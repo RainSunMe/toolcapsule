@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 import { readFile } from "node:fs/promises";
-import { join } from "node:path";
 import { cac } from "cac";
 import pc from "picocolors";
-import type { ProfileConfig } from "./types.js";
+import type { ProfileConfig, SnapshotProfileConfig } from "./types.js";
+import { disableNativeMcp, disableToolCapsuleProfile, formatInventory, listMcpInventory } from "./mcp/inventory.js";
 import { McpClient } from "./mcp/client.js";
-import { discoverMcpServers, selectImportedServers } from "./mcp/importer.js";
+import { discoverMcpServers, linkedProfileForImportedServer, selectImportedServers } from "./mcp/importer.js";
+import { userProfilePath, workspaceProfilePath, workspaceRunBaseDir } from "./paths.js";
 import { loadProfile } from "./profile.js";
 import { briefTools } from "./schema/brief.js";
 import { summarizeTool, summarizeTools } from "./schema/summarize.js";
-import { defaultSkillTarget, generateSkill, type SkillTarget, writeProfile } from "./skill/generator.js";
+import { defaultSkillTarget, fetchProfileTools, generateSkill, type SkillTarget, writeProfile } from "./skill/generator.js";
 import { installAgentSkill } from "./skill/installer.js";
 import { createRunId, loadRun, saveRun } from "./runs/recorder.js";
 import { writeFile } from "node:fs/promises";
@@ -29,7 +30,7 @@ async function readPackageVersion(): Promise<string> {
 
 const packageVersion = await readPackageVersion();
 
-async function withClient<T>(profile: ProfileConfig, fn: (client: McpClient) => Promise<T>): Promise<T> {
+async function withClient<T>(profile: SnapshotProfileConfig, fn: (client: McpClient) => Promise<T>): Promise<T> {
   const client = new McpClient(profile, { clientVersion: packageVersion });
   try {
     await client.init();
@@ -49,8 +50,27 @@ function readSkillTarget(raw: string | undefined): SkillTarget {
   throw new Error("Invalid --target. Use one of: copilot, claude, opencode, agents, all");
 }
 
-function runBaseDir(profileName: string): string {
-  return join(".toolcapsule", "runs", profileName);
+function renameSnapshotProfile(profile: SnapshotProfileConfig, name: string): SnapshotProfileConfig {
+  return { ...profile, name };
+}
+
+async function writeImportedServer(
+  server: Awaited<ReturnType<typeof discoverMcpServers>>[number],
+  opts: { as?: string | undefined; local?: boolean | undefined; copy?: boolean | undefined; target?: string | undefined },
+): Promise<void> {
+  const profileName = opts.as || server.name;
+  const local = opts.local === true;
+  const copy = opts.copy === true;
+  const profilePath = local ? workspaceProfilePath(profileName) : userProfilePath(profileName);
+  if (local) await ensureToolCapsuleIgnored();
+  const profile = copy ? renameSnapshotProfile(server.profile, profileName) : linkedProfileForImportedServer(server, profileName);
+  await writeProfile(profilePath, profile);
+  const tools = await fetchProfileTools(renameSnapshotProfile(server.profile, profileName), { clientVersion: packageVersion });
+  const skillOptions = { target: readSkillTarget(opts.target), embedProfile: local, ...(tools ? { tools } : {}) };
+  const out = await generateSkill(profile, skillOptions);
+  const mode = copy ? "snapshot" : "linked";
+  console.log(pc.green(`Imported ${server.name} as ${profileName} from ${server.source.path} -> ${profilePath} (${mode}), ${out}`));
+  for (const warning of server.warnings) console.log(pc.yellow(`  warning: ${warning}`));
 }
 
 cli
@@ -60,15 +80,25 @@ cli
   .option("--arg <arg>", "stdio MCP argument, repeatable", { type: [String] })
   .option("--output <dir>", "Skill output directory")
   .option("--target <target>", "Skill target: copilot, claude, opencode, agents, all", { default: defaultSkillTarget })
-  .action(async (name: string, options: { url?: string; command?: string; arg?: string[]; output?: string; target?: string }) => {
+  .option("--local", "Store the MCP profile in this workspace instead of ~/.toolcapsule")
+  .action(async (name: string, options: { url?: string; command?: string; arg?: string[]; output?: string; target?: string; local?: boolean }) => {
     if (!options.url && !options.command) throw new Error("Provide --url for remote MCP or --command for stdio MCP");
+    const local = options.local === true;
     const profile: ProfileConfig = options.url
       ? { name, transport: { type: "remote", url: options.url } }
       : { name, transport: { type: "stdio", command: options.command!, args: options.arg ?? [] } };
-    await ensureToolCapsuleIgnored();
-    await writeProfile(join(".toolcapsule", "profiles", `${name}.json`), profile);
-    const out = await generateSkill(profile, options.output ? { outputDir: options.output } : { target: readSkillTarget(options.target) });
-    console.log(pc.green(`Created profile and skill at ${out}`));
+    const profilePath = local ? workspaceProfilePath(name) : userProfilePath(name);
+    if (local) await ensureToolCapsuleIgnored();
+    await writeProfile(profilePath, profile);
+    const tools = await fetchProfileTools(profile, { clientVersion: packageVersion });
+    const skillOptions = options.output
+      ? { outputDir: options.output, embedProfile: local, ...(tools ? { tools } : {}) }
+      : { target: readSkillTarget(options.target), embedProfile: local, ...(tools ? { tools } : {}) };
+    const out = await generateSkill(
+      profile,
+      skillOptions,
+    );
+    console.log(pc.green(`Created profile at ${profilePath} and skill at ${out}`));
   });
 
 cli
@@ -84,11 +114,16 @@ cli
   .command("import", "Import existing MCP configuration into ToolCapsule profiles and skills")
   .option("--include-user", "Also inspect user-level MCP config files")
   .option("--name <name>", "Import only one MCP server by name")
+  .option("--as <name>", "Store the imported server under a different ToolCapsule profile name")
   .option("--all", "Import all discovered MCP servers")
   .option("--target <target>", "Skill target: copilot, claude, opencode, agents, all", { default: defaultSkillTarget })
+  .option("--local", "Store imported MCP profiles in this workspace instead of ~/.toolcapsule")
+  .option("--copy", "Copy MCP transport details into a ToolCapsule snapshot instead of linking the source config")
   .option("--dry-run", "List importable MCP servers without writing files")
   .action(
-    async (options: { includeUser?: boolean; name?: string; all?: boolean; target?: string; dryRun?: boolean }) => {
+    async (options: { includeUser?: boolean; name?: string; as?: string; all?: boolean; target?: string; local?: boolean; copy?: boolean; dryRun?: boolean }) => {
+      const local = options.local === true;
+      const copy = options.copy === true;
       const discovered = await discoverMcpServers(options.includeUser ? { includeUser: true } : {});
       if (discovered.length === 0) {
         console.log("No importable MCP servers found.");
@@ -109,14 +144,45 @@ cli
       }
 
       for (const server of selected) {
-        await ensureToolCapsuleIgnored();
-        await writeProfile(join(".toolcapsule", "profiles", `${server.profile.name}.json`), server.profile);
-        const out = await generateSkill(server.profile, { target: readSkillTarget(options.target) });
-        console.log(pc.green(`Imported ${server.name} from ${server.source.path} -> ${out}`));
-        for (const warning of server.warnings) console.log(pc.yellow(`  warning: ${warning}`));
+        await writeImportedServer(server, { as: options.as, local, copy, target: options.target });
       }
     },
   );
+
+cli
+  .command("mcp <action> [name]", "List, enable, or disable MCP servers")
+  .option("--include-user", "Also inspect user-level MCP config files")
+  .option("--json", "Print JSON output for list")
+  .option("--as <name>", "Store an enabled server under a different ToolCapsule profile name")
+  .option("--target <target>", "Skill target: copilot, claude, opencode, agents, all", { default: defaultSkillTarget })
+  .option("--local", "Store ToolCapsule profile in this workspace")
+  .option("--copy", "Copy MCP transport details into a ToolCapsule snapshot instead of linking source config")
+  .option("--native", "For disable: disable the native MCP config instead of the ToolCapsule profile")
+  .option("--yes", "Apply native disable changes; otherwise native disable is dry-run")
+  .action(async (action: string, name: string | undefined, options: { includeUser?: boolean; json?: boolean; as?: string; target?: string; local?: boolean; copy?: boolean; native?: boolean; yes?: boolean }) => {
+    if (action === "list") {
+      const items = await listMcpInventory(options.includeUser ? { includeUser: true } : {});
+      console.log(options.json ? JSON.stringify(items, null, 2) : formatInventory(items));
+      return;
+    }
+    if (action === "enable") {
+      if (!name) throw new Error("Usage: tcap mcp enable <server> [--as <profile>]");
+      const discovered = await discoverMcpServers(options.includeUser ? { includeUser: true } : {});
+      const selected = selectImportedServers(discovered, name, false);
+      if (selected.length !== 1) throw new Error(`Expected one MCP server named ${name}; run tcap mcp list --include-user first.`);
+      await writeImportedServer(selected[0]!, { as: options.as, local: options.local, copy: options.copy, target: options.target });
+      return;
+    }
+    if (action === "disable") {
+      if (!name) throw new Error("Usage: tcap mcp disable <profile|server>");
+      const message = options.native
+        ? await disableNativeMcp(name, { ...(options.includeUser ? { includeUser: true } : {}), dryRun: options.yes !== true })
+        : await disableToolCapsuleProfile(name);
+      console.log(message);
+      return;
+    }
+    throw new Error("Unknown mcp action. Use: list, enable, disable");
+  });
 
 cli
   .command("tools <profile>", "List MCP tools")
@@ -165,7 +231,7 @@ cli
       console.log(JSON.stringify(response, null, 2));
       if (options.saveRun) {
         await ensureToolCapsuleIgnored();
-        const dir = await saveRun(runBaseDir(profile.name), {
+        const dir = await saveRun(workspaceRunBaseDir(profile.name), {
           id: runId,
           createdAt: new Date().toISOString(),
           profile: profile.name,
@@ -181,7 +247,7 @@ cli
     } catch (error) {
       if (options.saveRun) {
         await ensureToolCapsuleIgnored();
-        const dir = await saveRun(runBaseDir(profile.name), {
+        const dir = await saveRun(workspaceRunBaseDir(profile.name), {
           id: runId,
           createdAt: new Date().toISOString(),
           profile: profile.name,

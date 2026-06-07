@@ -38,7 +38,7 @@ This is a lazy MCP workflow: agents discover compact summaries first and load fu
 
 ```text
 .mcp.json / .vscode/mcp.json / opencode.json / .gemini/settings.json / .cursor/mcp.json
-→ .toolcapsule/profiles/<server>.json
+→ ~/.toolcapsule/profiles/<server>.json
 → .claude/skills/<server>-mcp/SKILL.md by default
 ```
 

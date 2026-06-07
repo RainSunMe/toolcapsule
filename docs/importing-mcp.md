@@ -6,16 +6,41 @@ This is the fastest onboarding path when a user already has MCP working in Claud
 
 ## Quick start
 
+AI-first onboarding starts by installing the ToolCapsule Skill, not the CLI:
+
 ```bash
-tcap import --dry-run
-tcap import --name <server> --target claude
+npx skills add RainSunMe/toolcapsule --skill toolcapsule
+```
+
+For non-interactive installation into Claude Code:
+
+```bash
+npx skills add RainSunMe/toolcapsule --skill toolcapsule --agent claude-code --yes
+```
+
+Then ask the agent to use the ToolCapsule Skill to inspect MCPs and capsule selected heavy servers.
+
+Manual CLI flow:
+
+```bash
+tcap mcp list --include-user
+tcap mcp enable <server> --as <profile> --target claude
+```
+
+The newer inventory-oriented flow is:
+
+```bash
+tcap mcp list --include-user
+tcap mcp enable <server> --as <profile> --target claude
 ```
 
 To write skills for multiple agents:
 
 ```bash
-tcap import --name <server> --target all
+tcap mcp enable <server> --as <profile> --target all
 ```
+
+Use `--as` when the native MCP server name is generic, for example `tcap import --name docs --as feishu`.
 
 ## What gets created
 
@@ -24,7 +49,7 @@ An MCP-to-Skill import keeps MCP as the capability layer and creates a Skill as 
 For an imported server named `github`, ToolCapsule writes:
 
 ```text
-.toolcapsule/profiles/github.json
+~/.toolcapsule/profiles/github.json
 .claude/skills/github-mcp/SKILL.md
 ```
 
@@ -90,7 +115,11 @@ ToolCapsule stores the reference, not the resolved secret value.
 
 - Run `--dry-run` first.
 - Use `--include-user` only when you want ToolCapsule to inspect personal MCP config.
-- Do not commit generated profiles if they contain private endpoints, document IDs, tokens, or machine-specific paths.
+- Imported profiles are stored under `~/.toolcapsule/profiles/` by default so MCP connections can be reused across projects.
+- Imports link to the original MCP config by default instead of copying private endpoints.
+- Use `--copy` when you want a stable snapshot profile that no longer depends on the source MCP config file.
+- Use `--local` only when a profile should be stored in the current workspace under `.toolcapsule/profiles/`.
+- Do not commit local generated profiles if they contain private endpoints, document IDs, tokens, or machine-specific paths.
 - Keep `.toolcapsule/`, generated skills, and run artifacts under review before sharing.
 - Transport logs are quiet by default. Set `TOOLCAPSULE_DEBUG=1` only when debugging.
 
@@ -99,8 +128,8 @@ ToolCapsule stores the reference, not the resolved secret value.
 ### Import one server for Claude Code
 
 ```bash
-tcap import --dry-run
-tcap import --name notion --target claude
+tcap mcp list --include-user
+tcap mcp enable notion --target claude
 tcap tools notion --brief
 ```
 

@@ -1,6 +1,6 @@
 {
   "name": "toolcapsule",
-  "version": "0.1.0-alpha.11",
+  "version": "0.1.0-alpha.12",
   "description": "MCP-to-Skill for lazy-loaded, patchable Agent Skills from heavy MCP tools.",
   "type": "module",
   "bin": {
@@ -12,6 +12,7 @@
     "README.md",
     "LICENSE",
     "docs",
+    "skills",
     "examples",
     "llms.txt"
   ],

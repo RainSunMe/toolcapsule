@@ -114,8 +114,10 @@ Heavy MCP server
 使用 ToolCapsule，可以这样开始：
 
 ```bash
-npm i -g toolcapsule
+npx skills add RainSunMe/toolcapsule --skill toolcapsule
 ```
+
+AI 读到 ToolCapsule Skill 后，会在需要时安装 CLI，并扫描已有 MCP 配置。
 
 初始化一个 MCP profile，并生成对应的 Agent Skill：
 
@@ -126,8 +128,8 @@ tcap init feishu --url <remote-mcp-url> --target claude
 或者，如果你已经在 Claude Code、VS Code / GitHub Copilot、OpenCode、Gemini CLI、Cursor 等工具里配置过 MCP，可以直接导入：
 
 ```bash
-tcap import --dry-run
-tcap import --name feishu --target claude
+tcap mcp list --include-user
+tcap mcp enable docs --as feishu --target claude
 ```
 
 查看工具列表时，只加载简短摘要：
@@ -278,17 +280,18 @@ ToolCapsule 不是说 Native MCP 不好。
 ```text
 .claude/skills/feishu-mcp/
   SKILL.md                  # lightweight Agent Skill entrypoint
-  toolcapsule.config.json   # MCP transport/profile config
   scripts/README.md
 
+~/.toolcapsule/
+  profiles/feishu.json      # user-level MCP profile, reusable across projects
+
 .toolcapsule/
-  profiles/feishu.json      # local MCP profile
-  runs/feishu/              # auditable tool call records
+  runs/feishu/              # workspace-local auditable tool call records
 ```
 
 `SKILL.md` 是 Agent 看到的轻量入口。
 
-`toolcapsule.config.json` 保存 MCP profile 信息。
+`~/.toolcapsule/profiles/` 保存可跨项目复用的 MCP profile 信息。
 
 `.toolcapsule/runs/` 保存每次工具调用的记录。
 
@@ -329,14 +332,14 @@ ToolCapsule 目前是 early alpha，API 可能在 v1.0 前变化。
 如果你愿意尝试，可以这样安装：
 
 ```bash
-npm i -g toolcapsule
+npx skills add RainSunMe/toolcapsule --skill toolcapsule
 ```
 
 常用命令：
 
 ```bash
-tcap import --dry-run
-tcap import --name feishu --target claude
+tcap mcp list --include-user
+tcap mcp enable docs --as feishu --target claude
 tcap tools feishu --brief
 tcap schema feishu create-doc
 tcap call feishu create-doc @args.json --save-run

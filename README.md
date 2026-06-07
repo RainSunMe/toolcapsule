@@ -52,18 +52,20 @@ This is the practical version of a lazy MCP workflow:
 Already configured MCP in Claude Code, GitHub Copilot / VS Code, OpenCode, Gemini CLI, or Cursor? Import it instead of retyping URLs and commands:
 
 ```bash
-tcap import --dry-run
-tcap import --name github --target claude
+tcap mcp list --include-user
+tcap mcp enable docs --as feishu --target claude
 ```
 
 ToolCapsule scans common workspace MCP config files such as `.mcp.json`, `.vscode/mcp.json`, `opencode.json`, `.gemini/settings.json`, and `.cursor/mcp.json`, then creates:
 
 ```text
-.toolcapsule/profiles/<server>.json
+~/.toolcapsule/profiles/<server>.json
 .claude/skills/<server>-mcp/SKILL.md
 ```
 
-Use `--target copilot`, `--target opencode`, `--target agents`, or `--target all` to write skills for other agents. User-level MCP configs are only inspected when you opt in with `--include-user`.
+MCP profiles are user-level by default because MCP server connections are usually reused across projects. Use `--local` to store a profile in `.toolcapsule/profiles/` for the current workspace. Use `--target copilot`, `--target opencode`, `--target agents`, or `--target all` to write skills for other agents. User-level MCP configs are only inspected when you opt in with `--include-user`.
+
+Imports link back to the original MCP config by default so ToolCapsule does not duplicate private MCP URLs. Use `--copy` when you want a stable ToolCapsule snapshot profile.
 
 ## What is a ToolCapsule?
 
@@ -77,12 +79,30 @@ Instead of making the model hold everything in the prompt, ToolCapsule stores he
 
 ## Quick start
 
+AI-first onboarding: install the ToolCapsule Skill into your coding agent, then ask the agent to inventory MCPs and capsule the heavy ones.
+
+```bash
+npx skills add RainSunMe/toolcapsule --skill toolcapsule
+```
+
+For a specific agent or global install:
+
+```bash
+npx skills add RainSunMe/toolcapsule --skill toolcapsule --agent claude-code
+npx skills add RainSunMe/toolcapsule --skill toolcapsule --global --agent claude-code
+```
+
+Then tell your agent:
+
+> Use the ToolCapsule Skill. Scan my MCP servers, pick the heavy ones, and turn them into lazy ToolCapsule Skills.
+
+Manual CLI workflow:
+
 ```bash
 npm i -g toolcapsule
 
-toolcapsule install-skill
-toolcapsule import --dry-run
-toolcapsule import --name feishu --target claude
+toolcapsule mcp list --include-user
+toolcapsule mcp enable docs --as feishu --target claude
 toolcapsule tools feishu --brief
 toolcapsule schema feishu create-doc
 toolcapsule call feishu create-doc @args.json --save-run
@@ -101,12 +121,13 @@ tcap call feishu create-doc @args.json --save-run
 ```text
 .claude/skills/feishu-mcp/
   SKILL.md                  # lightweight Agent Skill entrypoint
-  toolcapsule.config.json   # MCP transport/profile config
   scripts/README.md
 
+~/.toolcapsule/
+  profiles/feishu.json      # user-level MCP profile, reusable across projects
+
 .toolcapsule/
-  profiles/feishu.json      # local MCP profile
-  runs/feishu/              # auditable tool call records
+  runs/feishu/              # workspace-local auditable tool call records
 ```
 
 This lets your agent discover the Skill instead of carrying the full MCP schema in every turn.
@@ -153,9 +174,13 @@ Results vary by MCP server, model, and host.
 ```text
 toolcapsule init <name> --url <remote-mcp-url> --target claude
 toolcapsule init <name> --command <stdio-command> --arg <arg> --target claude
-toolcapsule install-skill --target claude
+npx skills add RainSunMe/toolcapsule --skill toolcapsule
+toolcapsule mcp list --include-user
+toolcapsule mcp enable <server> --as <profile> --target claude
+toolcapsule mcp disable <profile>
+toolcapsule mcp disable <server> --native
 toolcapsule import --dry-run
-toolcapsule import --name <server> --target claude
+toolcapsule import --name <server> --as <profile> --target claude
 toolcapsule import --all --target all
 toolcapsule tools <profile> --brief
 toolcapsule describe <profile> <tool> --brief

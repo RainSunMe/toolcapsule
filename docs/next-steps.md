@@ -62,8 +62,8 @@ Add a better release note with:
 Initial support exists:
 
 ```bash
-tcap import --dry-run
-tcap import --name <server> --target claude
+tcap mcp list --include-user
+tcap mcp enable <server> --as <profile> --target claude
 tcap import --all --target all
 ```
 
@@ -201,7 +201,8 @@ Because ToolCapsule can call tools, store artifacts, and connect to MCP servers,
 
 - Do not commit secrets.
 - Run artifacts may contain sensitive data.
-- `.toolcapsule/` is ignored by default and stores local profiles plus run artifacts.
+- `.toolcapsule/` is ignored by default and stores workspace-local run artifacts plus optional `--local` profiles.
+- User-level MCP profiles live under `~/.toolcapsule/profiles/` by default.
 - Generated files should be reviewed before sharing.
 - Enterprise users should audit local artifacts.
 

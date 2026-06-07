@@ -19,8 +19,17 @@ export type ShortcutConfig = {
   args?: Record<string, "string" | "file" | "json" | "boolean" | "number">;
 };
 
-export type ProfileConfig = {
+export type McpProfileSource = {
+  tool: "vscode" | "claude" | "opencode" | "gemini" | "cursor" | "generic";
+  path: string;
+  server: string;
+  userLevel?: boolean;
+  managed?: boolean;
+};
+
+export type SnapshotProfileConfig = {
   name: string;
+  kind?: "snapshot";
   transport: TransportConfig;
   skill?: {
     name?: string;
@@ -28,6 +37,19 @@ export type ProfileConfig = {
   };
   shortcuts?: Record<string, ShortcutConfig>;
 };
+
+export type LinkedProfileConfig = {
+  name: string;
+  kind: "linked";
+  source: McpProfileSource;
+  skill?: {
+    name?: string;
+    description?: string;
+  };
+  shortcuts?: Record<string, ShortcutConfig>;
+};
+
+export type ProfileConfig = SnapshotProfileConfig | LinkedProfileConfig;
 
 export type McpTool = {
   name: string;

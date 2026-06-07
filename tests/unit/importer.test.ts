@@ -1,7 +1,7 @@
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, test } from "vitest";
-import { discoverMcpServers, selectImportedServers } from "../../src/mcp/importer.js";
+import { discoverMcpServers, linkedProfileForImportedServer, selectImportedServers } from "../../src/mcp/importer.js";
 
 const cwd = process.cwd();
 const tempDir = join(cwd, ".tmp-importer-test");
@@ -44,6 +44,11 @@ describe("MCP config importer", () => {
       type: "remote",
       url: "https://api.githubcopilot.com/mcp",
       headers: { Authorization: "Bearer ${GITHUB_TOKEN}" },
+    });
+    expect(servers[0] ? linkedProfileForImportedServer(servers[0]) : undefined).toMatchObject({
+      name: "github",
+      kind: "linked",
+      source: { tool: "vscode", server: "GitHub" },
     });
   });
 

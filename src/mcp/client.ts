@@ -1,7 +1,7 @@
 import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
 import { once } from "node:events";
 import { resolve } from "node:path";
-import type { JsonRpcMessage, ProfileConfig, ToolsListResult } from "../types.js";
+import type { JsonRpcMessage, SnapshotProfileConfig, ToolsListResult } from "../types.js";
 
 export type McpClientOptions = {
   timeoutMs?: number;
@@ -21,7 +21,7 @@ export class McpClient {
   private debug: boolean;
   private clientVersion: string;
 
-  constructor(profile: ProfileConfig, opts: McpClientOptions = {}) {
+  constructor(profile: SnapshotProfileConfig, opts: McpClientOptions = {}) {
     this.timeoutMs = opts.timeoutMs ?? Number(process.env.TOOLCAPSULE_TIMEOUT_MS || "45000");
     this.debug = opts.debug ?? process.env.TOOLCAPSULE_DEBUG === "1";
     this.clientVersion = opts.clientVersion ?? "0.0.0";
