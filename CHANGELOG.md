@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.0
+
+- Promote ToolCapsule to the first stable release.
+- Keep the latest importer hardening and local generated-file ignore rules from the alpha series.
+
 ## 0.1.0-alpha.14
 
 - Skip empty or invalid MCP config files during import and inventory discovery.

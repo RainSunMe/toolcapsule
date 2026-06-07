@@ -44,7 +44,14 @@ jobs:
             exit 1
           fi
       - run: pnpm run ci
-      - run: npm publish --access public --tag alpha
+      - name: Publish to npm
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if [[ "$VERSION" == *-* ]]; then
+            npm publish --access public --tag alpha
+          else
+            npm publish --access public --tag latest
+          fi
       - name: Verify npm publish
         run: |
           VERSION=$(node -p "require('./package.json').version")
