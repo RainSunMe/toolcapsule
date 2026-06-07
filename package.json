@@ -1,6 +1,6 @@
 {
   "name": "toolcapsule",
-  "version": "0.1.0-alpha.10",
+  "version": "0.1.0-alpha.11",
   "description": "MCP-to-Skill for lazy-loaded, patchable Agent Skills from heavy MCP tools.",
   "type": "module",
   "bin": {

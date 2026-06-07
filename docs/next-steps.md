@@ -94,7 +94,7 @@ The demo should show:
 tcap init feishu --url ...
 tcap tools feishu --brief
 tcap call feishu create-doc @create-doc.args.json --save-run
-tcap retry runs/...
+tcap retry .toolcapsule/runs/feishu/...
 ```
 
 Goal: a new user should understand MCP-to-Skill → file-first call → patch-and-retry in one example.
@@ -201,7 +201,7 @@ Because ToolCapsule can call tools, store artifacts, and connect to MCP servers,
 
 - Do not commit secrets.
 - Run artifacts may contain sensitive data.
-- `/runs/` is ignored by default.
+- `.toolcapsule/` is ignored by default and stores local profiles plus run artifacts.
 - Generated files should be reviewed before sharing.
 - Enterprise users should audit local artifacts.
 

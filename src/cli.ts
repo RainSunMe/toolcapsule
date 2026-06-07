@@ -13,7 +13,7 @@ import { defaultSkillTarget, generateSkill, type SkillTarget, writeProfile } fro
 import { installAgentSkill } from "./skill/installer.js";
 import { createRunId, loadRun, saveRun } from "./runs/recorder.js";
 import { writeFile } from "node:fs/promises";
-import { readJson } from "./utils/fs.js";
+import { ensureToolCapsuleIgnored, readJson } from "./utils/fs.js";
 import { percentReduction, roughTokens } from "./utils/tokens.js";
 
 const cli = cac("toolcapsule");
@@ -49,6 +49,10 @@ function readSkillTarget(raw: string | undefined): SkillTarget {
   throw new Error("Invalid --target. Use one of: copilot, claude, opencode, agents, all");
 }
 
+function runBaseDir(profileName: string): string {
+  return join(".toolcapsule", "runs", profileName);
+}
+
 cli
   .command("init <name>", "Create a profile and generated Agent Skill for an MCP server")
   .option("--url <url>", "Remote MCP URL")
@@ -61,6 +65,7 @@ cli
     const profile: ProfileConfig = options.url
       ? { name, transport: { type: "remote", url: options.url } }
       : { name, transport: { type: "stdio", command: options.command!, args: options.arg ?? [] } };
+    await ensureToolCapsuleIgnored();
     await writeProfile(join(".toolcapsule", "profiles", `${name}.json`), profile);
     const out = await generateSkill(profile, options.output ? { outputDir: options.output } : { target: readSkillTarget(options.target) });
     console.log(pc.green(`Created profile and skill at ${out}`));
@@ -104,6 +109,7 @@ cli
       }
 
       for (const server of selected) {
+        await ensureToolCapsuleIgnored();
         await writeProfile(join(".toolcapsule", "profiles", `${server.profile.name}.json`), server.profile);
         const out = await generateSkill(server.profile, { target: readSkillTarget(options.target) });
         console.log(pc.green(`Imported ${server.name} from ${server.source.path} -> ${out}`));
@@ -146,7 +152,7 @@ cli.command("schema <profile> <tool>", "Print a compact schema for one MCP tool"
 
 cli
   .command("call <profile> <tool> <args>", "Call an MCP tool with JSON args or @args.json")
-  .option("--save-run", "Save request, response, and command under runs/")
+  .option("--save-run", "Save request, response, and command under .toolcapsule/runs/<profile>/")
   .action(async (profileName: string, toolName: string, argsRaw: string, options: { saveRun?: boolean }) => {
     const argsPath = readArgsPath(argsRaw);
     const toolArgs = argsRaw.startsWith("@") ? await readJson(argsPath) : JSON.parse(argsRaw);
@@ -158,10 +164,11 @@ cli
       const response = await withClient(profile, (client) => client.callTool(toolName, toolArgs));
       console.log(JSON.stringify(response, null, 2));
       if (options.saveRun) {
-        const dir = await saveRun("runs", {
+        await ensureToolCapsuleIgnored();
+        const dir = await saveRun(runBaseDir(profile.name), {
           id: runId,
           createdAt: new Date().toISOString(),
-          profile: profileName,
+          profile: profile.name,
           tool: toolName,
           argsFile: argsPath,
           status: "success",
@@ -173,10 +180,11 @@ cli
       }
     } catch (error) {
       if (options.saveRun) {
-        const dir = await saveRun("runs", {
+        await ensureToolCapsuleIgnored();
+        const dir = await saveRun(runBaseDir(profile.name), {
           id: runId,
           createdAt: new Date().toISOString(),
-          profile: profileName,
+          profile: profile.name,
           tool: toolName,
           argsFile: argsPath,
           status: "error",

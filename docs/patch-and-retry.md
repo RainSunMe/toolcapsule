@@ -10,12 +10,12 @@ toolcapsule call feishu create-doc @args.json --save-run
 
 If the call fails:
 
-1. inspect `runs/<id>/error.txt`;
+1. inspect `.toolcapsule/runs/<profile>/<id>/error.txt`;
 2. patch `args.json` or the referenced Markdown file;
 3. retry:
 
 ```bash
-toolcapsule retry runs/<id>
+toolcapsule retry .toolcapsule/runs/feishu/<id>
 ```
 
 This makes failures reproducible and local.

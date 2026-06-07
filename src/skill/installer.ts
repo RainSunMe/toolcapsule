@@ -53,7 +53,7 @@ tcap call <name> <tool> @args.json --save-run
 6. If the call fails, patch the local file and retry:
 
 \`\`\`bash
-tcap retry runs/<run-id>
+tcap retry .toolcapsule/runs/<name>/<run-id>
 \`\`\`
 
 ## Safety

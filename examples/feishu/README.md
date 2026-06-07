@@ -45,7 +45,7 @@ If the call fails:
 
 ```bash
 # edit examples/feishu/create-doc.args.json or examples/feishu/demo.md
-tcap retry runs/<run-id>
+tcap retry .toolcapsule/runs/feishu/<run-id>
 ```
 
 ## Files

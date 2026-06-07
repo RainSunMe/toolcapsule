@@ -61,5 +61,5 @@ Ask a human/function-caller to capture:
 3. Run `tcap call ... --save-run`.
 4. Show failure or saved run artifacts.
 5. Patch `args.json`.
-6. Run `tcap retry runs/<id>`.
+6. Run `tcap retry .toolcapsule/runs/<profile>/<id>`.
 7. Show success.
