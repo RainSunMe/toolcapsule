@@ -5,17 +5,17 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-black?style=flat-square)](LICENSE)
 [![GitHub Repo stars](https://img.shields.io/github/stars/RainSunMe/toolcapsule?style=flat-square)](https://github.com/RainSunMe/toolcapsule)
 
-> MCP-to-Skill for heavy MCP tools.
+> AI-first workflow manager for heavy MCP tools.
 
-**ToolCapsule** turns heavy MCP servers into lightweight, lazy-loaded, file-first **Agent Skills** with saved runs and patch-and-retry recovery.
+**ToolCapsule** inventories your MCPs, turns heavy ones into lightweight, lazy-loaded, file-first **Agent Skills**, and keeps tool calls auditable with saved runs and patch-and-retry recovery.
 
-If you are looking for **lazy MCP**, **MCP to Skill**, **MCP-to-Skill**, or **Agent Skills for MCP tools**, ToolCapsule is built for that workflow.
+If you are looking for **lazy MCP**, **MCP to Skill**, **MCP-to-Skill**, or **Agent Skills for MCP tools**, ToolCapsule covers that workflow without replacing MCP.
 
 It is not a replacement for MCP or Skills. It is the missing workflow layer between them:
 
 ```text
 Heavy MCP server
-→ MCP-to-Skill workflow layer
+→ AI-first ToolCapsule workflow layer
 → compact Agent Skill
 → local args/content files
 → auditable tool runs
@@ -36,9 +36,9 @@ But large MCP servers can be expensive in agent contexts:
 ToolCapsule keeps the MCP server as the source of truth, but exposes it through a lightweight Skill and local artifacts.
 Transport logs are quiet by default so remote MCP URLs are not printed during normal use. Set `TOOLCAPSULE_DEBUG=1` only when debugging.
 
-## MCP-to-Skill and lazy MCP
+## AI-first MCP workflow
 
-ToolCapsule is an **MCP-to-Skill workflow layer**. It imports existing MCP configurations and generates Agent Skills that let agents lazy-load MCP schemas only when needed.
+ToolCapsule is an **AI-first workflow manager for heavy MCP tools**. It inventories existing MCP configurations, links selected servers into ToolCapsule profiles, and generates Agent Skills that let agents lazy-load MCP schemas only when needed.
 
 This is the practical version of a lazy MCP workflow:
 
@@ -84,6 +84,8 @@ AI-first onboarding: install the ToolCapsule Skill into your coding agent, then 
 ```bash
 npx skills add RainSunMe/toolcapsule --skill toolcapsule
 ```
+
+`npx skills add toolcapsule` is not enough today because the `skills` CLI treats a bare value as a git source. Use the GitHub shorthand above.
 
 For a specific agent or global install:
 
@@ -222,6 +224,7 @@ Early alpha. APIs may change before v1.0.
 - [Next steps](docs/next-steps.md)
 - [Release checklist](docs/release-checklist.md)
 - [Agent tool compatibility research](docs/agent-tool-compatibility.md)
+- [Comparison with native MCP, lazy-mcp, and MCP-to-Skill generators](docs/comparison.md)
 - [Roadmap](ROADMAP.md)
 
 ## License

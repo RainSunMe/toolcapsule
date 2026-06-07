@@ -2,7 +2,7 @@
 
 ToolCapsule has reached a public alpha loop: GitHub repository, Vercel site, npm package, release workflow, and project skill are in place.
 
-The public positioning is now: MCP-to-Skill for heavy MCP tools. Keep future docs, demos, and releases aligned with lazy MCP, lazy-loaded Agent Skills, and Agent Skills for MCP search intent.
+The public positioning is now: AI-first workflow manager for heavy MCP tools. Keep future docs, demos, and releases aligned with MCP inventory, lazy Agent Skills, file-first calls, and patch-and-retry.
 
 This document tracks what should happen next.
 

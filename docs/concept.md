@@ -1,6 +1,6 @@
 # Concept
 
-**ToolCapsule** is an MCP-to-Skill workflow layer for heavy MCP tools.
+**ToolCapsule** is an AI-first workflow manager for heavy MCP tools.
 
 MCP connects agents to tools. Skills package repeatable agent workflows. ToolCapsule sits between them: it keeps MCP as the source of truth, but turns schema-heavy tools into compact, lazy-loaded, file-first Agent Skills.
 

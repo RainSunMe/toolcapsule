@@ -1,7 +1,7 @@
 {
   "name": "toolcapsule",
-  "version": "0.1.0-alpha.12",
-  "description": "MCP-to-Skill for lazy-loaded, patchable Agent Skills from heavy MCP tools.",
+  "version": "0.1.0-alpha.13",
+  "description": "AI-first workflow manager for heavy MCP tools with lazy Agent Skills and patchable runs.",
   "type": "module",
   "bin": {
     "toolcapsule": "dist/cli.js",

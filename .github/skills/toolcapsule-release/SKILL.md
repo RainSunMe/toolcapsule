@@ -31,7 +31,7 @@ ToolCapsule is not merely "MCP as Skill". Use this positioning:
 
 Full description:
 
-> ToolCapsule turns schema-heavy MCP servers into lightweight, lazy-loaded Agent Skills with file-first calls and patch-and-retry recovery.
+> ToolCapsule inventories existing MCPs, turns selected heavy servers into lazy Agent Skills, and keeps calls file-first with auditable runs and patch-and-retry recovery.
 
 Keep MCP and Skill prominent in README, website, npm description, topics, and launch copy.
 

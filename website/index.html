@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="ToolCapsule is MCP-to-Skill for heavy MCP tools: turn schema-heavy MCP servers into lazy-loaded Agent Skills with file-first calls and patch-and-retry recovery."
+      content="ToolCapsule is an AI-first workflow manager for heavy MCP tools: inventory existing MCPs, turn selected servers into lazy Agent Skills, and keep calls file-first with patch-and-retry recovery."
     />
     <meta name="robots" content="index,follow" />
     <meta name="application-name" content="ToolCapsule" />
@@ -14,18 +14,18 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="ToolCapsule" />
     <meta property="og:url" content="https://toolcapsule.studio/" />
-    <meta property="og:title" content="ToolCapsule — MCP-to-Skill for lazy-loaded MCP tools" />
+    <meta property="og:title" content="ToolCapsule — AI-first workflow manager for heavy MCP tools" />
     <meta
       property="og:description"
-      content="Turn schema-heavy MCP servers into lazy-loaded Agent Skills with file-first calls and patch-and-retry recovery."
+      content="Inventory existing MCPs, turn selected heavy servers into lazy Agent Skills, and keep calls file-first with patch-and-retry recovery."
     />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="ToolCapsule — MCP-to-Skill for lazy-loaded MCP tools" />
+    <meta name="twitter:title" content="ToolCapsule — AI-first workflow manager for heavy MCP tools" />
     <meta
       name="twitter:description"
-      content="Turn schema-heavy MCP servers into lazy-loaded Agent Skills with file-first calls and patch-and-retry recovery."
+      content="Inventory existing MCPs, turn selected heavy servers into lazy Agent Skills, and keep calls file-first with patch-and-retry recovery."
     />
-    <title>ToolCapsule — MCP-to-Skill for lazy-loaded MCP tools</title>
+    <title>ToolCapsule — AI-first workflow manager for heavy MCP tools</title>
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="./favicon.svg" />
     <link rel="stylesheet" href="./style.css" />
@@ -36,7 +36,7 @@
         "name": "ToolCapsule",
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "Linux, macOS, Windows",
-        "description": "MCP-to-Skill for heavy MCP tools: turn schema-heavy MCP servers into lazy-loaded Agent Skills with file-first calls and patch-and-retry recovery.",
+        "description": "AI-first workflow manager for heavy MCP tools: inventory existing MCPs, turn selected servers into lazy Agent Skills, and keep calls file-first with patch-and-retry recovery.",
         "url": "https://toolcapsule.studio/",
         "codeRepository": "https://github.com/RainSunMe/toolcapsule",
         "downloadUrl": "https://www.npmjs.com/package/toolcapsule",
@@ -67,11 +67,11 @@
 
     <main id="top">
       <section class="hero">
-        <div class="hero-kicker" data-i18n="hero.kicker">MCP-to-Skill for lazy-loaded MCP tools</div>
+        <div class="hero-kicker" data-i18n="hero.kicker">AI-first workflow manager for heavy MCP tools</div>
         <h1 data-i18n="hero.title">Heavy MCP tools don’t belong in your prompt.</h1>
         <p class="hero-subtitle" data-i18n="hero.subtitle">
-          ToolCapsule turns schema-heavy MCP servers into lazy-loaded, file-first Agent Skills
-          with patch-and-retry recovery. If you want lazy MCP, this is the workflow layer.
+          ToolCapsule inventories existing MCPs, turns selected heavy servers into lazy-loaded,
+          file-first Agent Skills, and keeps calls patchable and retryable.
         </p>
         <div class="hero-setup" aria-label="Get started">
           <div class="install-card">
@@ -267,7 +267,7 @@ command.txt</code></pre>
     <script>
       const aiPrompt = `Help me onboard this project to ToolCapsule from start to finish.
 
-    ToolCapsule is MCP-to-Skill for heavy MCP tools. It turns MCP servers into lightweight, lazy-loaded, file-first Agent Skills. Your job is to install the ToolCapsule Skill/CLI if needed, inventory my existing MCP configuration safely, generate the right skill, and show me how to use patch-and-retry.
+    ToolCapsule is an AI-first workflow manager for heavy MCP tools. It inventories MCP servers, turns selected heavy ones into lightweight, lazy-loaded, file-first Agent Skills, and keeps calls patchable and retryable. Your job is to install the ToolCapsule Skill/CLI if needed, inventory my existing MCP configuration safely, generate the right skill, and show me how to use patch-and-retry.
 
 Please do this safely:
     1. If the ToolCapsule Skill is not installed, install it with: npx skills add RainSunMe/toolcapsule --skill toolcapsule
@@ -297,9 +297,9 @@ Please do this safely:
           "nav.import": "Import",
           "nav.capsule": "Capsule",
           "nav.evidence": "Evidence",
-          "hero.kicker": "MCP-to-Skill for lazy-loaded MCP tools",
+          "hero.kicker": "AI-first workflow manager for heavy MCP tools",
           "hero.title": "Heavy MCP tools don’t belong in your prompt.",
-          "hero.subtitle": "ToolCapsule turns schema-heavy MCP servers into lazy-loaded, file-first Agent Skills with patch-and-retry recovery. If you want lazy MCP, this is the workflow layer.",
+          "hero.subtitle": "ToolCapsule inventories existing MCPs, turns selected heavy servers into lazy-loaded, file-first Agent Skills, and keeps calls patchable and retryable.",
           "hero.installLabel": "Install the ToolCapsule Skill",
           "hero.installHint": "Then ask your agent to run <code>tcap mcp list --include-user</code>.",
           "hero.aiLabel": "Agent onboarding prompt",
@@ -312,10 +312,10 @@ Please do this safely:
           "problem.eyebrow": "The problem",
           "problem.title": "MCP made tools universal. It also made tool context heavier.",
           "problem.p1": "Native MCP is excellent for small, frequent tools. But document and workflow MCP servers often expose long descriptions, schemas, and rules that can be visible to the model even when the user is only planning.",
-          "problem.p2": "ToolCapsule keeps MCP as the capability layer and uses Skills as the agent-facing workflow layer. It is MCP-to-Skill for heavy tools: full schemas are still available, but no longer need to be carried every turn.",
+          "problem.p2": "ToolCapsule keeps MCP as the capability layer and uses Skills as the agent-facing workflow layer. Full schemas are still available, but no longer need to be carried every turn.",
           "import.eyebrow": "MCP-to-Skill conversion",
           "import.title": "Turn existing MCP config into a lazy-loaded Agent Skill.",
-          "import.copy": "ToolCapsule performs MCP-to-Skill conversion: it reads MCP registrations you already have and writes a profile plus an Agent Skill for Claude Code, GitHub Copilot / VS Code, OpenCode, Gemini CLI, or Cursor.",
+          "import.copy": "ToolCapsule inventories MCP registrations you already have and writes a linked profile plus an Agent Skill for Claude Code, GitHub Copilot / VS Code, OpenCode, Gemini CLI, or Cursor.",
           "import.benefit1.title": "No retyping",
           "import.benefit1.copy": "Reuse existing URLs, commands, headers, env references, and cwd.",
           "import.benefit2.title": "Safe by default",
@@ -348,7 +348,7 @@ Please do this safely:
           "cta.button": "Start with ToolCapsule",
           "modal.eyebrow": "Fast onboarding",
           "modal.title": "Copy this prompt into your coding agent.",
-          "modal.copy": "Your AI can inspect existing MCP configs, pick the right server, and turn it into a ToolCapsule MCP-to-Skill workflow without you retyping setup details.",
+          "modal.copy": "Your AI can inspect existing MCP configs, pick the right server, and turn it into a ToolCapsule workflow without you retyping setup details.",
           "modal.copyButton": "Copy prompt",
           "modal.copied": "Copied",
           "modal.copiedStatus": "Copied to clipboard. Paste it into your coding agent.",
@@ -361,9 +361,9 @@ Please do this safely:
           "nav.import": "导入",
           "nav.capsule": "工作流",
           "nav.evidence": "效果",
-          "hero.kicker": "MCP-to-Skill：让 MCP 工具按需加载",
+          "hero.kicker": "面向重型 MCP 工具的 AI-first 工作流管理器",
           "hero.title": "别把复杂 MCP 工具塞进提示词。",
-          "hero.subtitle": "ToolCapsule 把 schema 繁重的 MCP 服务变成按需加载、文件优先的 Agent Skill，并支持本地修补与确定性重试。如果你想找 lazy MCP，这就是对应的工作流层。",
+          "hero.subtitle": "ToolCapsule 会盘点已有 MCP，把选中的重型服务变成按需加载、文件优先的 Agent Skill，并支持本地修补与确定性重试。",
           "hero.installLabel": "安装 ToolCapsule Skill",
           "hero.installHint": "然后让 Agent 运行 <code>tcap mcp list --include-user</code> 扫描已有 MCP 配置。",
           "hero.aiLabel": "给编程 Agent 的接入提示词",
@@ -376,10 +376,10 @@ Please do this safely:
           "problem.eyebrow": "痛点",
           "problem.title": "MCP 让工具通用，也让工具上下文变重。",
           "problem.p1": "原生 MCP 很适合小而高频的工具。但文档和流程类 MCP 服务通常带着很长的描述、schema 和规则；即使用户只是在规划，这些内容也可能持续占用模型上下文。",
-          "problem.p2": "ToolCapsule 保留 MCP 作为能力层，同时把 Skill 作为面向 Agent 的工作流层。它是面向复杂工具的 MCP-to-Skill：完整 schema 仍然可用，但不需要每一轮都背在提示词里。",
+          "problem.p2": "ToolCapsule 保留 MCP 作为能力层，同时把 Skill 作为面向 Agent 的工作流层。完整 schema 仍然可用，但不需要每一轮都背在提示词里。",
           "import.eyebrow": "MCP-to-Skill 转换",
           "import.title": "把已有 MCP 配置变成按需加载的 Agent Skill。",
-          "import.copy": "ToolCapsule 会执行 MCP-to-Skill 转换：读取你已经配置好的 MCP 注册，并为 Claude Code、GitHub Copilot / VS Code、OpenCode、Gemini CLI 或 Cursor 写出 profile 和 Agent Skill。",
+          "import.copy": "ToolCapsule 会盘点你已经配置好的 MCP 注册，并为 Claude Code、GitHub Copilot / VS Code、OpenCode、Gemini CLI 或 Cursor 写出 linked profile 和 Agent Skill。",
           "import.benefit1.title": "不用重填",
           "import.benefit1.copy": "复用已有 URL、命令、headers、环境变量引用和 cwd。",
           "import.benefit2.title": "默认安全",
@@ -412,7 +412,7 @@ Please do this safely:
           "cta.button": "开始使用 ToolCapsule",
           "modal.eyebrow": "快速接入",
           "modal.title": "把这段提示词复制给你的编程 Agent。",
-          "modal.copy": "AI 可以检查你已有的 MCP 配置，选择合适的服务器，并把它转换成 ToolCapsule MCP-to-Skill 工作流，不需要你手动重填配置。",
+          "modal.copy": "AI 可以检查你已有的 MCP 配置，选择合适的服务器，并把它转换成 ToolCapsule 工作流，不需要你手动重填配置。",
           "modal.copyButton": "复制提示词",
           "modal.copied": "已复制",
           "modal.copiedStatus": "已复制到剪贴板。现在可以粘贴给你的编程 Agent。",
