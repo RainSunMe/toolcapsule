@@ -62,9 +62,9 @@ Add a better release note with:
 Initial support exists:
 
 ```bash
-tcap mcp list --include-user
-tcap mcp enable <server> --as <profile> --target claude
-tcap import --all --target all
+tcap tools <profile>
+tcap init <name> --url <url> --target claude
+tcap init <name> --url <url> --target all
 ```
 
 Next improvements:
@@ -93,8 +93,8 @@ The demo should show:
 ```bash
 tcap init feishu --url ...
 tcap tools feishu --brief
-tcap call feishu create-doc @create-doc.args.json --save-run
-tcap retry .toolcapsule/runs/feishu/...
+tcap call feishu create-doc @create-doc.args.json 
+tcap call <profile> <tool> @/tmp/args.json
 ```
 
 Goal: a new user should understand MCP-to-Skill → file-first call → patch-and-retry in one example.

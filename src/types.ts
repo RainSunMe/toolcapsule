@@ -13,43 +13,14 @@ export type TransportConfig =
       cwd?: string;
     };
 
-export type ShortcutConfig = {
-  tool: string;
-  description?: string;
-  args?: Record<string, "string" | "file" | "json" | "boolean" | "number">;
-};
-
-export type McpProfileSource = {
-  tool: "vscode" | "claude" | "opencode" | "gemini" | "cursor" | "generic";
-  path: string;
-  server: string;
-  userLevel?: boolean;
-  managed?: boolean;
-};
-
-export type SnapshotProfileConfig = {
+export type ProfileConfig = {
   name: string;
-  kind?: "snapshot";
   transport: TransportConfig;
   skill?: {
     name?: string;
     description?: string;
   };
-  shortcuts?: Record<string, ShortcutConfig>;
 };
-
-export type LinkedProfileConfig = {
-  name: string;
-  kind: "linked";
-  source: McpProfileSource;
-  skill?: {
-    name?: string;
-    description?: string;
-  };
-  shortcuts?: Record<string, ShortcutConfig>;
-};
-
-export type ProfileConfig = SnapshotProfileConfig | LinkedProfileConfig;
 
 export type McpTool = {
   name: string;
@@ -67,15 +38,6 @@ export type McpTool = {
 
 export type ToolsListResult = {
   tools: McpTool[];
-};
-
-export type JsonRpcMessage = {
-  jsonrpc: "2.0";
-  id?: number;
-  method?: string;
-  params?: unknown;
-  result?: unknown;
-  error?: unknown;
 };
 
 export type RunRecord = {

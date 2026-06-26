@@ -1,4 +1,0 @@
-{
-  "title": "ToolCapsule Feishu demo",
-  "markdown": "# ToolCapsule Feishu demo\n\nThis demo uses a local args file. For larger documents, put the Markdown in demo.md and copy it into this field before calling create-doc."
-}

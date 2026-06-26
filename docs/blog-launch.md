@@ -128,8 +128,8 @@ tcap init feishu --url <remote-mcp-url> --target claude
 或者，如果你已经在 Claude Code、VS Code / GitHub Copilot、OpenCode、Gemini CLI、Cursor 等工具里配置过 MCP，可以直接导入：
 
 ```bash
-tcap mcp list --include-user
-tcap mcp enable docs --as feishu --target claude
+tcap tools <profile>
+tcap init <name> --url <url> --target claude
 ```
 
 查看工具列表时，只加载简短摘要：
@@ -147,13 +147,13 @@ tcap schema feishu create-doc
 准备一个本地参数文件：
 
 ```bash
-tcap call feishu create-doc @args.json --save-run
+tcap call feishu create-doc @args.json 
 ```
 
 如果调用失败，不需要让模型重新生成整个工具调用。直接修改 `args.json` 或正文文件，然后重试：
 
 ```bash
-tcap retry .toolcapsule/runs/feishu/<run-id>
+tcap call <profile> <tool> @/tmp/args.json
 ```
 
 整个过程的重点是：Agent 不需要一直背着完整 MCP schema 和大 payload 前进。它只需要知道文件在哪里、当前步骤是什么、失败后该 patch 哪个 artifact。
@@ -215,9 +215,9 @@ ToolCapsule 的方式是：
 4. 使用同一个 run 目录重试。
 
 ```bash
-tcap call feishu create-doc @args.json --save-run
+tcap call feishu create-doc @args.json 
 # patch args.json or content.md
-tcap retry .toolcapsule/runs/feishu/2026-06-06T10-00-00-000Z
+tcap call <profile> <tool> @/tmp/args.json
 ```
 
 这个模式的关键是“确定性”。
@@ -338,12 +338,12 @@ npx skills add RainSunMe/toolcapsule --skill toolcapsule
 常用命令：
 
 ```bash
-tcap mcp list --include-user
-tcap mcp enable docs --as feishu --target claude
+tcap tools <profile>
+tcap init <name> --url <url> --target claude
 tcap tools feishu --brief
 tcap schema feishu create-doc
-tcap call feishu create-doc @args.json --save-run
-tcap retry .toolcapsule/runs/feishu/<run-id>
+tcap call feishu create-doc @args.json 
+tcap call <profile> <tool> @/tmp/args.json
 ```
 
 `tcap` 是 `toolcapsule` 的短别名。

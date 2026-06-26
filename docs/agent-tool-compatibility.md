@@ -63,14 +63,14 @@ npx skills add RainSunMe/toolcapsule --skill toolcapsule
 After the ToolCapsule Skill is installed, the agent can install/use the CLI and run:
 
 ```bash
-tcap mcp list --include-user
-tcap mcp enable <server> --as <profile> --target claude
+tcap tools <profile>
+tcap init <name> --url <url> --target claude
 ```
 
 For all compatible skill targets:
 
 ```bash
-tcap mcp enable <server> --as <profile> --target all
+tcap init <name> --url <url> --target claude
 ```
 
 The importer currently reads workspace MCP config by default and only reads user-level config with `--include-user`.
@@ -189,6 +189,6 @@ Add a visible onboarding button to the homepage: “Give this to your AI”. The
 4. Run `tcap init` for the selected server.
 5. Generate the right skill target for the current agent.
 6. Use `tcap tools <profile> --brief` and `tcap schema <profile> <tool>` before making calls.
-7. Keep payloads in files and use `--save-run` plus `tcap retry`.
+7. Keep payloads in files and use `` plus `tcap retry`.
 
 This lets users with existing MCP setup onboard without manually retyping server URLs or commands.

@@ -24,10 +24,10 @@ Try:
 
 ```bash
 npm i -g toolcapsule
-tcap mcp list --include-user
-tcap mcp enable docs --as feishu --target claude
+tcap tools <profile>
+tcap init <name> --url <url> --target claude
 tcap tools feishu --brief
-tcap call feishu create-doc @args.json --save-run
+tcap call feishu create-doc @args.json 
 ```
 
 New onboarding angle:
@@ -41,8 +41,8 @@ Search angle:
 Short demo:
 
 ```bash
-tcap mcp list --include-user
-tcap mcp enable github --target all
+tcap tools <profile>
+tcap init github --target all
 ```
 
 ## Suggested screenshot checklist
@@ -50,17 +50,17 @@ tcap mcp enable github --target all
 Ask a human/function-caller to capture:
 
 1. Hero section at `https://toolcapsule.studio` or `https://toolcapsule.vercel.app`.
-2. Terminal showing `tcap mcp list --include-user` finding existing MCP servers.
+2. Terminal showing `tcap tools <profile>` finding existing MCP servers.
 3. Terminal showing `tcap tools feishu --brief`.
 4. Terminal showing a saved run directory.
 5. Before/after graphic: native MCP schema in prompt vs ToolCapsule local artifacts.
 
 ## Suggested GIF flow
 
-1. Run `tcap mcp list --include-user`.
-2. Run `tcap mcp enable ... --as ... --target claude`.
-3. Run `tcap call ... --save-run`.
+1. Run `tcap tools <profile>`.
+2. Run `tcap init <name> --url <url> --target claude`.
+3. Run `tcap call ... `.
 4. Show failure or saved run artifacts.
 5. Patch `args.json`.
-6. Run `tcap retry .toolcapsule/runs/<profile>/<id>`.
+6. Run `tcap call <profile> <tool> @/tmp/args.json
 7. Show success.

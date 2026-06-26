@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.2.0
+
+Complete rearchitecture — slim down from 12 commands to 4 focused on the MCP-to-Skill core.
+
+- **CLI**: reduce to `init`, `call`, `tools`, `schema` (4 commands).
+- **SDK**: replace `mcp-remote` with official `@modelcontextprotocol/sdk` (remote + stdio).
+- **Auth**: auto-detect OAuth metadata and show guidance on 401.
+- **Security**: profiles isolated in `~/.toolcapsule/profiles/`, never in workspace.
+- **Simplicity**: remove import, mcp list/enable/disable, retry, --save-run, --local, benchmark, runs.
+- **Skills**: auto-generated SKILL.md is self-contained with usage instructions.
+- **Docs**: rewrite README, website, llms.txt, and delete obsolete docs.
+
+### Removed
+
+- `mcp list` / `mcp enable` / `mcp disable` — agent-driven, not CLI-driven.
+- `import` — use `init` directly with MCP URL.
+- `retry` / `--save-run` — edit /tmp file and re-run `call`.
+- `benchmark` / `describe` / `summarize` / `render-readme` / `install-skill`.
+- `--local` — profiles always in `~/.toolcapsule/`.
+
 ## 1.0.0
 
 - Promote ToolCapsule to the first stable release.
