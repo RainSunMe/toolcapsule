@@ -12,7 +12,7 @@ async function resetTempDir(): Promise<void> {
   await mkdir(homeDir, { recursive: true });
 }
 
-async function writeProfile(path: string, url: string): Promise<void> {
+async function writeProfileFile(path: string, url: string): Promise<void> {
   await mkdir(dirname(path), { recursive: true });
   await writeFile(
     path,
@@ -26,7 +26,6 @@ async function writeProfile(path: string, url: string): Promise<void> {
 describe("profile loading", () => {
   beforeEach(async () => {
     await resetTempDir();
-    process.chdir(tempDir);
     process.env.TOOLCAPSULE_HOME = homeDir;
   });
 
@@ -36,50 +35,16 @@ describe("profile loading", () => {
     await rm(tempDir, { recursive: true, force: true });
   });
 
-  test("loads user-level profiles", async () => {
-    await writeProfile(join(homeDir, "profiles", "demo.json"), "https://user.example.com/mcp");
+  test("loads profile from ~/.toolcapsule/profiles/", async () => {
+    await writeProfileFile(join(homeDir, "profiles", "demo.json"), "https://example.com/mcp");
 
     await expect(loadProfile("demo")).resolves.toMatchObject({
       name: "demo",
-      transport: { type: "remote", url: "https://user.example.com/mcp" },
+      transport: { type: "remote", url: "https://example.com/mcp" },
     });
   });
 
-  test("prefers workspace profile over user profile", async () => {
-    await writeProfile(join(homeDir, "profiles", "demo.json"), "https://user.example.com/mcp");
-    await writeProfile(join(".toolcapsule", "profiles", "demo.json"), "https://workspace.example.com/mcp");
-
-    await expect(loadProfile("demo")).resolves.toMatchObject({
-      transport: { type: "remote", url: "https://workspace.example.com/mcp" },
-    });
-  });
-
-  test("resolves linked profiles from source MCP config", async () => {
-    await mkdir(".vscode", { recursive: true });
-    await writeFile(
-      join(".vscode", "mcp.json"),
-      JSON.stringify({
-        servers: {
-          Original: {
-            type: "http",
-            url: "https://linked.example.com/mcp",
-          },
-        },
-      }),
-    );
-    await mkdir(join(homeDir, "profiles"), { recursive: true });
-    await writeFile(
-      join(homeDir, "profiles", "demo.json"),
-      JSON.stringify({
-        name: "demo",
-        kind: "linked",
-        source: { tool: "vscode", path: join(tempDir, ".vscode", "mcp.json"), server: "Original" },
-      }),
-    );
-
-    await expect(loadProfile("demo")).resolves.toMatchObject({
-      name: "demo",
-      transport: { type: "remote", url: "https://linked.example.com/mcp" },
-    });
+  test("throws when profile not found", async () => {
+    await expect(loadProfile("nonexistent")).rejects.toThrow("Profile not found");
   });
 });

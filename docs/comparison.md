@@ -47,10 +47,10 @@ ToolCapsule adds a broader workflow:
 
 - AI-first onboarding via `npx skills add RainSunMe/toolcapsule --skill toolcapsule`;
 - `tcap mcp list` inventory across workspace, user, and ToolCapsule profiles;
-- `tcap mcp enable <server> --as <profile>` for selected heavy servers;
+- `tcap init <server> --as <profile>` for selected heavy servers;
 - linked profiles by default, so private MCP URLs are not copied into generated Skills;
 - generated Skills with embedded tool summaries;
-- file-first calls through `tcap call <profile> <tool> @args.json --save-run`;
+- file-first calls through `tcap call <profile> <tool> @args.json `;
 - run artifacts under `.toolcapsule/runs/<profile>/<run-id>/`;
 - deterministic patch-and-retry.
 

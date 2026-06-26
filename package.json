@@ -1,6 +1,6 @@
 {
   "name": "toolcapsule",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "AI-first workflow manager for heavy MCP tools with lazy Agent Skills and patchable runs.",
   "type": "module",
   "bin": {
@@ -64,9 +64,8 @@
   },
   "packageManager": "pnpm@9.15.9",
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "cac": "^6.7.14",
-    "execa": "^9.6.0",
-    "handlebars": "^4.7.8",
     "picocolors": "^1.1.1",
     "zod": "^3.24.1"
   },

@@ -37,7 +37,7 @@ docs/assets/tcap-tools-brief.png
 Command:
 
 ```bash
-tcap call feishu create-doc @args.json --save-run
+tcap call feishu create-doc @args.json 
 ```
 
 Placeholder:
@@ -51,7 +51,7 @@ docs/assets/saved-run.png
 Command:
 
 ```bash
-tcap retry .toolcapsule/runs/feishu/<run-id>
+tcap call <profile> <tool> @/tmp/args.json
 ```
 
 Placeholder:
@@ -65,7 +65,7 @@ docs/assets/patch-and-retry.gif
 1. Show the website hero.
 2. Open terminal.
 3. Run `tcap tools <profile> --brief`.
-4. Run a call with `--save-run`.
+4. Run a call with ``.
 5. Patch `args.json`.
-6. Run `tcap retry .toolcapsule/runs/feishu/<run-id>`.
+6. Run `tcap call <profile> <tool> @/tmp/args.json
 7. End on the generated run directory and the ToolCapsule slogan.

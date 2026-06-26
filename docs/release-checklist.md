@@ -1,15 +1,15 @@
 # Release checklist
 
-Before publishing v0.1.0:
+Before publishing v0.2.0:
 
-- [ ] Create the GitHub repository.
-- [ ] Replace any remaining placeholder links.
-- [ ] Confirm the npm package name `toolcapsule` is available, or choose a scoped package.
-- [ ] Connect the repository to Vercel.
-- [ ] Point `toolcapsule.studio` to Vercel.
-- [ ] Enable GitHub Discussions.
-- [ ] Configure npm Trusted Publishing for `release.yml` and environment `npm`.
-- [ ] Review the security model for local command execution.
-- [ ] Run `pnpm run ci`.
-- [ ] Run CLI smoke tests with a mock MCP server.
-- [ ] Tag `v0.1.0-alpha.0` or publish manually with `pnpm publish --access public`.
+- [x] Run `pnpm run ci` (typecheck + lint + test + build).
+- [x] Smoke test with a real remote MCP server (Feishu).
+- [x] Test @file-based `tcap call` with /tmp args.
+- [x] Verify OAuth detection and auth guidance output.
+- [x] Verify Skills directory layout and content.
+- [x] Scan for leaked secrets or hardcoded tokens.
+- [x] Update README, website, docs, llms.txt.
+- [ ] Tag `v0.2.0` and push.
+- [ ] Publish to npm (`pnpm publish --access public`).
+- [ ] Verify `npm install -g toolcapsule` works.
+- [ ] Verify `npx skills add RainSunMe/toolcapsule --skill toolcapsule` works.

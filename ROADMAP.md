@@ -1,25 +1,25 @@
 # Roadmap
 
-## v0.1
+## v0.2.0 ✅
 
-- CLI skeleton
-- remote and stdio MCP profiles
-- tools/describe/call/retry
-- generated Agent Skill for MCP-to-Skill workflows
-- Feishu example
-- CI and docs
+- 4-command CLI: init, call, tools, schema
+- Remote + stdio MCP via official `@modelcontextprotocol/sdk`
+- OAuth detection + auth guidance
+- /tmp file-based tool calls
+- Auto-generated self-contained Agent Skills
+- Skills for copilot, claude, opencode, agents
+- Security: profile isolation in `~/.toolcapsule/`
 
-## v0.2
+## v0.3
 
-- schema summarizer improvements
-- shortcut generator
-- richer run recorder
-- mock benchmark reporter
-- SEO/docs polish for lazy MCP, MCP-to-Skill, and Agent Skills for MCP search intent
+- Integration tests with real MCP servers
+- Richer error handling and retry guidance
+- Profile management UX (list, delete, migrate)
+- More end-to-end Skill workflow testing
 
 ## v1.0
 
-- stable CLI
-- profile registry
-- plugin API
-- full security model
+- Stable API surface
+- Plugin / extension API
+- Comprehensive test coverage
+- Production hardening

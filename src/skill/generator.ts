@@ -1,10 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
-import { dirname, join } from "node:path";
-import Handlebars from "handlebars";
+import { join } from "node:path";
 import { McpClient } from "../mcp/client.js";
-import type { McpTool } from "../types.js";
-import { summarizeTools } from "../schema/summarize.js";
-import type { ProfileConfig } from "../types.js";
+import type { McpTool, ProfileConfig } from "../types.js";
 import { writeJson } from "../utils/fs.js";
 
 export type SkillTarget = "copilot" | "claude" | "opencode" | "agents" | "all";
@@ -22,139 +19,214 @@ export function expandSkillTargets(target: SkillTarget): Exclude<SkillTarget, "a
   return target === "all" ? ["copilot", "claude", "opencode", "agents"] : [target];
 }
 
-const skillTemplate = `---
-name: {{skillName}}
-description: '{{description}}'
-argument-hint: 'MCP task, tool name, or args file to run'
----
-
-# {{title}}
-
-This skill wraps an MCP server as a lightweight, lazy-loaded, file-first workflow.
-
-## Why use this skill
-
-- Keep full MCP tool schemas out of the model context until needed.
-- Use brief tool summaries for everyday work.
-- Store large payloads in local files such as \`args.json\` or \`content.md\`.
-- Patch local artifacts and retry failed calls deterministically.
-
-## Commands
-
-\`\`\`bash
-toolcapsule tools {{profileName}} --brief
-toolcapsule describe {{profileName}} <tool>
-toolcapsule call {{profileName}} <tool> @args.json
-toolcapsule retry .toolcapsule/runs/{{profileName}}/<run-id>
-\`\`\`
-
-{{#if toolsMarkdown}}
-## Tool summary
-
-Use this summary for planning. Only run \`toolcapsule schema {{profileName}} <tool>\` when these brief details are insufficient.
-
-{{{toolsMarkdown}}}
-{{else}}
-## Tool discovery
-
-Run \`toolcapsule tools {{profileName}} --brief\` once before choosing a tool. Then run \`toolcapsule schema {{profileName}} <tool>\` only when the brief summary is insufficient.
-{{/if}}
-
-## Workflow
-
-1. Use \`tools --brief\` to find the likely tool.
-2. Use \`describe <tool>\` only when the brief schema is insufficient.
-3. Put complex arguments in a local JSON file.
-4. Call with \`@args.json\` and save the run.
-5. On failure, patch the local file and run \`retry\`.
-
-## Safety
-
-- Do not fabricate IDs, URLs, user IDs, or opaque tokens.
-- Prefer local files for large payloads.
-- Do not print secrets.
-- Review destructive tools before calling.
-`;
-
 export type GenerateSkillOptions = {
   outputDir?: string;
   target?: SkillTarget;
-  embedProfile?: boolean;
   tools?: McpTool[];
 };
 
-type ToolSummary = {
-  name?: string;
-  description?: string;
-  required?: unknown;
-  annotations?: { readOnlyHint?: boolean; destructiveHint?: boolean };
-};
+// ── template helpers ──
 
-function toolsMarkdown(tools: McpTool[] | undefined): string | undefined {
-  if (!tools || tools.length === 0) return undefined;
-  const summaries = summarizeTools(tools) as ToolSummary[];
-  const rows = summaries.slice(0, 40).map((tool) => {
-    const required = Array.isArray(tool.required) && tool.required.length > 0 ? tool.required.join(", ") : "-";
-    const risk = tool.annotations?.destructiveHint ? "writes" : tool.annotations?.readOnlyHint ? "read" : "unknown";
-    const description = (tool.description || "-").replace(/\|/g, "\\|").slice(0, 120);
-    return `| \`${tool.name || "unknown"}\` | ${description} | ${required} | ${risk} |`;
-  });
-  return ["| Tool | Purpose | Required args | Risk |", "|---|---|---|---|", ...rows].join("\n");
-}
+function argsSkeleton(tool: McpTool): string {
+  const schema = tool.inputSchema as Record<string, unknown> | undefined;
+  const properties = schema?.properties as Record<string, { type?: string; description?: string }> | undefined;
+  const requiredList: string[] = Array.isArray(schema?.required) ? (schema.required as string[]) : [];
+  if (!properties) return "{}";
 
-export async function fetchProfileTools(profile: ProfileConfig, opts: { clientVersion?: string } = {}): Promise<McpTool[] | undefined> {
-  if (profile.kind === "linked") return undefined;
-  const client = new McpClient(profile, { ...(opts.clientVersion ? { clientVersion: opts.clientVersion } : {}), timeoutMs: 15000 });
-  try {
-    await client.init();
-    return (await client.listTools()).tools;
-  } catch {
-    return undefined;
-  } finally {
-    await client.close().catch(() => undefined);
+  const lines = ["{"];
+  const entries = Object.entries(properties);
+  for (let i = 0; i < entries.length; i++) {
+    const [key, prop] = entries[i]!;
+    const isRequired = requiredList.includes(key);
+    const desc = prop.description ? ` // ${prop.description.slice(0, 60)}` : "";
+    if (isRequired) {
+      let placeholder: string;
+      if (prop.type === "integer" || prop.type === "number") placeholder = "0";
+      else if (prop.type === "boolean") placeholder = "true";
+      else placeholder = "…";
+      lines.push(`  "${key}": ${prop.type === "boolean" ? placeholder : `"${placeholder}"`},${desc}`);
+    } else {
+      lines.push(`  // "${key}": "…",${desc}`);
+    }
   }
+  lines.push("}");
+  return lines.join("\n");
 }
 
-async function generateSkillAt(profile: ProfileConfig, outputDir: string, opts: { embedProfile?: boolean; tools?: McpTool[] } = {}): Promise<string> {
-  const skillName = profile.skill?.name || `${profile.name}-mcp`;
+function toolsMarkdown(tools: McpTool[] | undefined): string {
+  if (!tools || tools.length === 0) return "_（未能拉取工具列表，请手动运行 `tcap tools <profile>` 获取）_";
+  return tools
+    .map((tool) => {
+      const schema = tool.inputSchema as Record<string, unknown> | undefined;
+      const requiredList: string[] = Array.isArray(schema?.required) ? (schema.required as string[]) : [];
+      const properties = schema?.properties as Record<string, { type?: string }> | undefined;
+      const allParams = properties ? Object.keys(properties) : [];
+      const optionalParams = allParams.filter((p) => !requiredList.includes(p));
+
+      const required = requiredList.length > 0 ? requiredList.map((r) => `\`${r}\``).join("、") : "—";
+      const optional = optionalParams.length > 0 ? optionalParams.map((o) => `\`${o}\``).join("、") : "—";
+
+      const fullDesc = tool.description || "—";
+      const summary = fullDesc.split(/\n\n|(?=\n#+\s)/)[0]?.trim() || fullDesc.slice(0, 200);
+
+      return [
+        `### \`${tool.name || "unknown"}\``,
+        "",
+        `- **必填**：${required}`,
+        `- **可选**：${optional}`,
+        "",
+        summary,
+        "",
+        "```json",
+        `// /tmp/tcap-${tool.name}.args.json`,
+        argsSkeleton(tool),
+        "```",
+      ].join("\n");
+    })
+    .join("\n\n---\n\n");
+}
+
+function buildSkillMarkdown(profileName: string, tools: McpTool[] | undefined): string {
+  const skillName = `${profileName}-mcp`;
+
+  return `---
+name: ${skillName}
+description: 'TODO：一句话描述何时触发此 Skill'
+argument-hint: 'TODO：参数提示，如「飞书文档操作（fetch/create/update/search）」'
+---
+
+# ${profileName} MCP Skill
+
+> 自动生成，含使用方法与工具列表。
+> **AI 首次使用时，请完善上方 YAML 头部的 \`description\` 和 \`argument-hint\`。**
+
+## 使用方法
+
+ToolCapsule 通过 \`tcap\` 命令调用 MCP 工具，参数通过 \`/tmp\` 文件传递。
+
+\`\`\`bash
+# 查看所有工具（简要）
+tcap tools ${profileName}
+
+# 查看所有工具（仅名称）
+tcap tools ${profileName} --names
+
+# 查看所有工具（完整 JSON）
+tcap tools ${profileName} --json
+
+# 查看单个工具的参数说明
+tcap schema ${profileName} <工具名>
+
+# 调用工具：把参数写入 /tmp 文件，用 @file 引用
+tcap call ${profileName} <工具名> @/tmp/tcap-${profileName}-<工具名>.json
+
+# 调用失败？修改 /tmp 里的参数文件，重新执行上一条 call 命令即可
+\`\`\`
+
+**参数文件格式**（每个工具的参数骨架见下方工具列表）：
+
+\`\`\`json
+// /tmp/tcap-${profileName}-<工具名>.json
+{
+  "param1": "value",
+  "param2": 123
+}
+\`\`\`
+
+**Profile 管理**：\`~/.toolcapsule/profiles/${profileName}.json\` 存储 MCP 连接信息，切勿提交到仓库。
+
+## 工具列表
+
+${toolsMarkdown(tools)}
+
+## 安全提醒
+
+- 不要将 profile JSON 或鉴权 URL 提交到仓库
+- 调用参数写入 /tmp，不要污染项目目录
+- 调用前确认操作的影响范围（尤其是修改/删除类操作）
+`;
+}
+
+// ── skill generation ──
+
+async function writeSkillAt(outputDir: string, profileName: string, tools: McpTool[] | undefined): Promise<string> {
   await mkdir(join(outputDir, "scripts"), { recursive: true });
 
-  const template = Handlebars.compile(skillTemplate);
-  const description =
-    profile.skill?.description ||
-    `Use when operating tools from the ${profile.name} MCP server. Lazy-load schemas, call tools through local files, and retry failed calls by patching artifacts.`;
-  const markdown = template({
-    skillName,
-    profileName: profile.name,
-    title: `${profile.name} MCP Skill`,
-    description: description.replace(/'/g, "''"),
-    toolsMarkdown: toolsMarkdown(opts.tools),
-  });
+  const markdown = buildSkillMarkdown(profileName, tools);
   await writeFile(join(outputDir, "SKILL.md"), markdown);
-  if (opts.embedProfile) await writeJson(join(outputDir, "toolcapsule.config.json"), profile);
   await writeFile(
     join(outputDir, "scripts", "README.md"),
-    `# Scripts\n\nThis skill uses the \`toolcapsule\` CLI and profiles resolved by name.\n`,
+    `# Scripts\n\nThis skill uses the \`toolcapsule\` CLI and profiles from \`~/.toolcapsule/profiles/\`.\n`,
   );
   return outputDir;
 }
 
-export async function generateSkill(profile: ProfileConfig, opts: GenerateSkillOptions = {}): Promise<string> {
-  const skillName = profile.skill?.name || `${profile.name}-mcp`;
+export async function generateSkill(profileName: string, opts: GenerateSkillOptions = {}): Promise<string> {
+  const skillName = `${profileName}-mcp`;
   const target = opts.target || defaultSkillTarget;
-  const embedProfile = opts.embedProfile === true;
-  const atOptions = { embedProfile, ...(opts.tools ? { tools: opts.tools } : {}) };
   const outputs = opts.outputDir
-    ? [await generateSkillAt(profile, opts.outputDir, atOptions)]
+    ? [await writeSkillAt(opts.outputDir, profileName, opts.tools)]
     : await Promise.all(
         expandSkillTargets(target).map((item) =>
-          generateSkillAt(profile, skillOutputDir(skillName, item), atOptions),
+          writeSkillAt(skillOutputDir(skillName, item), profileName, opts.tools),
         ),
       );
   return outputs.join(", ");
 }
 
 export async function writeProfile(path: string, profile: ProfileConfig): Promise<void> {
-  await mkdir(dirname(path), { recursive: true });
+  await mkdir(join(path, ".."), { recursive: true });
   await writeJson(path, profile);
+}
+
+export type AuthInfo = {
+  status: number;
+  oauthAuthorizationUrl?: string;
+  serverUrl: string;
+};
+
+export type FetchToolsResult = {
+  tools?: McpTool[];
+  auth?: AuthInfo;
+};
+
+export async function fetchProfileTools(profile: ProfileConfig, opts: { clientVersion?: string } = {}): Promise<FetchToolsResult> {
+  const client = new McpClient(profile, { ...(opts.clientVersion ? { clientVersion: opts.clientVersion } : {}), timeoutMs: 15000 });
+  try {
+    await client.init();
+    const tools = (await client.listTools()).tools;
+    return { tools };
+  } catch (error) {
+    const auth = await detectAuth(profile, error);
+    const result: FetchToolsResult = {};
+    if (auth) result.auth = auth;
+    return result;
+  } finally {
+    await client.close().catch(() => undefined);
+  }
+}
+
+async function detectAuth(profile: ProfileConfig, error: unknown): Promise<AuthInfo | undefined> {
+  if (profile.transport.type !== "remote") return undefined;
+  const err = error as { code?: number; message?: string } | undefined;
+  if (err?.code !== 401 && err?.code !== 403) return undefined;
+
+  const origin = new URL(profile.transport.url).origin;
+  let oauthAuthorizationUrl: string | undefined;
+
+  try {
+    const res = await fetch(`${origin}/.well-known/oauth-authorization-server`);
+    if (res.ok) {
+      const metadata = (await res.json()) as { authorization_endpoint?: string };
+      if (metadata.authorization_endpoint) {
+        oauthAuthorizationUrl = metadata.authorization_endpoint;
+      }
+    }
+  } catch {
+    // OAuth discovery failed — server likely uses static tokens
+  }
+
+  const result: AuthInfo = { status: err.code, serverUrl: origin };
+  if (oauthAuthorizationUrl) result.oauthAuthorizationUrl = oauthAuthorizationUrl;
+  return result;
 }

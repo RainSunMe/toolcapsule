@@ -77,7 +77,7 @@
           <div class="install-card">
             <span data-i18n="hero.installLabel">Install the ToolCapsule Skill</span>
             <code>npx skills add RainSunMe/toolcapsule --skill toolcapsule</code>
-            <small data-i18n-html="hero.installHint">Then ask your agent to run <code>tcap mcp list --include-user</code>.</small>
+            <small data-i18n-html="hero.installHint">Then ask your agent to run <code>tcap init <name> --url <url></code>.</small>
           </div>
           <div class="ai-card">
             <span data-i18n="hero.aiLabel">Agent onboarding prompt</span>
@@ -145,12 +145,12 @@
               <span></span><span></span><span></span>
               <strong>toolcapsule mcp</strong>
             </div>
-            <pre><code><span>$</span> tcap mcp list --include-user
+            <pre><code><span>$</span> tcap init <name> --url <url>
 STATUS  NAME    SCOPE      SOURCE  MODE    PATH
 ● on    github  workspace  vscode  native  .vscode/mcp.json
 ● on    notion  workspace  claude  native  .mcp.json
 
-<span>$</span> tcap mcp enable github --target claude
+<span>$</span> tcap init github --target claude
 created  ~/.toolcapsule/profiles/github.json
 created  .claude/skills/github-mcp/SKILL.md
 
@@ -272,12 +272,12 @@ command.txt</code></pre>
 Please do this safely:
     1. If the ToolCapsule Skill is not installed, install it with: npx skills add RainSunMe/toolcapsule --skill toolcapsule
     2. Check whether toolcapsule or tcap is installed. If missing, install it with: npm i -g toolcapsule
-    3. Run: tcap mcp list
+    3. Run: tcap init <name> --url <url>
     4. Inspect common workspace MCP config files only: .vscode/mcp.json, .mcp.json, opencode.json, .gemini/settings.json, and .cursor/mcp.json.
      5. Do not print secrets, API keys, bearer tokens, private document IDs, or private MCP URLs. Preserve environment variable references such as $TOKEN or {env:TOKEN}.
      6. If workspace config is not enough, ask me before using --include-user to inspect user-level MCP config.
      7. Identify the MCP server that best matches my task. If multiple servers match, explain the options briefly and ask me to choose.
-     8. Enable the selected server with: tcap mcp enable <server> --as <profile> --target <target>
+     8. Enable the selected server with: tcap init <name> --url <url> --target <target>
        - Use --target claude by default.
        - Use --target copilot for GitHub Copilot / VS Code.
        - Use --target opencode for OpenCode.
@@ -287,8 +287,8 @@ Please do this safely:
      10. The generated Skill should include a tool summary. If it does not, discover tools briefly with: tcap tools <profile> --brief
      11. Load one tool schema only when needed with: tcap schema <profile> <tool>
      12. Put large arguments or Markdown payloads in local files such as args.json or content.md.
-     13. Call tools with: tcap call <profile> <tool> @args.json --save-run
-     14. If a call fails, inspect the saved run, patch the local args/content file, then retry with: tcap retry .toolcapsule/runs/<profile>/<run-id>
+     13. Call tools with: tcap call <profile> <tool> @args.json 
+     14. If a call fails, inspect the saved run, patch the local args/content file, then retry with: see usage -- edit /tmp file and re-run
      15. Summarize what was installed, enabled, generated, and how I should invoke the new skill in my current agent.`;
 
       const copy = {
@@ -301,7 +301,7 @@ Please do this safely:
           "hero.title": "Heavy MCP tools don’t belong in your prompt.",
           "hero.subtitle": "ToolCapsule inventories existing MCPs, turns selected heavy servers into lazy-loaded, file-first Agent Skills, and keeps calls patchable and retryable.",
           "hero.installLabel": "Install the ToolCapsule Skill",
-          "hero.installHint": "Then ask your agent to run <code>tcap mcp list --include-user</code>.",
+          "hero.installHint": "Then ask your agent to run <code>tcap init <name> --url <url></code>.",
           "hero.aiLabel": "Agent onboarding prompt",
           "hero.aiCopy": "Copy a detailed prompt for Claude Code, GitHub Copilot / VS Code, OpenCode, Gemini CLI, or Cursor so it can import your MCP setup safely.",
           "hero.github": "View on GitHub",
@@ -365,7 +365,7 @@ Please do this safely:
           "hero.title": "别把复杂 MCP 工具塞进提示词。",
           "hero.subtitle": "ToolCapsule 会盘点已有 MCP，把选中的重型服务变成按需加载、文件优先的 Agent Skill，并支持本地修补与确定性重试。",
           "hero.installLabel": "安装 ToolCapsule Skill",
-          "hero.installHint": "然后让 Agent 运行 <code>tcap mcp list --include-user</code> 扫描已有 MCP 配置。",
+          "hero.installHint": "然后让 Agent 运行 <code>tcap init <name> --url <url></code> 扫描已有 MCP 配置。",
           "hero.aiLabel": "给编程 Agent 的接入提示词",
           "hero.aiCopy": "复制一段详细提示词给 Claude Code、GitHub Copilot / VS Code、OpenCode、Gemini CLI 或 Cursor，让它安全导入你的 MCP 配置。",
           "hero.github": "查看 GitHub",
