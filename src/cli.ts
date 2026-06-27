@@ -146,23 +146,3 @@ try {
   console.error(pc.red(error instanceof Error ? error.message : String(error)));
   process.exit(1);
 }
-
-// ── init ──
-
-cli
-  .command("init <name>", "Register an MCP server and generate an Agent Skill")
-  .option("--url <url>", "Remote MCP URL")
-  .option("--command <command>", "stdio MCP command")
-  .option("--arg <arg>", "stdio MCP argument (repeatable)", { type: [String] })
-  .option("--output <dir>", "Skill output directory")
-  .option("--target <target>", "Skill target: copilot, claude, opencode, agents, all", { default: defaultSkillTarget })
-
-cli.help();
-cli.version(packageVersion);
-
-try {
-  cli.parse();
-} catch (error) {
-  console.error(pc.red(error instanceof Error ? error.message : String(error)));
-  process.exit(1);
-}
