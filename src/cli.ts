@@ -9,7 +9,7 @@ import { loadProfile } from "./profile.js";
 import { briefTools } from "./schema/brief.js";
 import { summarizeTool } from "./schema/summarize.js";
 import { defaultSkillTarget, fetchProfileTools, generateSkill, type AuthInfo, type GenerateSkillOptions, type SkillTarget, writeProfile } from "./skill/generator.js";
-import { readJson } from "./utils/fs.js";
+import { readJson, writeText } from "./utils/fs.js";
 
 const cli = cac("toolcapsule");
 
@@ -101,13 +101,20 @@ cli
 
 cli
   .command("call <profile> <tool> <args>", "Call an MCP tool with inline JSON or @file")
-  .action(async (profileName: string, toolName: string, argsRaw: string) => {
+  .option("-o, --output <file>", "Write response JSON to a file instead of stdout")
+  .action(async (profileName: string, toolName: string, argsRaw: string, options: { output?: string }) => {
     const toolArgs = argsRaw.startsWith("@")
       ? await readJson(argsRaw.slice(1))
       : JSON.parse(argsRaw);
     const profile = await loadProfile(profileName);
     const response = await withClient(profile, (client) => client.callTool(toolName, toolArgs));
-    console.log(JSON.stringify(response, null, 2));
+    const output = JSON.stringify(response, null, 2);
+    if (options.output) {
+      await writeText(options.output, output + "\n");
+      console.error(pc.dim(`Response saved to ${options.output}`));
+    } else {
+      console.log(output);
+    }
   });
 
 // ── tools ──
