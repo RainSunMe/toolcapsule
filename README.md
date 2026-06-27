@@ -50,7 +50,7 @@ tcap tools  <profile> [--brief | --names | --json]
 tcap schema <profile> <tool>
 ```
 
-Supported targets: `claude` (default), `copilot`, `opencode`, `agents`, `all`.
+Supported targets: `agents` (default), `copilot`, `claude`, `opencode`, `all`.
 
 ## Workflow
 
