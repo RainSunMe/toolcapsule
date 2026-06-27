@@ -112,6 +112,9 @@ tcap schema ${profileName} <工具名>
 # 调用工具：把参数写入 /tmp 文件，用 @file 引用
 tcap call ${profileName} <工具名> @/tmp/tcap-${profileName}-<工具名>.json
 
+# 把响应保存到文件（避免大响应撑满上下文）
+tcap call ${profileName} <工具名> @/tmp/tcap-${profileName}-<工具名>.json -o /tmp/tcap-${profileName}-response.json
+
 # 调用失败？修改 /tmp 里的参数文件，重新执行上一条 call 命令即可
 \`\`\`
 

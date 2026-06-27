@@ -55,6 +55,9 @@ tcap schema <profile> <tool>         # compact schema for one tool
 ```bash
 # Write args to /tmp (never the workspace)
 tcap call <profile> <tool> @/tmp/tcap-<profile>-<tool>.json
+
+# Save response to a file (avoids large responses flooding context)
+tcap call <profile> <tool> @/tmp/tcap-<profile>-<tool>.json -o /tmp/tcap-<profile>-response.json
 ```
 
 If the call fails, edit the args file and re-run the same command.
