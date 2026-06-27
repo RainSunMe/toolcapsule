@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1
+
+First stable release.
+
 ## 0.2.0
 
 Complete rearchitecture — slim down from 12 commands to 4 focused on the MCP-to-Skill core.
