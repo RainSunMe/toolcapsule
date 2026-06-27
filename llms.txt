@@ -14,7 +14,7 @@ tcap --help
 Remote MCP:
 
 ```bash
-tcap init <name> --url <remote-mcp-url> --target claude
+tcap init <name> --url <remote-mcp-url> --target agents
 ```
 
 stdio MCP:

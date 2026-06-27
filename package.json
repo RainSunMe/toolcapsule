@@ -1,6 +1,6 @@
 {
   "name": "toolcapsule",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "AI-first workflow manager for heavy MCP tools with lazy Agent Skills and patchable runs.",
   "type": "module",
   "bin": {

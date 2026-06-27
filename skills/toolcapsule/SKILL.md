@@ -35,7 +35,7 @@ This creates:
 - `~/.toolcapsule/profiles/<profile-name>.json` (transport config — never commit)
 - Skills directory with `SKILL.md` (safe to commit)
 
-Supported targets: `claude` (default), `copilot`, `opencode`, `agents`, `all`.
+Supported targets: `agents` (default), `copilot`, `claude`, `opencode`, `all`.
 
 ### 2. Read the generated SKILL.md
 

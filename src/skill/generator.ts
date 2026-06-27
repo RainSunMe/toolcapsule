@@ -6,7 +6,7 @@ import { writeJson } from "../utils/fs.js";
 
 export type SkillTarget = "copilot" | "claude" | "opencode" | "agents" | "all";
 
-export const defaultSkillTarget: SkillTarget = "claude";
+export const defaultSkillTarget: SkillTarget = "agents";
 
 export function skillOutputDir(skillName: string, target: Exclude<SkillTarget, "all">): string {
   if (target === "copilot") return join(".github", "skills", skillName);
