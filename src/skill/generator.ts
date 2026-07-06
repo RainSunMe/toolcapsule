@@ -100,7 +100,7 @@ argument-hint: 'TODO'
 
 ## 使用方法
 
-ToolCapsule 通过 \`tcap\` 命令调用 MCP 工具，参数通过 \`/tmp\` 文件传递。
+ToolCapsule 通过 \`tcap\` 命令调用 MCP 工具。简单参数可以直接传 JSON；大参数、敏感参数或需要反复修补的参数通过 \`/tmp\` 文件传递。
 
 \`\`\`bash
 # 查看所有工具（简要）
@@ -109,13 +109,16 @@ tcap tools ${profileName}
 # 查看单个工具的参数说明
 tcap schema ${profileName} <工具名>
 
-# 调用工具：把参数写入 /tmp 文件，用 @file 引用
+# 简单参数：直接传 JSON
+tcap call ${profileName} <工具名> '{"key":"value"}'
+
+# 大参数或需要重试：把参数写入 /tmp 文件，用 @file 引用
 tcap call ${profileName} <工具名> @/tmp/tcap-${profileName}-<工具名>.json
 
 # 把响应保存到文件（避免大响应撑满上下文）
 tcap call ${profileName} <工具名> @/tmp/tcap-${profileName}-<工具名>.json -o /tmp/tcap-${profileName}-response.json
 
-# 调用失败？修改 /tmp 里的参数文件，重新执行上一条 call 命令即可
+# 文件参数调用失败？修改 /tmp 里的参数文件，重新执行上一条 call 命令即可
 \`\`\`
 
 **参数文件格式**（每个工具的参数骨架见下方工具列表）：
@@ -137,7 +140,7 @@ ${toolsMarkdown(tools)}
 ## 安全提醒
 
 - 不要将 profile JSON 或鉴权 URL 提交到仓库
-- 调用参数写入 /tmp，不要污染项目目录
+- 大参数、敏感参数或需要重试的调用参数写入 /tmp，不要污染项目目录
 - 调用前确认操作的影响范围（尤其是修改/删除类操作）
 
 ## ⚠️ 此 Skill 尚未激活（${toolCount} 个工具待确认）

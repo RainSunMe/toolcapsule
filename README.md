@@ -45,7 +45,7 @@ The `tcap` alias is equivalent to `toolcapsule`.
 
 ```text
 tcap init   <name> --url <url> | --command <cmd> [--arg <arg>] [--target <target>]
-tcap call   <profile> <tool> @/tmp/args.json
+tcap call   <profile> <tool> '{"key":"value"}' | @/tmp/args.json
 tcap tools  <profile> [--brief | --names | --json]
 tcap schema <profile> <tool>
 ```
@@ -65,10 +65,13 @@ tcap init feishu --url https://mcp.feishu.cn/mcp/xxx --target claude
 tcap tools feishu                # compact one-line list
 tcap schema feishu create-doc    # compact schema for one tool
 
-# 4. Call with args in /tmp file
+# 4. Call with inline JSON for simple args
+tcap call feishu fetch-doc '{"doc_id":"https://mi.feishu.cn/docx/..."}'
+
+#    Or call with args in /tmp file for larger payloads
 tcap call feishu create-doc @/tmp/tcap-feishu-create-doc.json
 
-# 5. If it fails — edit /tmp file and re-run step 4
+# 5. If a file-based call fails — edit /tmp file and re-run step 4
 ```
 
 ## What gets created

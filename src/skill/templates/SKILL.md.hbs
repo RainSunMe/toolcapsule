@@ -32,11 +32,14 @@ tcap tools {{profileName}} --brief
 # 查看单个工具的完整参数说明
 tcap schema {{profileName}} <工具名>
 
-# 调用工具（参数写入本地 JSON 文件）
-tcap call {{profileName}} <工具名> @args.json --save-run
+# 简单参数可直接传 JSON
+tcap call {{profileName}} <工具名> '{"key":"value"}'
 
-# 修改参数文件后重试
-tcap retry .toolcapsule/runs/{{profileName}}/<run-id>
+# 大参数或需要反复修补的参数写入本地 JSON 文件
+tcap call {{profileName}} <工具名> @args.json
+
+# 修改参数文件后重试同一条 call 命令
+tcap call {{profileName}} <工具名> @args.json
 ```
 
 ## 常用示例
@@ -48,6 +51,6 @@ tcap retry .toolcapsule/runs/{{profileName}}/<run-id>
 ## 安全提醒
 
 - 不要编造文档 ID、URL、用户 ID 等标识符
-- 大文档内容通过本地文件传递，避免撑满上下文
+- 大文档内容或复杂参数通过本地文件传递，避免撑满上下文
 - 不要打印或提交包含鉴权信息的 URL
 - 调用前确认操作的影响范围

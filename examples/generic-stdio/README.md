@@ -12,7 +12,10 @@ tcap tools mock --brief
 # Inspect one tool
 tcap schema mock create-doc
 
-# Call with /tmp args file
+# Call with inline JSON
+tcap call mock create-doc '{"title":"Hello"}'
+
+# Or call with /tmp args file
 tcap call mock create-doc @/tmp/tcap-mock-create-doc.json
 ```
 

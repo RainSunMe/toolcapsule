@@ -1,7 +1,7 @@
 ---
 name: toolcapsule
-description: 'Use when: turning MCP servers into lazy Agent Skills, calling MCP tools through local files, or looking up MCP tool schemas on demand.'
-argument-hint: 'MCP server URL, profile name, target agent, /tmp args file'
+description: 'Use when: turning MCP servers into lazy Agent Skills, calling MCP tools with inline JSON or local files, or looking up MCP tool schemas on demand.'
+argument-hint: 'MCP server URL, profile name, target agent, JSON args or /tmp args file'
 ---
 
 # ToolCapsule
@@ -50,17 +50,20 @@ tcap tools <profile> --json          # raw JSON
 tcap schema <profile> <tool>         # compact schema for one tool
 ```
 
-### 4. Call tools through /tmp files
+### 4. Call tools with inline JSON or /tmp files
 
 ```bash
-# Write args to /tmp (never the workspace)
+# Use inline JSON for simple args
+tcap call <profile> <tool> '{"key":"value"}'
+
+# Use /tmp files for larger or frequently patched args (never the workspace)
 tcap call <profile> <tool> @/tmp/tcap-<profile>-<tool>.json
 
 # Save response to a file (avoids large responses flooding context)
 tcap call <profile> <tool> @/tmp/tcap-<profile>-<tool>.json -o /tmp/tcap-<profile>-response.json
 ```
 
-If the call fails, edit the args file and re-run the same command.
+If a file-based call fails, edit the args file and re-run the same command. For simple one-off calls, inline JSON is fine.
 
 ## Profile management
 
@@ -75,6 +78,6 @@ ls ~/.toolcapsule/profiles/
 ## Safety
 
 - Never print or commit MCP URLs, tokens, API keys, or credentials.
-- Write call args to `/tmp`, never to the workspace.
+- For large, sensitive, or retryable payloads, write call args to `/tmp`, never to the workspace.
 - Profile JSON files in `~/.toolcapsule/profiles/` are private — do not read their contents to the user.
 - Set `TOOLCAPSULE_DEBUG=1` only for debugging stderr output.
