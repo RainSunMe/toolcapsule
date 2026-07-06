@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.10
+
+- Add inline JSON arguments for `tcap call`, while keeping `@file` support for larger or retryable payloads.
+- Update built-in and generated Skills to document inline JSON calls.
+- Add tests for inline JSON and `@file` argument parsing.
+
 ## 1.0.3
 
 First stable release.
